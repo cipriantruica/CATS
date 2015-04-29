@@ -112,7 +112,7 @@ class Search:
 		
 		idx = 0
 		for key in answer:
-			#print key
+			print key
 			idx += 1
 			if idx == k:
 				break
@@ -129,7 +129,7 @@ if __name__ == "__main__":
 	searchPhrase.append("absurd ability action back go")
 	for i in range(0,5):
 		time_words = []
-		for j in range(0, 5):
+		for j in range(0, 1):
 			start = time.time()
 			search = Search(searchPhrase[i], 20)
 			end = time.time() 
