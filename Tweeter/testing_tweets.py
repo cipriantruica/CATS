@@ -111,13 +111,13 @@ def main(filename, csv_delimiter = '\t', header = True, dbname = 'ERICDB', langu
 		Documents.drop_collection() 
 		Words.drop_collection()	
 		populateDB(filename, csv_delimiter, header, language)
-		Documents.objects(intText__exists = False).delete()		
+		Documents.objects(intText__exists = False).delete()
 		clean(language)
 		constructIndexes(dbname)
 	elif initialize == 1: #update the database with new infomation not tested, should work
 		last_docDate, last_wordDate = getDates()
 		populateDB(filename, csv_delimiter, header, language)
-		Documents.objects(intText__exists = False).delete()		
+		Documents.objects(intText__exists = False).delete()
 		clean(language, last_docDate)
 		updateIndexes(dbname, last_wordDate)
 
