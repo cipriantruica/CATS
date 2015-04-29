@@ -13,13 +13,6 @@ from indexing.vocabulary_index import VocabularyIndex as VI
 from indexing.inverted_index import InvertedIndex as IV
 from indexing.pos_index import POSIndex as PI
 
-#this script receives 5 parameters
-# 1 - filename
-# 2 - the csv delimiter: t - tab, c - coma, s - semicolon
-# 3 - integer: 1 csv has header, 0 csv does not have hearer
-# 4 - integer - nr of threads
-# 5 - lematizer/stemmer
-
 def getDates():
 	documents = Documents.objects.only("createdAt")
 	no_docs = documents.count()
@@ -41,7 +34,7 @@ def populateDB(filename, csv_delimiter, header, language):
 	end = time.time() 
 	print "time_populate.append(", (end - start), ")"
 
-def clean(language, last_docDate):
+def clean(language, last_docDate=None):
 	if not last_docDate:
 		documents = Documents.objects.only("createdAt")
 	else:
@@ -58,22 +51,20 @@ def clean(language, last_docDate):
 	#add one second to the last date
 	list_of_dates[-1] += timedelta(0,1)
 	
+	#create clean text in chunks
 	start = time.time() 
 	for idx in xrange(0, len(list_of_dates)-1, 1) :
 		createCleanTextField(list_of_dates[idx], list_of_dates[idx+1], language)
 	
 	end = time.time() 
 	print "time_cleantext.append(", (end - start), ")"
-
-	#TO_DO this is just a test, remove this line
-	#createCleanTextField(list_of_dates[0], list_of_dates[1], language)
-	#createCleanTextField(list_of_dates[1], list_of_dates[2], language)
-
+	
 	#delete documents without cleanText
-	#Documents.objects(cleanText__exists = False).delete();
+	Documents.objects(cleanText__exists = False).delete();
 
+#this does not work yet
 def buildNamedEntities():
-	print "sunt in build entities"
+	
 
 	documents = Documents.objects.only("createdAt")
 	no_docs = documents.count()
@@ -98,39 +89,57 @@ def buildNamedEntities():
 	
 	print "time build named entities:", (end - start) 
 
-
-def main(filename, csv_delimiter = '\t', header = True, dbname = 'ERICDB', language='EN'):
-	connectDB(dbname)	
-	#Documents.drop_collection()
-	#Words.drop_collection()
-	#last_docDate, last_wordDate = getDates()
-	last_docDate = None
-	#populateDB(filename, csv_delimiter, header, language)
-	#Documents.objects(intText__exists = False).delete()		
-	clean(language, last_docDate)
-	
-	#for testing
-	#iv = IV(dbname)
-	#pos = PI(dbname)
-	#start = time.time()
-	#vocab = VI(dbname)
-	#vocab.createIndex()
-	#end = time.time()
+def constructIndexes(dbname):
+	start = time.time()
+	vocab = VI(dbname)
+	vocab.createIndex()
+	end = time.time()
 	print "vocabulary build time:", (end - start) 
-	#pos.createIndex()
-	#iv.createIndex()
+
+def updateIndexes(dbname, startDate):
+	start = time.time()
+	vocab = VI(dbname)
+	vocab.updateIndex(startDate)
+	end = time.time()
+	print "vocabulary build time:", (end - start) 
+
 	
-	
-	#print 'date for update indexes:', last_wordDate
-	#print 'last date doc:', last_docDate
+def main(filename, csv_delimiter = '\t', header = True, dbname = 'ERICDB', language='EN', initialize = 0):
+	connectDB(dbname)	
+	#initialize everything from the stat
+	if initialize == 0:
+		Documents.drop_collection() 
+		Words.drop_collection()	
+		populateDB(filename, csv_delimiter, header, language)
+		Documents.objects(intText__exists = False).delete()		
+		clean(language)
+		constructIndexes(dbname)
+	elif initialize == 1: #update the database with new infomation not tested, should work
+		last_docDate, last_wordDate = getDates()
+		populateDB(filename, csv_delimiter, header, language)
+		Documents.objects(intText__exists = False).delete()		
+		clean(language, last_docDate)
+		updateIndexes(dbname, last_wordDate)
+
+	#this does not work yet
 	#NamedEntities.drop_collection()
 	#buildNamedEntities()
-	
 
+	print 'date for update indexes:', last_wordDate
+	print 'last date doc:', last_docDate
+	
+#this script receives 5 parameters
+# 1 - filename
+# 2 - the csv delimiter: t - tab, c - coma, s - semicolon
+# 3 - integer: 1 csv has header, 0 csv does not have hearer
+# 4 - integer: - nr of threads
+# 5 - language: EN or FR
+# 6 - integer: 0 - create the database, 1 - update the database
 if __name__ == "__main__":
-	filename = sys.argv[1]
+	filename = sys.argv[1] 
 	csv_delimiter = utils.determineDelimiter(sys.argv[2])
 	header = bool(sys.argv[3])
 	dbname = sys.argv[4]
-	language = sys.argv[5]
-	main(filename, csv_delimiter, header, dbname, language)
+	language = sys.argv[5] #currently EN & FR, FR does not work so well
+	initialize = int(sys.argv[6])
+	main(filename, csv_delimiter, header, dbname, language, initialize)
