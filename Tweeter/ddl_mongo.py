@@ -19,50 +19,62 @@ sys.setdefaultencoding('utf8')
 # language, default English
 # TO_DO sould see if other fields are needed
 
-def populateDatabase(elem, language='EN'):
-	if len(elem) > 0:
-		cleanText = CleanText()
-		tweetID = elem[0]
-		document = Documents.objects(tweetID=tweetID).timeout(False)
-			
-		if not document:
-			if len(elem) == 4:
-				document = Documents()
-				document.tweetID = tweetID
-				document.rawText = elem[1]
-				document.intText = cleanText.cleanText(elem[1], language)
-				document.date = elem[2]
-				document.author = elem[3]
-				document.language = language
-				try:
-					document.save()
-				except Exception as e:
-					print "Insert Error!!!", e
+
+
+ct = CleanText()
+def populateDatabase(elems, language='EN', dbname='TwitterDB'):
+	client = pymongo.MongoClient()
+	db = client[dbname]
+	if elems:
+		documents = []
+		print len(elems)
+		idx = 1
+		for elem in elems:
+			if len(elem) >= 4:
+				#get language
+				if len(elem) >= 5:
+					lang = elem[4]
+				else:
+					lang = language
+				#get clean text
+				cleanText, hashtags, attags = ct.cleanText(elem[1], lang)
+				#if clean text exists
+				if len(ct.removePunctuation(cleanText))>0:
+					#extract lemmas and part of speech
+					lemmas = LemmatizeText(ct.removePunctuation(cleanText), lang)
+					lemmas.createLemmaText()
+					lemmaText = lemmas.cleanText
+					if lemmaText and lemmaText != " ":
+						document = {}
+						lemmas.createLemmas()
+						words = []
+						for w in lemmas.wordList:
+							word = {}
+							word['word']=w.word
+							word['tf']=w.tf
+							word['count']=w.count
+							word['pos']=w.wtype
+							words.append(word)
+						#construct the document
+						document['_id'] = elem[0]
+						document['rawText'] = elem[1]
+						document['cleanText'] = cleanText
+						document['lemmaText'] = lemmaText
+						document['date'] = elem[2]
+						document['author'] = elem[3]
+						document['words'] = words
+						document['attags'] = attags
+						document['hashtags'] = hashtags
+						documents.append(document)
+						print idx
+						idx += 1
 			else:
-				print "tweet with problems: ",tweetID
-		
-
-
-#this functions adds to the documents collection the cleanText and words labels
-def createCleanTextField(startDate, endDate, language):
-	documents = Documents.objects(Q(createdAt__gte = startDate) & Q(createdAt__lt = endDate)).only("id", "intText").timeout(False)
-	for document in documents:
-		if document.intText and document.intText != " ":
-			lemmas = LemmatizeText(document.intText, language)
-			lemmas.createLemmaText()
-			if lemmas.cleanText and lemmas.cleanText != " ":
-				wordsColl = Words()
-				lemmas.createLemmas()
-				words = [Word(word=word.word, tf=word.tf, count=word.count, wtype=word.wtype) for word in lemmas.wordList]
-				wordsColl.docID = document.id
-				wordsColl.words = words
 				try:
-					#update document
-					#document.update(set__cleanText=lemmas.cleanText, set__words=words)
-					document.update(set__cleanText=lemmas.cleanText)
-					wordsColl.save()
-				except Exception as e:
-					print "Update Error!!!", e
+					print "tweet with problems: ", elem[0]
+				except Exception, e:
+					print e
+		if documents:
+			db.documents.insert( documents)
 
 #this function will create the named_entities collection
 def createNamedEntitiesCollection(startDate, endDate):

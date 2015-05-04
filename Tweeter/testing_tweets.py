@@ -26,93 +26,62 @@ def getDates():
 		last_wordDate = words[no_words-1].createdAt
 	return last_docDate, last_wordDate
 
-def populateDB(filename, csv_delimiter, header, language):
+#try to parallelize this
+def populateDB(filename, csv_delimiter, header, language, k = 1000):
 	start = time.time() 
 	h, lines = utils.readCSV(filename, csv_delimiter, header)
-	for line in lines:
-		populateDatabase(line, language)
+	populateDatabase(lines, language)
+	#noLines = (len(lines)/k)+1
+	#print noLines, len(lines[0: 1000])
+	#for idx in range(0, noLines):
+	#	start, end = idx*k, idx*k+k
+	#	if end<=noLines:
+	#		populateDatabase(lines[start:end], language)
+	#	else:
+	#		populateDatabase(lines[start:], language)
+	#	print idx, idx*k, idx*k+k
+	#	for elem in lines[start: end]:
+	#		print elem
+	#for idx in range(0, noLines):
+	#	start, end = idx*k, idx*k+k
+	#	print idx, idx*k, idx*k+k
+	#	if end<=noLines:
+	#		populateDatabase(lines[start:end], language)
+	#	else:
+	#		populateDatabase(lines[start:], language)
 	end = time.time() 
 	print "time_populate.append(", (end - start), ")"
 
-def clean(language, last_docDate=None):
-	if not last_docDate:
-		documents = Documents.objects.only("createdAt")
-	else:
-		documents = Documents.objects(Q(createdAt__gte = last_docDate)).only("createdAt")
-	no_docs = documents.count()
-	print no_docs
-	
-	list_of_dates = []
-	idx = 0
-	for document in documents:		
-		if idx%100 == 0 or idx + 1 == no_docs:
-			list_of_dates.append(document.createdAt)
-		idx += 1
-	#add one second to the last date
-	list_of_dates[-1] += timedelta(0,1)
-	
-	#create clean text in chunks
-	start = time.time() 
-	for idx in xrange(0, len(list_of_dates)-1, 1) :
-		createCleanTextField(list_of_dates[idx], list_of_dates[idx+1], language)
-	
-	end = time.time() 
-	print "time_cleantext.append(", (end - start), ")"
-	
-	#delete documents without cleanText
-	Documents.objects(cleanText__exists = False).delete();
-
-#this does not work yet
-def buildNamedEntities():
-	
-
-	documents = Documents.objects.only("createdAt")
-	no_docs = documents.count()
-	
-	list_of_dates = []
-	idx = 0
-
-	for document in documents:		
-		if idx%100 == 0 or idx + 1 == no_docs:
-			list_of_dates.append(document.createdAt)
-		idx += 1
-	#add one second to the last date
-	list_of_dates[-1] += timedelta(0,1)
-	
-	no_threads = cpu_count()
-		
-	start = time.time()
-	with ThreadPoolExecutor(max_workers = no_threads) as e:
-		for idx in xrange(0, len(list_of_dates)-1, 1) :
-			 e.submit(createNamedEntitiesCollection, list_of_dates[idx], list_of_dates[idx+1])
-	end = time.time() 
-	
-	print "time build named entities:", (end - start) 
 
 def constructIndexes(dbname):
 	start = time.time()
 	vocab = VI(dbname)
 	vocab.createIndex()
 	end = time.time()
-	print "vocabulary build time:", (end - start) 
 
-def updateIndexes(dbname, startDate):
+	print "vocabulary_build.append(", (end - start) , ")"	
+	
 	start = time.time()
-	vocab = VI(dbname)
-	vocab.updateIndex(startDate)
+	iv = IV(dbname)
+	iv.createIndex()
 	end = time.time()
-	print "vocabulary build time:", (end - start) 
+	print "inverted_build.append(", (end - start) , ")"
+	
+	start = time.time()
+	pi = PI(dbname)
+	pi.createIndex()
+	end = time.time()
+	print "pos_build.append(", (end - start) , ")"
+	
+
 
 	
-def main(filename, csv_delimiter = '\t', header = True, dbname = 'ERICDB', language='EN', initialize = 0):
+def main(filename, csv_delimiter = '\t', header = True, dbname = 'TwitterDB', language='EN', initialize = 0):
 	connectDB(dbname)	
 	#initialize everything from the stat
 	if initialize == 0:
 		Documents.drop_collection() 
-		Words.drop_collection()	
 		populateDB(filename, csv_delimiter, header, language)
-		Documents.objects(intText__exists = False).delete()
-		clean(language)
 		constructIndexes(dbname)
 	elif initialize == 1: #update the database with new infomation not tested, should work
 		last_docDate, last_wordDate = getDates()
@@ -120,13 +89,8 @@ def main(filename, csv_delimiter = '\t', header = True, dbname = 'ERICDB', langu
 		Documents.objects(intText__exists = False).delete()
 		clean(language, last_docDate)
 		updateIndexes(dbname, last_wordDate)
-
-	#this does not work yet
-	#NamedEntities.drop_collection()
-	#buildNamedEntities()
-
-	print 'date for update indexes:', last_wordDate
-	print 'last date doc:', last_docDate
+		print 'date for update indexes:', last_wordDate
+		print 'last date doc:', last_docDate
 	
 #this script receives 5 parameters
 # 1 - filename

@@ -2,7 +2,7 @@ import pymongo
 
 mapFunction = """function() {
 					var ids = [];
-					ids.push(this.docID)
+					ids.push(this._id)
 					for (var i in this.words){
 						var key = this.words[i].word;
 						var value = { 'ids': ids};
@@ -25,23 +25,25 @@ functionCreate = """function(){
 					doc = {word: item._id, createdAt: new Date(), docIDs: item.value.ids};
 					db.inverted_index.insert(doc);
 				}
+				db.temp_collection.drop();
 			}"""
 
 functionUpdate = """function(){
 				var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
 				while(items.hasNext()){
 					var item = items.next();
-					var wordID = item._id;					
+					var wordID = item._id;
 					var exists = db.inverted_index.findOne({word: wordID}, {docIDs: 1, _id: 0});
 					if (exists){
-							var docIDs = exists.docIDs;		
+							var docIDs = exists.docIDs;
 							docIDs = docIDs.concat(item.value.ids);
-							db.inverted_index.update({word: wordID}, {$set: {docIDs: docids_vec}});
+							db.inverted_index.update({word: wordID}, {$set: {docIDs: docIDs}});
 					}else{
 						doc = {word: wordID, createdAt: new Date(), docIDs: item.value.ids};
 						db.inverted_index.insert(doc);
 					}
 				}
+				db.temp_collection.drop();
 			}"""
 
 class InvertedIndex:
@@ -53,15 +55,18 @@ class InvertedIndex:
 	def createIndex(self, query=None):
 		self.db.inverted_index.drop();
 		if query:
-			self.db.words.map_reduce(mapFunction, reduceFunction, "temp_collection", query = query)
+			self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", query = query)
 		else:
-			self.db.words.map_reduce(mapFunction, reduceFunction, "temp_collection")
+			self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection")
 		self.db.eval(functionCreate)
-		self.db.inverted_index.ensure_index("word")
-		self.db.temp_collection.drop()
+		#self.db.inverted_index.ensure_index("word")
 
 	def updateIndex(self, startDate):
 		query = query = {"createdAt": {"$gt": startDate } }
-		self.db.words.map_reduce(mapFunction, reduceFunction, "temp_collection", query = query)		
-		self.db.eval(functionCreate, {'startDate': startDate})
-		self.db.temp_collection.drop()
+		self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", query = query)		
+		self.db.eval(functionUpdate)
+
+	#docIDs - list of documents
+	def deleteIndex(self, docIDs):
+		self.db.inverted_index.update({ }, { "$pull": { "docIDs" : {"$in": docIDs} } },  multi=True)
+		self.db.inverted_index.remove({"docIDs" : {"$size": 0}}, multi=True )

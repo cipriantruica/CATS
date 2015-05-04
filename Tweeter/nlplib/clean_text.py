@@ -9,7 +9,7 @@ from nltk.corpus import stopwords
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
-punctuation = '!"#$%&\'()*+,./:;<=>?@[\\]^_`{|}~'
+punctuation = '!"#$%&\'()*+,./:;<=>?@[\\]^_`{|}~-'
 cachedStopWords_en = stopwords.words("english")
 cachedStopWords_fr = stopwords.words("french") + ["ce", "cet", "cette", "le", "les"]
 contractions_en = static.contractionsEN()
@@ -49,6 +49,20 @@ class CleanText:
 			return specialchars[match.group(0)]
 		return specialchar_re.sub(replace, text)
 
+	def getHashTags(self, text):
+		hashtags = [tag for tag in tweet.split() if tag.startswith("#")]
+		hashtags = list(set(hashtags))
+		for hashtag in hashtags:
+			text = text.replace(hashtag, ' ')
+		return hashtags, text
+
+	def getAtTags(self, text):
+		attags = [tag for tag in tweet.split() if tag.startswith("@")]
+		attags = list(set(attags))
+		for attag in attags:
+			text = text.replace(attag, ' ')
+		return attags, text
+
 
 	#expand contrations
 	#only for english
@@ -84,7 +98,9 @@ class CleanText:
 	def cleanText(self, text, language = 'EN'):
 		text = self.replaceUTF8Char(self.removeURLs(self.removeTags(self.removeScripts(text))))
 		text = self.expandContractions(text, language)
+		attags, text = self.getAtTags(text)
+		hashtags, text = self.getHashTags(text)
 		#text = self.removeStopWords(text.lower(), language)
 		#text = self.removePunctuation(text)
-		return self.removeMultipleSpaces(text.strip())
-			
+		text = self.removeMultipleSpaces(text.strip())
+		return text, hashtags, attags

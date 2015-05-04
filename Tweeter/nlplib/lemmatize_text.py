@@ -25,37 +25,21 @@ class LemmatizeText:
 
 	def createLemmaText(self):
 		ct = CleanText()
+		text = self.rawText
+		text = text.lower()
+		text = ct.removeStopWords(text, self.language)
+		text = ct.removePunctuation(text)
 		if self.language == 'EN':
-			"""
-			lemmas = lemmatize(ct.removeStopWords(self.rawText))
-			for word in lemmas:
-				elems = word.split('/')
-				self.words.append((elems[0], elems[1]))
-			self.cleanText = ' '.join(word[0] for word in self.words)
-			"""
-			text = self.rawText
-			text = text.lower()
-			text = ct.removeStopWords(text, self.language)
-			text = ct.removePunctuation(text)
 			text = parseEN(text, tags = False, chunks = False, lemmata=True).split()
-			#print text
-			try:
-				for word in text[0]:
-					self.words.append((word[2], word[1][:2]))
-				self.cleanText = ' '.join(word[0] for word in self.words)
-			except Exception as e:
-				print e, self.rawText
-		if self.language == 'FR':
-			text = self.rawText
-			text = text.lower()
-			text = ct.removeStopWords(text, self.language)
-			text= ct.removePunctuation(text)	
+		elif self.language == 'FR':
 			text = parseFR(text, tags = False, chunks = False, lemmata=True).split()
-			for word in text[0]:
-				#if word[2] 	not in stopwords.words("french"):
-				if word[1][:2] in ['RB', 'NN', 'VB', 'JJ']:
-					self.words.append((word[2], word[1][:2]))
-			self.cleanText = ' '.join(word[0] for word in self.words)
+		try:
+			if text:
+				for word in text[0]:
+					self.words.append((word[2].lower(), word[1][:2]))
+				self.cleanText = ' '.join(word[0] for word in self.words)
+		except Exception as e:
+			print e, self.rawText
 
 
 	def createLemmas(self):

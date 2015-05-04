@@ -1,82 +1,45 @@
 from mongoengine import *
 from datetime import datetime
 from bson.objectid import ObjectId
+import pymongo
 
-def connectDB(dbname = 'ERICDB'):
+def connectDB(dbname = 'TwitterDB'):
 	connect(dbname, host="127.0.0.1", port=27017, read_preference= True)
-
-class Documents(Document):
-	tweetID = StringField(max_length = 255, required = True, unique=True)
-	rawText = StringField()
-	intText = StringField() #intermediate text without stopwords, punctuation, etc
-	cleanText = StringField() #lemma text
-	#the date the element was inserted in the database
-	createdAt = DateTimeField(default=datetime.now)
-	date = DateTimeField()
-	language = StringField()
-	author = StringField()
-	tags = ListField()
-	#words = ListField(EmbeddedDocumentField("Word"))
-	
-
-	meta = {
-		'ordering': ['+createdAt'],
-		'indexes': [
-			{
-				'fields': ['+createdAt'],
-				'unique': True,
-				'sparse': False
-			},
-			
-		]
-	}
-
-	"""
-	{
-				'fields': ['words']
-			}
-	,
-	{
-		'fields': ["$cleanText"],
-		'default_language': 'english'
-	},
-	{
-		'fields': ['words'],
-		'unique': True,
-		'sparse': False
-	},
-	{
-		'fields': ['words.word'],
-		'unique': True,
-		'sparse': False
-	}
-	"""
 
 class Word(EmbeddedDocument):
 	_auto_id_field = False
 	word = StringField(max_length = 255)
-	wtype = ListField()
+	pos = ListField()
 	count = FloatField()
 	tf = FloatField()
 	idf = FloatField()
 
 	meta = {
-		'ordering': ['-word'],
-		'indexes': [		
-			{
-				'fields': ['words.word']
-			}
-		]
+		'ordering': ['+word']
 	}
 
-class Words(Document):
-	docID = ObjectIdField()
+class Documents(Document):
+	_auto_id_field = False
+	tweetID = StringField(max_length = 255, required = True, unique=True)
+	rawText = StringField()
+	cleanText = StringField() #intermediate text without stopwords, punctuation, etc
+	lemmaText = StringField() #lemma text
+	#the date the element was inserted in the database
 	createdAt = DateTimeField(default=datetime.now)
+	gender = StringField()
+	hashtags = ListField()
+	attags = ListField()
+	date = DateTimeField()
+	language = StringField()
+	author = StringField()
+	tags = ListField()
 	words = ListField(EmbeddedDocumentField("Word"))
+	
 
 	meta = {
-		'ordering': ['+createdAt']		
+		'ordering': ['+createdAt']
 	}
+
 
 class InvertedIndex(Document):
 	word = StringField(max_length = 255, required = True, unique=True)
@@ -84,19 +47,11 @@ class InvertedIndex(Document):
 	createdAt = DateTimeField(default=datetime.now) 
 
 	meta = { 
-			'ordering': ['+createdAt'], 
-#			'indexes': [
-#				{
-#					'fields': ['+createdAt'],
-#					'unique': True,
-#					'sparse': False
-#				}
-#		]
+			'ordering': ['+createdAt']
 	}
 
 class Docs(EmbeddedDocument):
 	_auto_id_field = False
-	#docId = ReferenceField("Documents", dbref=False)
 	docID = ObjectIdField()
 	count = FloatField()
 	tf = FloatField()
