@@ -27,8 +27,8 @@ def populateDatabase(elems, language='EN', dbname='TwitterDB'):
 	db = client[dbname]
 	if elems:
 		documents = []
-		print len(elems)
-		idx = 1
+		#print len(elems)
+		#idx = 1
 		for elem in elems:
 			if len(elem) >= 4:
 				#get language
@@ -66,8 +66,8 @@ def populateDatabase(elems, language='EN', dbname='TwitterDB'):
 						document['attags'] = attags
 						document['hashtags'] = hashtags
 						documents.append(document)
-						print idx
-						idx += 1
+						#print idx
+						#idx += 1
 			else:
 				try:
 					print "tweet with problems: ", elem[0]

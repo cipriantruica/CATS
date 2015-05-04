@@ -50,14 +50,14 @@ class CleanText:
 		return specialchar_re.sub(replace, text)
 
 	def getHashTags(self, text):
-		hashtags = [tag for tag in tweet.split() if tag.startswith("#")]
+		hashtags = [tag for tag in text.split() if tag.startswith("#")]
 		hashtags = list(set(hashtags))
 		for hashtag in hashtags:
 			text = text.replace(hashtag, ' ')
 		return hashtags, text
 
 	def getAtTags(self, text):
-		attags = [tag for tag in tweet.split() if tag.startswith("@")]
+		attags = [tag for tag in text.split() if tag.startswith("@")]
 		attags = list(set(attags))
 		for attag in attags:
 			text = text.replace(attag, ' ')
