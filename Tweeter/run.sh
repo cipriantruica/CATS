@@ -15,21 +15,13 @@ LMTZ=1
 OP=1
 LANGUAGE=$2
 path="times/"
-
-getCurrentTimeInMili() {
-  date +'%H 3600 * %M 60 * + %S + 1000 * %N 1000000 / + p' | dc
-}
-
+INIT=0
 FILE="../DATA_SETS/tweets/CATS_demo.csv"
-DB="ERICDB_tweets"
+DB="TwitterDB"
 echo $FILE
 for i in `seq 1 $N`
 do
 	echo "test_$i"
-	START=$(getCurrentTimeInMili)
-	python testing_tweets.py $FILE $DELIMITER $HEADER $DB $LANGUAGE >> $path"perforance"
-	END=$(getCurrentTimeInMili)
-	DIFF=$(( $END - $START ))
+	python testing_tweets.py $FILE $DELIMITER $HEADER $DB $LANGUAGE $INIT
 	echo "*******************" >> $path"perforance"
-	echo $DIFF >> $path"100_script_performance"
 done;
