@@ -93,15 +93,14 @@ class VocabularyIndex:
 		self.db = client[dbname]
 	
 	def createIndex(self, query = None):
-		self.db.vocabulary.drop();
 		if query:
 			self.db.vocabulary_query.drop()
 			self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", query = query)
 			self.db.eval(functionCreateQuery, query)
 		else:
+            self.db.vocabulary.drop()
 			self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection")
 			self.db.eval(functionCreate)
-
 
 	#update index after docunemts are added
 	def updateIndex(self, startDate):				
