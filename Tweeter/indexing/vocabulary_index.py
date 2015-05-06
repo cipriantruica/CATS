@@ -1,4 +1,12 @@
+# coding: utf-8
 import pymongo
+
+__author__ = "Ciprian-Octavian Truică"
+__copyright__ = "Copyright 2014, University Politehnica of Bucharest"
+__license__ = "GNU GPL"
+__version__ = "0.1"
+__email__ = "ciprian.truica@cs.pub.ro"
+__status__ = "Production"
 
 mapFunction = """function() {
 					for (var idx=0; idx<this.words.length; idx++){
@@ -98,19 +106,19 @@ class VocabularyIndex:
 			self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", query = query)
 			self.db.eval(functionCreateQuery, query)
 		else:
-            self.db.vocabulary.drop()
+			self.db.vocabulary.drop()
 			self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection")
 			self.db.eval(functionCreate)
 
 	#update index after docunemts are added
-	def updateIndex(self, startDate):				
+	def updateIndex(self, startDate):
 		query = {"createdAt": {"$gt": startDate } }
 		self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", query = query)
 		self.db.eval(functionUpdate)
 
 
 	#docIDs - list of documents
-	def deleteIndex(self, docIDs):		
+	def deleteIndex(self, docIDs):
 		self.db.vocabulary.update({ }, { "$pull": { "docIDs" :{ "docID": {"$in": docIDs} } }}, multi=True );
 		self.db.vocabulary.remove({"docIDs" : {"$size": 0}}, multi=True )
 		self.db.eval(functionDelete)

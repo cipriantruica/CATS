@@ -1,7 +1,15 @@
+# coding: utf-8
 from mongoengine import *
 from datetime import datetime
 from bson.objectid import ObjectId
 import pymongo
+
+__author__ = "Ciprian-Octavian Truică"
+__copyright__ = "Copyright 2014, University Politehnica of Bucharest"
+__license__ = "GNU GPL"
+__version__ = "0.1"
+__email__ = "ciprian.truica@cs.pub.ro"
+__status__ = "Production"
 
 def connectDB(dbname = 'TwitterDB'):
 	connect(dbname, host="127.0.0.1", port=27017, read_preference= True)

@@ -1,3 +1,4 @@
+# coding: utf-8
 import sys
 import threading
 import time
@@ -12,6 +13,13 @@ from models.mongo_models import *
 from indexing.vocabulary_index import VocabularyIndex as VI
 from indexing.inverted_index import InvertedIndex as IV
 from indexing.pos_index import POSIndex as PI
+
+__author__ = "Ciprian-Octavian Truică"
+__copyright__ = "Copyright 2014, University Politehnica of Bucharest"
+__license__ = "GNU GPL"
+__version__ = "0.1"
+__email__ = "ciprian.truica@cs.pub.ro"
+__status__ = "Production"
 
 def getDates():
 	documents = Documents.objects.only("createdAt")
@@ -80,8 +88,8 @@ def main(filename, csv_delimiter = '\t', header = True, dbname = 'TwitterDB', la
 	connectDB(dbname)	
 	#initialize everything from the stat
 	if initialize == 0:
-		Documents.drop_collection() 
-		populateDB(filename, csv_delimiter, header, language)
+		#Documents.drop_collection() 
+		#populateDB(filename, csv_delimiter, header, language)
 		constructIndexes(dbname)
 	elif initialize == 1: #update the database with new infomation not tested, should work
 		last_docDate, last_wordDate = getDates()

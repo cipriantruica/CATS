@@ -6,6 +6,14 @@ from nlplib.lemmatize_text import LemmatizeText
 from nlplib.named_entities import NamedEntitiesRegonizer
 from nlplib.clean_text import CleanText
 
+__author__ = "Ciprian-Octavian Truică"
+__copyright__ = "Copyright 2014, University Politehnica of Bucharest"
+__license__ = "GNU GPL"
+__version__ = "0.1"
+__email__ = "ciprian.truica@cs.pub.ro"
+__status__ = "Production"
+
+
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
