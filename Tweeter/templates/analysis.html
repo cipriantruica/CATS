@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<title>CATS - Tweet analysis dashboard</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css') }}"/>
+</head>
+
+<body>
+
+	<div id="header">
+		<h1><img src="{{ url_for('static', filename = 'logo.png') }}"></img>CATS project: tweet analysis dashboard</h1>
+	</div>
+	
+	<div style="background-color:#FFFFFF; height:1px;">
+		
+	</div>
+	
+	<div id="content">
+		<div id="sidebar">
+			<label>Navigate on this page:</label></br>
+			<label><a href="analysis">Tweet analysis dashboard</a></label>
+			<ul>
+				<li>Filtering
+					<ul>
+						<li><a href="#filter-date">By date</a></li>
+						<li><a href="#filter-keyword">By keyword</a></li>
+						<li><a href="#filter-location">By location</a></li>
+					</ul>	
+				</li>
+				<li>Natural Language Processing
+					<ul>
+						<li><a href="#nlp-lemmatization">Lemmatization</a></li>
+						<li><a href="#nlp-ner">Named-entity recognition</a></li>
+						<li><a href="#nlp-vocabulary">Vocabulary</a></li>
+						<li><a href="#nlp-cooccurrence">Co-occurrence</a></li>
+					</ul>	
+				</li>
+				<li>Topic Modeling
+					<ul>
+						<li><a href="#topic-lda">LDA</a></li>
+						<li><a href="#topic-hlda">Hierarchical LDA</a></li>
+					</ul>
+				</li>
+				<li>Event Detection and Tracking
+					<ul>
+						<li><a href="#edt-mabed">MABED</a></li>
+					</ul>
+				</li>
+			</ul>
+			</br>
+			<label>Browse other pages:</label></br>
+			<label><a href="collection">Tweet collection dashboard</a></label></br>
+			<label><a href="about">About this project</a></label></br>
+		</div>
+		
+		<div id="main-content">
+		    
+		    <h2>Filtering</h2>
+    
+		    <label id="filter-date">By date: </label><input type="text" name="date" class="underlined"/></br>
+		    <label id="filter-keyword">By keywords: </label><input type="text" name="keyword" class="underlined"/></br>
+		    <label id="id-location">By location: </label><input type="text" name="location" class="underlined"/></br>
+		    <button>Filter tweets</button>
+           	<label>{% if tweetCount %} {{ tweetCount }}{% endif %} tweets</label>
+
+		    <h2>Natural language processing</h2>
+	
+		    <h3 id="nlp-lemmatization">Lemmatization</h3>
+    
+		    <p>Lemmatization is the process of reducing inflectional forms and sometimes derivationally related forms of a word to a common base form, so they can be analysed as a single item. By default, all the functionnalities offers by CATS are based on lemmatized tweets. However, you can change this behavior by checking the box below, so treatments are applied to raw tweets instead.</p>
+    
+		    <input type="checkbox" name="lemmatization" value="on" checked > Activate lemmatization 
+		    </br>
+		    </br>
+		    <h3 id="nlp-vocabulary">Vocabulary</h3>
+		    
+			<p>The vocabulary is the list of all lemmas sorted in terms of their frequency in tweets.</p>
+
+		    <a href="{{ url_for('getWords') }}"><button>Download the vocabulary</button></a><button>Browse the vocabulary</button><button>Visualize the vocabulary</button>
+		    </br>
+		    </br>
+		    <h3 id="nlp-cooccurrence">Co-occurrence</h3>
+    
+		    <label>Find tweets in which the following words appear together: </label><form action="{{ url_for('getTweets') }}" method="POST"><input type="text" name="cooccurringwords" class="underlined"/><input type="submit" value="Download tweets" class="button"/></form>
+		    <p>Tweets can be sorted according to one of the following criteria</p>
+		    <ul>
+		      <li>TF-IDF: </li>
+		      <li>BM25: </li>
+		    </ul></p>
+		    <label>Sort tweets according to </label><select name="sorting" size="1"><option>TF-IDF</option><option>BM25</option></select><button>Browse tweets</button>
+		    </br>
+		    </br>
+		    <h3 id="nlp-ner">Named-entity recognition</h3>
+	
+		    <p>Named-entity recognition (NER) consists in automatically locating specific elements in tweets, such as the names of persons, organizations, locations and so on.</p>
+    
+		    <button>Perform NER</button>
+		    </br>
+		    </br>
+		    <input type="submit" name="submit" value="Download named-entity list"/><input type="submit" name="submit" value="Browse named-entities"/><input type="submit" value="Visualize named-entities"/>
+
+		    </br>
+		    </br>
+
+		    <h2>Topic modeling</h2>
+
+		    <p>Topic modeling is a way of automatically discovering hidden themes that pervade a collection of tweets. Topic models help organizing, understanding, and summarizing large amounts of tweets.</p>
+
+		    <h3 id="topic-lda">LDA</h3>
+
+		    <p>LDA (i.e. Latent Dirichlet Allocation) is a model that represents tweets as mixtures of topics, each topic being associated to a probability distribution over a set of words.</p>
+
+		    <label>Number of topics: </label><input type="text" name="k" class="underlined"/>
+			
+			<button>Perform LDA</button>
+		    </br>
+		    </br>
+		    <input type="submit" name="submit" value="Download topics"/><input type="submit" name="submit" value="Browse topics"/><input type="submit" name="submit" value="Visualize topics"/>
+		    </br>
+		    </br>
+		    <h3 id="topic-hlda">Hierarchical LDA</h3>
+    
+		    <p>Hierarchical LDA (hLDA) is an extension of LDA where topics are joined together in a hierarchy.</p>
+    
+		    <label>Number of topics: </label><input type="text" name="k" class="underlined"/>
+			
+			<button>Perform hLDA</button>
+		    </br>
+		    </br>
+		    <input type="submit" name="submit" value="Download topics"/><input type="submit" name="submit" value="Browse topics"/><input type="submit" name="submit" value="Visualize hierarchy"/>
+    
+		    </br>
+		    </br>
+
+		    <h2>Event detection</h2>
+    
+		    <p>Event detection refers</p>
+    
+		    <h3 id="edt-mabed">MABED</h3>
+    
+		    <p>MABED (i.e. Mention-Anomaly-Based Event Detection) is a statistical method for automatically detecting significant events reported in a collection of tweets.</p>
+		</div>
+		
+		<div class="clear"></div>
+	</div>
+
+</body>
+
+</html>

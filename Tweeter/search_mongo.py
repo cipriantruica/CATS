@@ -1,14 +1,12 @@
 import pymongo
 from gensim.utils import lemmatize
 from nlplib.clean_text import CleanText
-from itertools import combinations
 from concurrent.futures import ThreadPoolExecutor
 from multiprocessing import cpu_count
-from nlplib.lemmatize_text import LemmatizeText
 import time
 
 client = pymongo.MongoClient()
-db = client['ERICDB']
+db = client['TwitterDB']
 cleanText = CleanText()
 
 function = """function(){
@@ -39,7 +37,8 @@ reduceFunction = """function(key, values){
 
 class Search:
 	def score(self, word):
-
+		db.search_index2.drop()
+		db.search_index.drop()
 		db.vocabulary.map_reduce(mapFunction, reduceFunction, 'search_index2', query={'word': word})
 		db.eval(function)
 		response = db.search_index.find({'word': word}, {'docIDs': 1, '_id': 0})
@@ -47,7 +46,7 @@ class Search:
 		for value in response[0]['docIDs']:
 			lista[value['docID']] = value['TFIDF']
 		db.search_index2.drop()
-		db.search_index2.drop()
+		db.search_index.drop()
 		return lista
 
 	def rank(self, searchPhrase):
@@ -65,40 +64,26 @@ class Search:
 			scorePhrase[key] = round(score, 2)
 		#print searchPhrase, scorePhrase
 		return scorePhrase, keys
-				
-	def subQueries(self, searchPhrase):
-		print searchPhrase
-		text, h, a = cleanText.cleanText(searchPhrase)
 
-		words = [word.split('/')[0] for word in lemmatize(text)]
-		searchWords = []
-		for L in range(len(words) + 1, 0, -1):
-			for subset in combinations(words, L):
-				searchWords.append(list(subset))
-		return words, searchWords
 
-	def __init__(self, searchPhrase, k):
-		words, subSearch = self.subQueries(searchPhrase)
+	def __init__(self, searchPhrase, k=0):
+		self.words = [word.split('/')[0] for word in lemmatize(cleanText.removeStopWords(cleanText.cleanText(searchPhrase)[0]))]
 		self.listSearch = {}
+		self.k = k
+
+	def results(self):
 		no_threads = cpu_count()
 
 		with ThreadPoolExecutor(max_workers = no_threads) as e:
-			for word in words:
+			for word in self.words:
 				result = e.submit(self.score, word)
 				self.listSearch[word] = result.result()
 
 		keys = {}
 		rankedPhrase = {}
-		
-		with ThreadPoolExecutor(max_workers = no_threads) as e:
-			for phrase in subSearch:
-				result = e.submit(self.rank, phrase)
-				rankedPhrase[' '.join(word for word in phrase)], keys[' '.join(word for word in phrase)] = result.result()
-		"""
-		for phrase in subSearch:
-			rankedPhrase[' '.join(word for word in phrase)], keys[' '.join(word for word in phrase)] = self.rank(phrase)
-		"""
-		
+		w = ' '.join(word for word in self.words)
+		rankedPhrase[w], keys[w] = self.rank(self.words)
+				
 		distinctKeys = []
 		for key in keys:			
 			distinctKeys += keys[key]
@@ -107,35 +92,33 @@ class Search:
 
 		answer = {}
 		for key in distinctKeys:
-			for phrase in subSearch:
-				if rankedPhrase[' '.join(word for word in phrase)].get(key, -1) != -1:
-					answer[key] = max(rankedPhrase[' '.join(word for word in phrase)][key], answer.get(key, -1))
-
-		#print answer.values()
-		answer = sorted(answer.items(), key=lambda x: x[1], reverse=True)
+			if rankedPhrase[w].get(key, -1) != -1:
+				answer[key] = max(rankedPhrase[w][key], answer.get(key, -1))
 		
-		idx = 0
+		if self.k !=0:
+			answer = dict(sorted(answer.items(), key=lambda x: x[1], reverse=True)[:self.k])
+		else:
+			answer = dict(sorted(answer.items(), key=lambda x: x[1], reverse=True))
+		l = []
 		for key in answer:
-			print key
-			idx += 1
-			if idx == k:
-				break
+			d={}
+			d = db.documents.find_one(spec_or_id={"_id": key})
+			l.append({ 'id': key, 'rawText': d['rawText'], 'author': d['author'], 'date': d['date'], 'score':answer[key] })
+		return l
 
-
-
+"""
 if __name__ == "__main__":
 	db.search_index.drop()
 	searchPhrase = []
-	searchPhrase.append("absurd")
-	searchPhrase.append("absurd ability")
-	searchPhrase.append("absurd ability action")
-	searchPhrase.append("absurd ability action back")
-	searchPhrase.append("absurd ability action back go")
-	for i in range(0,5):
-		time_words = []
-		for j in range(0, 1):
-			start = time.time()
-			search = Search(searchPhrase[i], 20)
-			end = time.time() 
-			time_words.append(end-start)
-		print "no search words:", i+1, " k = ", 20, 'mean time:', round(sum(time_words)/len(time_words), 2)
+	searchPhrase.append("fuck shit")
+
+
+	time_words = []
+	for j in range(0, 1):
+		start = time.time()
+		search = Search(searchPhrase[0], 20000)
+		search.results()
+		end = time.time() 
+		time_words.append(end-start)
+	print "no search words: k = ", 20, 'mean time:', round(sum(time_words)/len(time_words), 2)
+"""
