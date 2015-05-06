@@ -4,6 +4,7 @@ from nlplib.clean_text import CleanText
 from itertools import combinations
 from concurrent.futures import ThreadPoolExecutor
 from multiprocessing import cpu_count
+from nlplib.lemmatize_text import LemmatizeText
 import time
 
 client = pymongo.MongoClient()
@@ -66,7 +67,10 @@ class Search:
 		return scorePhrase, keys
 				
 	def subQueries(self, searchPhrase):
-		words = [word.split('/')[0] for word in lemmatize(cleanText.removeStopWords(cleanText.cleanText(searchPhrase)))]
+		print searchPhrase
+		text, h, a = cleanText.cleanText(searchPhrase)
+
+		words = [word.split('/')[0] for word in lemmatize(text)]
 		searchWords = []
 		for L in range(len(words) + 1, 0, -1):
 			for subset in combinations(words, L):

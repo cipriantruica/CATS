@@ -24,47 +24,27 @@ functionCreate = """function(){
 						while(items.hasNext()){
 							var item = items.next();
 							var n = item.value.ids.length;
-							var widf = Math.round(Math.log(noDocs/n) * 100)/100;
+							var widf = 1 + Math.round(Math.log(noDocs/n) * 100)/100;
 							doc = {word: item._id, idf: widf, createdAt: new Date(), docIDs: item.value.ids};
 							db.vocabulary.insert(doc);
 						}
 						db.temp_collection.drop();
 					}"""
-
-functionUpdate1 ="""
-					function(){
-						var noDocs = db.documents.count();
+functionCreateQuery = """function(query){
+						var noDocs = db.documents.count(query);
+						var start = new Date();
 						var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
-						var list_words = []
 						while(items.hasNext()){
 							var item = items.next();
-							var wordID = item._id;
-							list_words.push(wordID);
-							var exists = db.vocabulary.findOne({word: wordID}, {docIDs: 1, _id:0});
-							if (exists){
-								var docIDs = exists.docIDs;
-								docIDs = docIDs.concat(item.value.ids);
-								var n = docIDs.length;
-								var widf = Math.round(Math.log(noDocs/n) * 100)/100;
-								db.vocabulary.update({word: wordID}, {$set: {idf: widf, docIDs: docIDs}});
-							}else{
-								var n = item.value.ids.length;
-								var widf = Math.round(Math.log(noDocs/n) * 100)/100;
-								doc = {word: wordID, idf: widf, createdAt: new Date(), docIDs: item.value.ids};
-								db.vocabulary.insert(doc);
-							}
-						}
-						var words = db.vocabulary.find({word: {$nin: list_words}},{_id: 0, word: 1, docIDs: 1}).addOption(DBQuery.Option.noTimeout);
-						while(words.hasNext()){
-							var word = words.next();
-							var widf = Math.round(Math.log(noDocs/word.docIDs.length) * 100)/100;
-							db.vocabulary.update({word: wordID}, {$set: {idf: widf}});
+							var n = item.value.ids.length;
+							var widf = 1 + Math.round(Math.log(noDocs/n) * 100)/100;
+							doc = {word: item._id, idf: widf, createdAt: new Date(), docIDs: item.value.ids};
+							db.vocabulary_query.insert(doc);
 						}
 						db.temp_collection.drop();
-					}
-"""
+					}"""
 
-functionUpdate2 ="""
+functionUpdate ="""
 					function(){
 						var noDocs = db.documents.count();
 						var words = db.vocabulary.find({},{_id: 0, word: 1, docIDs: 1}).addOption(DBQuery.Option.noTimeout);
@@ -92,27 +72,7 @@ functionUpdate2 ="""
 						}
 						db.temp_collection.drop();
 					}
-"""
-
-functionUpdate3 ="""
-					function(){
-						var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
-						while(items.hasNext()){
-							var item = items.next();
-							var wordID = item._id;
-							var exists = db.vocabulary.findOne({word: wordID}, {docIDs: 1, _id:0});
-							if (exists){
-								var docIDs = exists.docIDs;
-								docIDs = docIDs.concat(item.value.ids);
-								db.vocabulary.update({word: wordID}, {$set: {docIDs: docIDs}});
-							}else{
-								doc = {word: wordID, createdAt: new Date(), docIDs: item.value.ids};
-								db.vocabulary.insert(doc);
-							}
-						}
-						db.temp_collection.drop();
-					}
-"""
+				"""
 
 
 functionDelete = """function (){
@@ -135,19 +95,19 @@ class VocabularyIndex:
 	def createIndex(self, query = None):
 		self.db.vocabulary.drop();
 		if query:
+			self.db.vocabulary_query.drop()
 			self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", query = query)
+			self.db.eval(functionCreateQuery, query)
 		else:
 			self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection")
-		self.db.eval(functionCreate)
+			self.db.eval(functionCreate)
+
 
 	#update index after docunemts are added
 	def updateIndex(self, startDate):				
 		query = {"createdAt": {"$gt": startDate } }
 		self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", query = query)
-		#self.db.eval(functionUpdate1)
-		self.db.eval(functionUpdate2)
-		#self.db.eval(functionUpdate3)
-		#self.db.eval(functionDelete)
+		self.db.eval(functionUpdate)
 
 
 	#docIDs - list of documents
