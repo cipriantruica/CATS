@@ -1,13 +1,12 @@
 # coding: utf-8
-import csv
-
 __author__ = "Ciprian-Octavian Truică"
-__copyright__ = "Copyright 2014, University Politehnica of Bucharest"
+__copyright__ = "Copyright 2015, University Politehnica of Bucharest"
 __license__ = "GNU GPL"
 __version__ = "0.1"
 __email__ = "ciprian.truica@cs.pub.ro"
 __status__ = "Production"
 
+import csv
 
 #author field parse
 def getAuthorName(text, ch = ','):

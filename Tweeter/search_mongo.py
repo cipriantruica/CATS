@@ -1,4 +1,13 @@
 # coding: utf-8
+
+__author__ = "Ciprian-Octavian Truică"
+__copyright__ = "Copyright 2015, University Politehnica of Bucharest"
+__license__ = "GNU GPL"
+__version__ = "0.1"
+__email__ = "ciprian.truica@cs.pub.ro"
+__status__ = "Production"
+
+
 import pymongo
 from gensim.utils import lemmatize
 from nlplib.clean_text import CleanText
@@ -6,12 +15,7 @@ from concurrent.futures import ThreadPoolExecutor
 from multiprocessing import cpu_count
 import time
 
-__author__ = "Ciprian-Octavian Truică"
-__copyright__ = "Copyright 2014, University Politehnica of Bucharest"
-__license__ = "GNU GPL"
-__version__ = "0.1"
-__email__ = "ciprian.truica@cs.pub.ro"
-__status__ = "Production"
+
 
 client = pymongo.MongoClient()
 db = client['TwitterDB']

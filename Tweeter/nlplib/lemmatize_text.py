@@ -1,4 +1,12 @@
 # coding: utf-8
+
+__author__ = "Ciprian-Octavian Truică"
+__copyright__ = "Copyright 2015, University Politehnica of Bucharest"
+__license__ = "GNU GPL"
+__version__ = "0.1"
+__email__ = "ciprian.truica@cs.pub.ro"
+__status__ = "Production"
+
 from __future__ import division
 from gensim.utils import lemmatize
 from nlplib.clean_text import CleanText
@@ -8,12 +16,7 @@ from pattern.fr import parse as parseFR
 from pattern.en import parse as parseEN
 from nltk.corpus import stopwords
 
-__author__ = "Ciprian-Octavian Truică"
-__copyright__ = "Copyright 2014, University Politehnica of Bucharest"
-__license__ = "GNU GPL"
-__version__ = "0.1"
-__email__ = "ciprian.truica@cs.pub.ro"
-__status__ = "Production"
+
 
 #TO_DO modify this class to accept french also
 class LemmatizeText:
