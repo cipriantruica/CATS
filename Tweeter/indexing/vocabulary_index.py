@@ -38,6 +38,7 @@ functionCreate = """function(){
 							doc = {word: item._id, idf: widf, createdAt: new Date(), docIDs: item.value.ids};
 							db.vocabulary.insert(doc);
 						}
+						db.vocabulary.ensureIndex({'idf':1});
 						db.temp_collection.drop();
 					}"""
 functionCreateQuery = """function(query){
@@ -51,6 +52,7 @@ functionCreateQuery = """function(query){
 							doc = {word: item._id, idf: widf, createdAt: new Date(), docIDs: item.value.ids};
 							db.vocabulary_query.insert(doc);
 						}
+						db.vocabulary_query.ensureIndex({'idf':1});
 						db.temp_collection.drop();
 					}"""
 

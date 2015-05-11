@@ -21,21 +21,30 @@ def analysis_dashboard_page(name=None):
 def about_page(name=None):
     return render_template('about.html', name=name)    
 
-#@app.route('/cats/analysis/construct_vocabulary')
-#def construct_vocabulary():
-#    print("constructing voxcab")
-#    vocab = VocabularyIndex(dbname='TwitterDB')
-#    vocab.createIndex()
+@app.route('/cats/analysis/construct_vocabulary')
+def construct_vocabulary():
+    print("constructing voxcab")
+    vocab = VocabularyIndex(dbname='TwitterDB')
+    vocab.createIndex()
 
-@app.route('/cats/analysis/vocabulary.csv')
-def getWords():
+@app.route('/cats/analysis/vocabulary_cloud')
+def getTermCloud():
     voc = db.vocabulary.find(projection={'word':1,'idf':1},limit=1000).sort('idf',pymongo.ASCENDING)
     csv = 'word,idf\n'
     for doc in voc :
         csv += doc['word']+','+str(doc['idf'])+'\n'
     return Response(csv,mimetype="text/csv")
 
-@app.route('/cats/analysis/tweets.csv',methods=['POST'])
+@app.route('/cats/analysis/vocabulary.csv')
+def getTerms():
+    voc = db.vocabulary.find(projection={'word':1,'idf':1},limit=1000).sort('idf',pymongo.ASCENDING)
+    csv = 'word,idf\n'
+    for doc in voc :
+
+        csv += doc['word']+','+str(doc['idf'])+'\n'
+    return Response(csv,mimetype="text/csv")
+
+@app.route('/cats/analysis/tweets',methods=['POST'])
 def getTweets():
     query = request.form['cooccurringwords']
     search = Search(query)
@@ -44,10 +53,10 @@ def getTweets():
     html = """  
     <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.7/css/jquery.dataTables.css">
+        <link rel="stylesheet" type="text/css" href="/static/jquery.dataTables.css">
         <style type="text/css" class="init"></style>
-        <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" language="javascript" src="/static/jquery-1.11.1.min.js"></script>
+    	<script type="text/javascript" language="javascript" src="/static/jquery.dataTables.min.js"></script>
         <script type="text/javascript" class="init">
             $(document).ready(function() {
     	        $('#example').DataTable();
@@ -70,7 +79,6 @@ def getTweets():
         html += "<tr><td>"+str(doc['author'])+'</td><td>'+str(doc['date'])+'</td><td>'+doc['rawText']+'</td><td>'+str(doc['score'])+'</td></tr>'
         csv += str(doc['author'])+','+str(doc['date'])+','+doc['rawText']+','+str(doc['score'])+'\n'
     html += "</tbody></table></body></html>"
-    #return Response(csv,mimetype="text/csv")
     return html
     
 if __name__ == '__main__':

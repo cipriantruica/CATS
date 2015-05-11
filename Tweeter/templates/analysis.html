@@ -19,7 +19,7 @@
 	
 	<div id="content">
 		<div id="sidebar">
-			<label>Navigate on this page:</label></br>
+			<label>Navigate on this page:</label><br/>
 			<label><a href="analysis">Tweet analysis dashboard</a></label>
 			<ul>
 				<li>Filtering
@@ -33,8 +33,8 @@
 					<ul>
 						<li><a href="#nlp-lemmatization">Lemmatization</a></li>
 						<li><a href="#nlp-ner">Named-entity recognition</a></li>
-						<li><a href="#nlp-vocabulary">Vocabulary</a></li>
-						<li><a href="#nlp-cooccurrence">Co-occurrence</a></li>
+						<li><a href="#nlp-vocabulary">Vocabulary analysis</a></li>
+						<li><a href="#nlp-cooccurrence">Term co-occurrence exploration</a></li>
 					</ul>	
 				</li>
 				<li>Topic Modeling
@@ -49,19 +49,19 @@
 					</ul>
 				</li>
 			</ul>
-			</br>
-			<label>Browse other pages:</label></br>
-			<label><a href="collection">Tweet collection dashboard</a></label></br>
-			<label><a href="about">About this project</a></label></br>
+			<br/>
+			<label>Browse other pages:</label><br/>
+			<label><a href="collection">Tweet collection dashboard</a></label><br/>
+			<label><a href="about">About this project</a></label><br/>
 		</div>
 		
 		<div id="main-content">
 		    
 		    <h2>Filtering</h2>
     
-		    <label id="filter-date">By date: </label><input type="text" name="date" class="underlined"/></br>
-		    <label id="filter-keyword">By keywords: </label><input type="text" name="keyword" class="underlined"/></br>
-		    <label id="id-location">By location: </label><input type="text" name="location" class="underlined"/></br>
+		    <label id="filter-date" style="width: 20%;">By date: </label><input type="text" name="date" class="underlined"/><br/>
+		    <label id="filter-keyword">By keywords: </label><input type="text" name="keyword" class="underlined"/><br/>
+		    <label id="id-location">By location: </label><input type="text" name="location" class="underlined"/><br/>
 		    <button>Filter tweets</button>
            	<label>{% if tweetCount %} {{ tweetCount }}{% endif %} tweets</label>
 
@@ -69,44 +69,47 @@
 	
 		    <h3 id="nlp-lemmatization">Lemmatization</h3>
     
-		    <p>Lemmatization is the process of reducing inflectional forms and sometimes derivationally related forms of a word to a common base form, so they can be analysed as a single item. By default, all the functionnalities offers by CATS are based on lemmatized tweets. However, you can change this behavior by checking the box below, so treatments are applied to raw tweets instead.</p>
+		    <p>Lemmatization is the process of reducing inflectional forms and sometimes derivationally related forms of a word to a common base form, so they can be analysed as a single item. By default, all the functionnalities offers by CATS are based on lemmatized tweets.</p>
     
 		    <input type="checkbox" name="lemmatization" value="on" checked > Activate lemmatization 
-		    </br>
-		    </br>
-		    <h3 id="nlp-vocabulary">Vocabulary</h3>
+		    <br/>
+		    <br/>
+		    <h3 id="nlp-vocabulary">Vocabulary analysis</h3>
 		    
 			<p>The vocabulary is the list of all lemmas sorted in terms of their frequency in tweets.</p>
-
-		    <a href="{{ url_for('getWords') }}"><button>Download the vocabulary</button></a><button>Browse the vocabulary</button><button>Visualize the vocabulary</button>
-		    </br>
-		    </br>
-		    <h3 id="nlp-cooccurrence">Co-occurrence</h3>
+			<br/>
+		    <a href="{{ url_for('getTerms') }}"><button>Download the vocabulary</button></a>
+		    <button>Visualize the vocabulary</button>
+		    <br/>
+		    <br/>
+		    <h3 id="nlp-cooccurrence">Term co-occurrence exploration</h3>
     
-		    <label>Find tweets in which the following words appear together: </label><form action="{{ url_for('getTweets') }}" method="POST"><input type="text" name="cooccurringwords" class="underlined"/><input type="submit" value="Download tweets" class="button"/></form>
-		    <p>Tweets can be sorted according to one of the following criteria</p>
-		    <ul>
-		      <li>TF-IDF: </li>
-		      <li>BM25: </li>
-		    </ul></p>
-		    <label>Sort tweets according to </label><select name="sorting" size="1"><option>TF-IDF</option><option>BM25</option></select><button>Browse tweets</button>
-		    </br>
-		    </br>
+		    <p>A set of terms are said to be co-occurring when are present in the same tweet. Co-occurence analysis can help understand semantics or dicover linguistic patterns for instance.</p>
+
+		    <label>Terms (separated by a space, example: "cat dog"): </label> 
+		    <br/>
+		    <form action="{{ url_for('getTweets') }}" method="POST"><input type="text" name="cooccurringwords" class="underlined" style="width: 615px;"/>
+				<br/>
+				<br/>
+		    	<input type="submit" value="Browse tweets" class="button"/>
+		    </form>
+		    <br/>
+		    <br/>
 		    <h3 id="nlp-ner">Named-entity recognition</h3>
 	
 		    <p>Named-entity recognition (NER) consists in automatically locating specific elements in tweets, such as the names of persons, organizations, locations and so on.</p>
     
 		    <button>Perform NER</button>
-		    </br>
-		    </br>
+		    <br/>
+		    <br/>
 		    <input type="submit" name="submit" value="Download named-entity list"/><input type="submit" name="submit" value="Browse named-entities"/><input type="submit" value="Visualize named-entities"/>
 
-		    </br>
-		    </br>
+		    <br/>
+		    <br/>
 
 		    <h2>Topic modeling</h2>
 
-		    <p>Topic modeling is a way of automatically discovering hidden themes that pervade a collection of tweets. Topic models help organizing, understanding, and summarizing large amounts of tweets.</p>
+		    <p>Topic modeling is a way of automatically discovering hidden themes that pervade a collection of tweets. Topic models can help organizing, understanding, and summarizing large amounts of tweets.</p>
 
 		    <h3 id="topic-lda">LDA</h3>
 
@@ -115,24 +118,24 @@
 		    <label>Number of topics: </label><input type="text" name="k" class="underlined"/>
 			
 			<button>Perform LDA</button>
-		    </br>
-		    </br>
+		    <br/>
+		    <br/>
 		    <input type="submit" name="submit" value="Download topics"/><input type="submit" name="submit" value="Browse topics"/><input type="submit" name="submit" value="Visualize topics"/>
-		    </br>
-		    </br>
+		    <br/>
+		    <br/>
 		    <h3 id="topic-hlda">Hierarchical LDA</h3>
     
 		    <p>Hierarchical LDA (hLDA) is an extension of LDA where topics are joined together in a hierarchy.</p>
     
-		    <label>Number of topics: </label><input type="text" name="k" class="underlined"/>
+		    <label>Number of topics (example: "10"): </label><input type="text" name="k" class="underlined"/>
 			
 			<button>Perform hLDA</button>
-		    </br>
-		    </br>
+		    <br/>
+		    <br/>
 		    <input type="submit" name="submit" value="Download topics"/><input type="submit" name="submit" value="Browse topics"/><input type="submit" name="submit" value="Visualize hierarchy"/>
     
-		    </br>
-		    </br>
+		    <br/>
+		    <br/>
 
 		    <h2>Event detection</h2>
     
