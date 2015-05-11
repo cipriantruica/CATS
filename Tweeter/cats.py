@@ -30,17 +30,65 @@ def construct_vocabulary():
 @app.route('/cats/analysis/vocabulary_cloud')
 def getTermCloud():
     voc = db.vocabulary.find(projection={'word':1,'idf':1},limit=1000).sort('idf',pymongo.ASCENDING)
-    csv = 'word,idf\n'
+    html = """
+    <!doctype html>
+    <!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"><![endif]-->
+    <!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+    <!--[if IE 8]><html class="no-js lt-ie9" lang="en"><![endif]-->
+    <!--[if gt IE 8]><!-->
+    <html class="no-js" lang="en">
+    <!--<![endif]-->
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="/static/jquery-1.11.1.min.js"></script>
+    <script src="/static/jquery.awesomeCloud-0.2.js"></script>
+    <style type="text/css">
+    .wordcloud {
+    border: 1px solid #036;
+    height: 7in;
+    margin: 0.5in auto;
+    padding: 0;
+    page-break-after: always;
+    page-break-inside: avoid;
+    width: 7in;
+    }
+    </style>
+    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+    <div role="main">
+    <div id="wordcloud2" class="wordcloud">
+    """
     for doc in voc :
-        csv += doc['word']+','+str(doc['idf'])+'\n'
-    return Response(csv,mimetype="text/csv")
+        html += "<span data-weight='"+str(doc['idf'])+"'>"+doc['word']+"</span>\n"
+    html += """</div>
+            <script>
+    			$(document).ready(function(){
+    				$("#wordcloud2").awesomeCloud({
+    					"size" : {
+    						"grid" : 9,
+    						"factor" : 1
+    					},
+    					"options" : {
+    						"color" : "random-dark",
+    						"rotationRatio" : 0.35
+    					},
+    					"font" : "'Times New Roman', Times, serif",
+    					"shape" : "circle"
+    				});
+    			});
+    		</script>
+        </body>
+    </html>
+    """
+    return html
 
 @app.route('/cats/analysis/vocabulary.csv')
 def getTerms():
     voc = db.vocabulary.find(projection={'word':1,'idf':1},limit=1000).sort('idf',pymongo.ASCENDING)
     csv = 'word,idf\n'
     for doc in voc :
-
         csv += doc['word']+','+str(doc['idf'])+'\n'
     return Response(csv,mimetype="text/csv")
 

@@ -79,7 +79,7 @@
 			<p>The vocabulary is the list of all lemmas sorted in terms of their frequency in tweets.</p>
 			<br/>
 		    <a href="{{ url_for('getTerms') }}"><button>Download the vocabulary</button></a>
-		    <button>Visualize the vocabulary</button>
+		    <a href="{{ url_for('getTermCloud') }}"><button>Visualize the vocabulary</button></a>
 		    <br/>
 		    <br/>
 		    <h3 id="nlp-cooccurrence">Term co-occurrence exploration</h3>
