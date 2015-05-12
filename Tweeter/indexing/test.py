@@ -9,7 +9,11 @@ __status__ = "Production"
 
 from vocabulary_index import VocabularyIndex
 
-query = {"words.word" : {"$in":["curry","cara","cuti"]}, "date": {"$gt": "2015-04-10", "$lte":  "2015-04-12"}}
+#words with or 
+query_or = {"words.word" : {"$in": ["shit", "fuck"] }, "date": {"$gt": "2015-04-10", "$lte":  "2015-04-12"}}
+#words with and
+query_and = {"$and": [{ "words.word": "shit"}, {'words.word': "fuck" } ], "date": {"$gt": "2015-04-10", "$lte":  "2015-04-12"}}
+
 #"author" : "76570268", 
 vocab = VocabularyIndex('TwitterDB')
-vocab.createIndex(query=query)
+vocab.createIndex(query=query_and)

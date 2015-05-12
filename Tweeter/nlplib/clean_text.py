@@ -49,7 +49,8 @@ class CleanText:
 
 	#remove any urls from text
 	def removeURLs(self, text):
-		return re.sub(r'^https?:\/\/.*[\r\n]*', '', text, flags=re.MULTILINE)
+		#return re.sub(r'^https?:\/\/.*[\r\n]*', '', text, flags=re.MULTILINE)
+		return re.sub(r"http\S+", "", text)
 
 	#replace UTF-8 characters with ASCII ones 
 	def replaceUTF8Char(self, text, specialchars=static.specialchar_dic):

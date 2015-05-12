@@ -68,9 +68,9 @@ def constructIndexes(dbname):
 	vocab = VI(dbname)
 	vocab.createIndex()
 	end = time.time()
-
 	print "vocabulary_build.append(", (end - start) , ")"	
 	
+	"""
 	start = time.time()
 	iv = IV(dbname)
 	iv.createIndex()
@@ -82,16 +82,14 @@ def constructIndexes(dbname):
 	pi.createIndex()
 	end = time.time()
 	print "pos_build.append(", (end - start) , ")"
-	
-
-
+	"""
 	
 def main(filename, csv_delimiter = '\t', header = True, dbname = 'TwitterDB', language='EN', initialize = 0):
 	connectDB(dbname)	
 	#initialize everything from the stat
 	if initialize == 0:
-		#Documents.drop_collection() 
-		#populateDB(filename, csv_delimiter, header, language)
+		Documents.drop_collection() 
+		populateDB(filename, csv_delimiter, header, language)
 		constructIndexes(dbname)
 	elif initialize == 1: #update the database with new infomation not tested, should work
 		last_docDate, last_wordDate = getDates()
