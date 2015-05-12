@@ -1,3 +1,9 @@
+__author__ = "Adrien Guille"
+__license__ = "GNU GPL"
+__version__ = "0.1"
+__email__ = "adrien.guille@univ-lyon2.fr"
+__status__ = "Production"
+
 from flask import Flask, Response, render_template, request
 from indexing.vocabulary_index import VocabularyIndex
 from search_mongo import Search
@@ -23,13 +29,14 @@ def about_page(name=None):
 
 @app.route('/cats/analysis/construct_vocabulary')
 def construct_vocabulary():
-    print("constructing voxcab")
+    print("constructing vocab")
     vocab = VocabularyIndex(dbname='TwitterDB')
     vocab.createIndex()
+    return analysis_dashboard_page()
 
 @app.route('/cats/analysis/vocabulary_cloud')
 def getTermCloud():
-    voc = db.vocabulary.find(projection={'word':1,'idf':1},limit=1000).sort('idf',pymongo.ASCENDING)
+    voc = db.vocabulary.find(projection={'word':1,'idf':1},limit=250).sort('idf',pymongo.ASCENDING)
     html = """
     <!doctype html>
     <!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"><![endif]-->
@@ -54,21 +61,21 @@ def getTermCloud():
     width: 7in;
     }
     </style>
-    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
     </head>
     <body>
     <div role="main">
     <div id="wordcloud2" class="wordcloud">
     """
     for doc in voc :
-        html += "<span data-weight='"+str(doc['idf'])+"'>"+doc['word']+"</span>\n"
+        weight = round((1/doc['idf'])*333)
+        html += "<span data-weight='"+str(weight)+"'>"+doc['word']+"</span>\n"
     html += """</div>
             <script>
     			$(document).ready(function(){
     				$("#wordcloud2").awesomeCloud({
     					"size" : {
-    						"grid" : 9,
-    						"factor" : 1
+    						"grid" : 20,
+    						"factor" : 0.25
     					},
     					"options" : {
     						"color" : "random-dark",
@@ -128,6 +135,8 @@ def getTweets():
         csv += str(doc['author'])+','+str(doc['date'])+','+doc['rawText']+','+str(doc['score'])+'\n'
     html += "</tbody></table></body></html>"
     return html
+
+    
     
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0')
