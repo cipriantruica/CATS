@@ -32,6 +32,7 @@ sys.setdefaultencoding('utf8')
 
 ct = CleanText()
 def populateDatabase(elems, language='EN', dbname='TwitterDB'):
+	print dbname
 	client = pymongo.MongoClient()
 	db = client[dbname]
 	if elems:
@@ -102,3 +103,4 @@ def createNamedEntitiesCollection(startDate, endDate):
 			namedEntity.save()
 		except Exception as e:
 			print "Update Error!!!", e
+

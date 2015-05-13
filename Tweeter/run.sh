@@ -16,8 +16,8 @@ OP=1
 LANGUAGE=$2
 path="times/"
 INIT=0
-FILE="../DATA_SETS/tweets/CATS_demo.csv"
-DB="TwitterDB"
+FILE="/home/cats/data/CATS_demo_May-12-2015_3.csv"
+DB="TwitterDB2"
 echo $FILE
 for i in `seq 1 $N`
 do

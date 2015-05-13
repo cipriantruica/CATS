@@ -15,10 +15,6 @@ from concurrent.futures import ThreadPoolExecutor
 from multiprocessing import cpu_count
 import time
 
-
-
-client = pymongo.MongoClient()
-db = client['TwitterDB']
 cleanText = CleanText()
 
 function = """function(){
@@ -49,16 +45,16 @@ reduceFunction = """function(key, values){
 
 class Search:
 	def score(self, word):
-		db.search_index2.drop()
-		db.search_index.drop()
-		db.vocabulary.map_reduce(mapFunction, reduceFunction, 'search_index2', query={'word': word})
-		db.eval(function)
-		response = db.search_index.find({'word': word}, {'docIDs': 1, '_id': 0})
+		self.db.search_index2.drop()
+		self.db.search_index.drop()
+		self.db.vocabulary.map_reduce(mapFunction, reduceFunction, 'search_index2', query={'word': word})
+		self.db.eval(function)
+		response = self.db.search_index.find({'word': word}, {'docIDs': 1, '_id': 0})
 		lista = {}
 		for value in response[0]['docIDs']:
 			lista[value['docID']] = value['TFIDF']
-		db.search_index2.drop()
-		db.search_index.drop()
+		self.db.search_index2.drop()
+		self.db.search_index.drop()
 		return lista
 
 	def rank(self, searchPhrase):
@@ -78,7 +74,9 @@ class Search:
 		return scorePhrase, keys
 
 
-	def __init__(self, searchPhrase, k=0):
+	def __init__(self, searchPhrase, dbname='TwitterDB',k=0):
+		client = pymongo.MongoClient()
+		self.db = client[dbname]
 		self.words = [word.split('/')[0] for word in lemmatize(cleanText.removeStopWords(cleanText.cleanText(searchPhrase)[0]))]
 		self.listSearch = {}
 		self.k = k
@@ -114,13 +112,13 @@ class Search:
 		l = []
 		for key in answer:
 			d={}
-			d = db.documents.find_one(spec_or_id={"_id": key})
+			d = self.db.documents.find_one(spec_or_id={"_id": key})
 			l.append({ 'id': key, 'rawText': d['rawText'], 'author': d['author'], 'date': d['date'], 'score':answer[key] })
 		return l
 
 """
 if __name__ == "__main__":
-	db.search_index.drop()
+	self.db.search_index.drop()
 	searchPhrase = []
 	searchPhrase.append("fuck shit")
 

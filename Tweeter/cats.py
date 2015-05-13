@@ -8,20 +8,40 @@ from flask import Flask, Response, render_template, request
 from indexing.vocabulary_index import VocabularyIndex
 from search_mongo import Search
 import pymongo
+from nlplib.lemmatize_text import LemmatizeText
 
+# Connecting to the database
 client = pymongo.MongoClient()
-db = client['TwitterDB']
+dbname = 'TwitterDB2'
+db = client[dbname]
 
 app = Flask(__name__)
 
-def getTweetCount():
-   tweetCount = db.documents.count()
-   return tweetCount
+query = {}
+
+def getTweetCount(query = {}):
+    #print query
+    return db.documents.find(query).count()
 
 @app.route('/cats/analysis')
 def analysis_dashboard_page(name=None):
     tweetCount = getTweetCount()
-    return render_template('analysis.html', name=name, tweetCount=tweetCount)  
+    return render_template('analysis.html', name=name, tweetCount=tweetCount) 
+
+@app.route('/cats/analysis', methods=['POST'])
+def analysis_dashboard_page2():
+    keywords = request.form['keyword']
+    date = request.form['date']
+    lem = LemmatizeText(keywords)
+    lem.createLemmaText()
+    lem.createLemmas()
+    wordList = []
+    for word in lem.wordList:
+    	wordList.append(word.word)
+    global query
+    query = {"words.word" : {"$in": wordList }, "date": {"$gt": "2015-04-10", "$lte":  "2015-04-12"}}
+    tweetCount = getTweetCount(query)
+    return render_template('analysis.html', tweetCount=tweetCount)  
     
 @app.route('/cats/about')
 def about_page(name=None):
@@ -29,13 +49,14 @@ def about_page(name=None):
 
 @app.route('/cats/analysis/construct_vocabulary')
 def construct_vocabulary():
-    print("constructing vocab")
-    vocab = VocabularyIndex(dbname='TwitterDB')
+    print("constructing vocab")	
+    vocab = VocabularyIndex(dbname)
     vocab.createIndex()
     return analysis_dashboard_page()
 
 @app.route('/cats/analysis/vocabulary_cloud')
 def getTermCloud():
+    
     voc = db.vocabulary.find(projection={'word':1,'idf':1},limit=250).sort('idf',pymongo.ASCENDING)
     html = """
     <!doctype html>
@@ -93,16 +114,22 @@ def getTermCloud():
 
 @app.route('/cats/analysis/vocabulary.csv')
 def getTerms():
-    voc = db.vocabulary.find(projection={'word':1,'idf':1},limit=1000).sort('idf',pymongo.ASCENDING)
+    print 'ok', query
+    if query:
+        vocab = VocabularyIndex(dbname)
+        vocab.createIndex(query)
+        voc = db.vocabulary_query.find(projection={'word':1,'idf':1},limit=1000).sort('idf',pymongo.ASCENDING)
+    else:
+        voc = db.vocabulary.find(projection={'word':1,'idf':1},limit=1000).sort('idf',pymongo.ASCENDING)
     csv = 'word,idf\n'
     for doc in voc :
         csv += doc['word']+','+str(doc['idf'])+'\n'
-    return Response(csv,mimetype="text/csv")
+    return Response(csv,mimetype="text/csv")   
 
 @app.route('/cats/analysis/tweets',methods=['POST'])
 def getTweets():
     query = request.form['cooccurringwords']
-    search = Search(query)
+    search = Search(searchPhrase=query,dbname=dbname)
     results = search.results()
     csv = 'author,timestamp,text,score\n'
     html = """  

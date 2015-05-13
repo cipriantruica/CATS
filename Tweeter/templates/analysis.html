@@ -58,13 +58,15 @@
 		    
 		    <h2>Filtering</h2>
     
-		    <label id="filter-date" style="width: 20%;">By date (starting and ending date (YYYY-MM-DD) separated by a space, example: "2015-04-06 2015-04-13"): </label><br/>
+		    <label id="filter-date" style="width: 20%;">By date (starting and ending date (YYYY-MM-DD) separated by a space, example: "2015-04-06 2015-04-13"): </label><br/>		    <form action="{{ url_for('analysis_dashboard_page2') }}" method="POST">
 		    <input type="text" name="date" class="underlined" style="width:615px;"/><br/>
 		    <label id="filter-keyword">By keywords: </label><br/>
 		    <input type="text" name="keyword" class="underlined" style="width:615px;"/><br/>
 		    <br/>
-		    <button>Filter tweets</button>
-           	<label>{% if tweetCount %} {{ tweetCount }}{% endif %} tweets</label>
+
+		    	<input type="submit" value="Filter tweets" class="button"/>
+		    </form>
+           	    <label>{% if tweetCount %} {{ tweetCount }}{% endif %} tweets</label>
 
 		    <h2>Natural language processing</h2>
 	

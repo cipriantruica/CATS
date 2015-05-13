@@ -37,10 +37,10 @@ def getDates():
 	return last_docDate, last_wordDate
 
 #try to parallelize this
-def populateDB(filename, csv_delimiter, header, language, k = 1000):
+def populateDB(filename, csv_delimiter, header, language, dbname='TwitterDB',k = 1000):
 	start = time.time() 
 	h, lines = utils.readCSV(filename, csv_delimiter, header)
-	populateDatabase(lines, language)
+	populateDatabase(lines, language, dbname)
 	#noLines = (len(lines)/k)+1
 	#print noLines, len(lines[0: 1000])
 	#for idx in range(0, noLines):
@@ -89,7 +89,7 @@ def main(filename, csv_delimiter = '\t', header = True, dbname = 'TwitterDB', la
 	#initialize everything from the stat
 	if initialize == 0:
 		Documents.drop_collection() 
-		populateDB(filename, csv_delimiter, header, language)
+		populateDB(filename, csv_delimiter, header, language, dbname=dbname)
 		constructIndexes(dbname)
 	elif initialize == 1: #update the database with new infomation not tested, should work
 		last_docDate, last_wordDate = getDates()
@@ -99,7 +99,7 @@ def main(filename, csv_delimiter = '\t', header = True, dbname = 'TwitterDB', la
 		updateIndexes(dbname, last_wordDate)
 		print 'date for update indexes:', last_wordDate
 		print 'last date doc:', last_docDate
-	
+
 #this script receives 5 parameters
 # 1 - filename
 # 2 - the csv delimiter: t - tab, c - coma, s - semicolon
