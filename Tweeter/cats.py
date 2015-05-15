@@ -9,18 +9,19 @@ from indexing.vocabulary_index import VocabularyIndex
 from search_mongo import Search
 import pymongo
 from nlplib.lemmatize_text import LemmatizeText
+from bson.regex import Regex
+import re
 
 # Connecting to the database
 client = pymongo.MongoClient()
-dbname = 'TwitterDB2'
+dbname = 'TwitterDB'
 db = client[dbname]
 
 app = Flask(__name__)
 
 query = {}
 
-def getTweetCount(query = {}):
-    #print query
+def getTweetCount():
     return db.documents.find(query).count()
 
 @app.route('/cats/analysis')
@@ -37,10 +38,26 @@ def analysis_dashboard_page2():
     lem.createLemmas()
     wordList = []
     for word in lem.wordList:
-    	wordList.append(word.word)
+        """
+            If you want to use a regex,
+            This example will construct a regex that contains the lemma
+            similar in SQL to -> where word like '%fuck%'
+        """
+        regex = re.compile(word.word, re.IGNORECASE)
+    	wordList.append(regex)
+        """
+            this one will find only the tweets with the matching word
+        """
+        #wordList.append(word.word)
     global query
-    query = {"words.word" : {"$in": wordList }, "date": {"$gt": "2015-04-10", "$lte":  "2015-04-12"}}
-    tweetCount = getTweetCount(query)
+    query = {}
+    if wordList:
+        query["words.word"] = {"$in": wordList }
+    if date:
+        start, end = date.split(" ") 
+        query["date"] = {"$gt": start, "$lte": end}
+    print query
+    tweetCount = getTweetCount()
     return render_template('analysis.html', tweetCount=tweetCount)  
     
 @app.route('/cats/about')
@@ -56,8 +73,7 @@ def construct_vocabulary():
 
 @app.route('/cats/analysis/vocabulary_cloud')
 def getTermCloud():
-    
-    voc = db.vocabulary.find(projection={'word':1,'idf':1},limit=250).sort('idf',pymongo.ASCENDING)
+    voc = db.vocabulary.find(fields={'word':1,'idf':1},limit=250, sort=[('idf',pymongo.ASCENDING)])
     html = """
     <!doctype html>
     <!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"><![endif]-->
@@ -114,13 +130,12 @@ def getTermCloud():
 
 @app.route('/cats/analysis/vocabulary.csv')
 def getTerms():
-    print 'ok', query
     if query:
         vocab = VocabularyIndex(dbname)
         vocab.createIndex(query)
-        voc = db.vocabulary_query.find(projection={'word':1,'idf':1},limit=1000).sort('idf',pymongo.ASCENDING)
+        voc = db.vocabulary_query.find(fields={'word':1,'idf':1}, limit=1000, sort=[('idf',pymongo.ASCENDING)])
     else:
-        voc = db.vocabulary.find(projection={'word':1,'idf':1},limit=1000).sort('idf',pymongo.ASCENDING)
+        voc = db.vocabulary.find(fields={'word':1,'idf':1}, limit=1000, sort=[('idf',pymongo.ASCENDING)])
     csv = 'word,idf\n'
     for doc in voc :
         csv += doc['word']+','+str(doc['idf'])+'\n'
@@ -128,8 +143,8 @@ def getTerms():
 
 @app.route('/cats/analysis/tweets',methods=['POST'])
 def getTweets():
-    query = request.form['cooccurringwords']
-    search = Search(searchPhrase=query,dbname=dbname)
+    searchPhrase = request.form['cooccurringwords']
+    search = Search(searchPhrase=searchPhrase, dbname=dbname, query=query)
     results = search.results()
     csv = 'author,timestamp,text,score\n'
     html = """  

@@ -8,7 +8,9 @@ from multiprocessing import cpu_count
 from indexing.vacabulary_index import 
 
 start = time.time() 
-
+"""
+RIP (RESEARCH IN PROGRESS) :)
+"""
 
 #query_and = {"$and": [{ "words.word": "shit"}, {'words.word': "fuck" } ], "date": {"$gt": "2015-04-10", "$lte":  "2015-04-12"}}
 #cursor = db.documents.find(query_and, {'words.count': 1, 'words.word': 1})

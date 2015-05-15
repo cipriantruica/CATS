@@ -47,7 +47,10 @@ class Search:
 	def score(self, word):
 		self.db.search_index2.drop()
 		self.db.search_index.drop()
-		self.db.vocabulary.map_reduce(mapFunction, reduceFunction, 'search_index2', query={'word': word})
+		if self.query:
+			self.db.vocabulary_query.map_reduce(mapFunction, reduceFunction, 'search_index2', query={'word': word})
+		else:
+			self.db.vocabulary.map_reduce(mapFunction, reduceFunction, 'search_index2', query={'word': word})
 		self.db.eval(function)
 		response = self.db.search_index.find({'word': word}, {'docIDs': 1, '_id': 0})
 		lista = {}
@@ -74,11 +77,12 @@ class Search:
 		return scorePhrase, keys
 
 
-	def __init__(self, searchPhrase, dbname='TwitterDB',k=0):
+	def __init__(self, searchPhrase, dbname='TwitterDB', query={}, k=0):
 		client = pymongo.MongoClient()
 		self.db = client[dbname]
 		self.words = [word.split('/')[0] for word in lemmatize(cleanText.removeStopWords(cleanText.cleanText(searchPhrase)[0]))]
 		self.listSearch = {}
+		self.query = query
 		self.k = k
 
 	def results(self):

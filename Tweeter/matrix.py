@@ -45,16 +45,10 @@ for tweetID, word in sorted(dick.items()):
 	for word in words:
 		if dick[tweetID].get(word, 0) == 0:
 			dick[tweetID][word] = 0
-
-
 for elem in dick:
 	print elem, dick[elem]
-
 print '*********************************'
-
 print '*********************************'
-
-
 print mm2
 """
 end = time.time() 
