@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<title>CATS - About the project</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css') }}"/>
+</head>
+
+<body>
+
+	<div id="header">
+		<h1><img src="{{ url_for('static', filename = 'logo.png') }}"></img>CATS project: tweet analysis dashboard</h1>
+	</div>
+	
+	<div style="background-color:#FFFFFF; height:1px;">
+		
+	</div>
+	
+	<div id="content">
+		<div id="sidebar">
+			<label>Navigate on this page:</label></br>
+			<label><a href="about">About this project</a></label>
+			<ul>
+				<li>Purpose of the project</li>
+				<li>Project members</li>
+				<li>Tweet collection functionalities</li>
+				<li>Tweet analysis functionalities</li>
+				<li>Demonstration</li>
+			</ul>
+			</br>
+			<label>Browse other pages:</label></br>
+			<label><a href="collection">Tweet collection dashboard</a></label></br>
+			<label><a href="analysis">Tweet analysis dashboard</a></label></br>
+		</div>
+		
+		<div id="main-content">
+		    <h2>Purpose of the project</h2>
+		    <p>&bull; CATS (i.e. Collection and Analysis of Tweets made Simple) is a project developed by researchers from the Universities of Lyon 1 and Lyon 2. Its aim is to respond to an ever-increasing demand by making it possible for everyone to use Twitter’s API to easily collect tweets with specific restrictions, even to those without any programming skills.</br>
+
+&bull; CATS is meant to be a starting point in the development of new means of data collection on Twitter, in order to make it easier for everyone to use it. This will hopefully give researchers (and others) new possibilities and tools to put to good use in their respective areas of research.</br>
+
+&bull; CATS is not meant to be a fixed interface. It will be a constant work in progress, adding new functionalities with time according to people’s needs. Thus, it will be everyone’s role to participate in its construction, by providing feedback, or by helping with certain tasks when possible (annotation of tweets for certain machine-learning tasks, creation of lists the program would use to focus on certain parameters (specific words, jobs, cities etc…), manual verification of automated processes in order to improve the program etc…).</br>
+
+&bull; Our goal is to make it a user-friendly, participative interface, useful to as many people as possible to benefit research.
+</p>
+			</br>
+		    <h2>Project members</h2>
+		    <p>&bull; Anthony Deseille (University of Lyon 1, Faculty of Sciences, Departement of Computer Science)</br>
+&bull; Michaël Gauthier (University of Lyon 2, Faculty of Languages, Center for Research in Terminology and Translation)</br>
+&bull; Adrien Guille (University of Lyon 2, ERIC Lab, Data Mining and Decision Team)</br>
+&bull; Ciprian-Octavian Truică (University Politehnica of Bucharest, Faculty of Automatic Control and Computers, Departement of Computer Science)</br>
+&bull; Fabien Rico (University of Lyon 1, ERIC Lab, Data Mining and Decision Team)</p>
+			</br>
+		    <h2>Tweet collection functionalities</h2>
+								<p>
+			&bull; The CATS project aims at implementing all the primary functionalities provided by Twitter’s API (collection of tweets by keyword, geolocation, user etc…), and with time, we wish to implement more sophisticated features, such as collection of tweets by gender of the user, age, occupation, sentiment of the tweet, and more… 
+			For every functionality, we will provide detailed reviews of the methodology adopted, as well as accuracy tests to ensure maximum transparency to CATS users so that it can be continuously improved in terms of efficiency, and also in terms of the number of possibilities offered.</br>
+
+			&bull; To be as user-friendly as possible, users of CATS will have the possibility to create an account with a username and a password, and download their corpora directly on a CATS server. This will allow users to collect their corpora without worrying about storage issues on their personal machines, though they will also have the possibility to download everything they want from CATS, when they want it.</p>
+			</br>
+		    <h2>Tweet analysis functionalities</h2>
+								<p>
+			&bull; CATS will implement some corpus analysis features, so that users can start sorting out or analyzing their corpora online, even before downloading them on their own machines. It can also be a way to see if the collection parameters correspond to the users’ expectations, without having to go back and forth between downloading, deleting and arranging; everything can be done online.</p>
+			</br>
+		    <h2>Demonstration</h2>
+		    <p></p>
+		    
+		</div>
+		
+		<div class="clear"></div>
+	</div>
+
+</body>
+
+</html>
