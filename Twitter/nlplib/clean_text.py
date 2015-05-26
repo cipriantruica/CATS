@@ -11,7 +11,6 @@ import sys
 import re
 import static
 import string
-import unicodedata
 from nltk.corpus import stopwords
 
 reload(sys)  

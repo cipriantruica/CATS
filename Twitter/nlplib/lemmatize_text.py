@@ -7,7 +7,7 @@ __version__ = "0.1"
 __email__ = "ciprian.truica@cs.pub.ro"
 __status__ = "Production"
 
-from nlplib.clean_text import CleanText
+from clean_text import CleanText
 from pattern.fr import parse as parseFR
 from pattern.en import parse as parseEN
 
@@ -87,3 +87,15 @@ class LemmatizeText:
 	def printList(self):
 		for words in self.wordList:
 			print words.word, "pos", words.wtype, "count:", words.count, "TF:", words.tf
+
+
+# this are just tests
+if __name__ == '__main__':
+	lt1 = LemmatizeText('John has cats', language='EN')
+	lt1.createLemmaText()
+	lt1.createLemmas()
+	lt1.printList()
+	lt2 = LemmatizeText('Tu t\'appele Julien', language='FR')
+	lt2.createLemmaText()
+	lt2.createLemmas()
+	lt2.printList()

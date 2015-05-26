@@ -27,7 +27,7 @@ RIP (RESEARCH IN PROGRESS) :)
 #query_or = {"words.word" : {"$in": ["shit", "fuck"] }, "date": {"$gt": "2015-04-10", "$lte":  "2015-04-12"}}
 #cursor = db.documents.find({}, {'words.count': 1, 'words.word': 1})
 
-class BuildMarketMatrix:
+class MarketMatrix:
 	def __init__(self, dbname='TwitterDB'):
 		client = pymongo.MongoClient()
 		self.dbname = dbname
@@ -167,7 +167,7 @@ print "time_populate.append(", (end - start), ")"
 
 #this are just tests
 if __name__ == '__main__':
-	mm = BuildMarketMatrix(dbname='TwitterDB')
+	mm = MarketMatrix(dbname='TwitterDB')
 	#mm.build()
 	#query_or = {"words.word" : {"$in": ["shit", "fuck"] }, "date": {"$gt": "2015-04-10", "$lte":  "2015-04-12"}}
 	query_and = {"$and": [{ "words.word": "shit"}, {'words.word': "fuck" } ], "date": {"$gt": "2015-04-10", "$lte":  "2015-04-12"}}
