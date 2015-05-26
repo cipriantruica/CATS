@@ -73,7 +73,10 @@ def construct_vocabulary():
 
 @app.route('/cats/analysis/vocabulary_cloud')
 def getTermCloud():
-    voc = db.vocabulary.find(fields={'word':1,'idf':1},limit=250, sort=[('idf',pymongo.ASCENDING)])
+    if query:
+        voc = db.vocabulary_query.find(fields={'word':1,'idf':1},limit=250, sort=[('idf',pymongo.ASCENDING)])
+    else:
+        voc = db.vocabulary.find(fields={'word':1,'idf':1},limit=250, sort=[('idf',pymongo.ASCENDING)])
     html = """
     <!doctype html>
     <!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"><![endif]-->
