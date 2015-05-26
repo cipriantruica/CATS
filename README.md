@@ -1,19 +1,4 @@
-# ERIC
-
-## TO DO
-* topic extration - see LDA gensim
-* automatic term recognition (ATR) using linguistic information - see BIOTEX 
-* see how this works with a RDBMS
-
-## Review
-* named entities index (should be reviewed, find a better way, use Stanford NER)
-
-## DONE
-* clean text
-* create word vocabulary
-* inverted index
-* POS index
-* create TF_IDF
+# CATS Project
 
 ## Packages
 * sudo apt-get update
@@ -43,4 +28,3 @@
 
 ## Other packages
 * install MongoDB - see MongoDB documentation
-* install PostgreSQL - see PostgreSQl documentation
