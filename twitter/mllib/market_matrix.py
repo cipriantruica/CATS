@@ -14,7 +14,7 @@ import scipy.io, scipy.sparse
 from gensim.corpora import MmCorpus
 from gensim.models import LdaMulticore
 from multiprocessing import cpu_count
-from Twitter.indexing.vocabulary_index import VocabularyIndex
+from twitter.indexing.vocabulary_index import VocabularyIndex
 
 start = time.time() 
 """

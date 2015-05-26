@@ -8,7 +8,7 @@ __email__ = "ciprian.truica@gmail.com"
 __status__ = "Production"
 
 import pymongo
-from Twitter.indexing.vocabulary_index import VocabularyIndex
+from twitter.indexing.vocabulary_index import VocabularyIndex
 
 #TO DO
 #write a single function to write to file
