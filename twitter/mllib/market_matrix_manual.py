@@ -13,7 +13,6 @@ from twitter.indexing.vocabulary_index import VocabularyIndex
 #TO DO
 #write a single function to write to file
 
-
 class MarketMatrix:
 	def __init__(self, dbname='TwitterDB'):
 		client = pymongo.MongoClient()
