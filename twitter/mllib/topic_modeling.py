@@ -55,7 +55,9 @@ if __name__ == '__main__':
 
     print 'Manual MM'
     mm2 = manual(dbname='TwitterDB')
-    mm2.build(query=query_and, rebuild=True)
+    #mm2.build(query=query_and, rebuild=True)
+    #entire vocabulary
+    mm2.build()
     filename = 'mm_count2.mtx'
     id2word2, id2tweetID, matrix = mm2.buildCountMM(filename=filename)
     lda2 = LDA(filename=filename, id2word=id2word2)
@@ -63,12 +65,10 @@ if __name__ == '__main__':
 
     filename = 'mm_binary2.mtx'
     id2word2, id2tweetID, matrix = mm2.buildBinaryMM(filename=filename)
-    print id2word2
     lda2 = LDA(filename=filename, id2word=id2word2)
     lda2.topicModeling()
 
     filename = 'mm_tf2.mtx'
     id2word2, id2tweetID, matrix = mm2.buildTFMM(filename=filename)
-    print id2word2
     lda2 = LDA(filename=filename, id2word=id2word2)
     lda2.topicModeling()

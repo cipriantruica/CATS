@@ -134,38 +134,8 @@ class MarketMatrix:
 			count += 1
 		return id2word, tweetID
 
-"""
-dick = {}	
-for elem in cursor:
-	d = {}
-	for e in elem['words']:
-		d[e['word']] = e['count']
-	dick[elem['_id']]  = d
 
-df = DataFrame(dick).T.fillna(0)
-print(df.columns.values)
-id2word = {}
-count = 0
-for word in df.columns.values:
-	id2word[count] = word
-	count += 1
-
-	
-scipy.io.mmwrite("mmout_sparse", scipy.sparse.csr_matrix(df))
-corpus = MmCorpus('mmout_sparse.mtx')
-
-
-
-workers = cpu_count()
-lda = LdaMulticore(corpus, num_topics=10, id2word=id2word, workers=workers)
-for i in lda.show_topics():
-	print i, "\n"
-
-end = time.time() 
-print "time_populate.append(", (end - start), ")"
-"""
-
-#this are just tests
+#these are just tests
 if __name__ == '__main__':
 	mm = MarketMatrix(dbname='TwitterDB')
 	#mm.build()

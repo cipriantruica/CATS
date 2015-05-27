@@ -89,7 +89,7 @@ class LemmatizeText:
 			print words.word, "pos", words.wtype, "count:", words.count, "TF:", words.tf
 
 
-# this are just tests
+# these are just tests
 if __name__ == '__main__':
 	lt1 = LemmatizeText('John has cats', language='EN')
 	lt1.createLemmaText()
