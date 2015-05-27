@@ -9,6 +9,7 @@ __status__ = "Production"
 
 import pymongo
 from twitter.indexing.vocabulary_index import VocabularyIndex
+import time
 
 #TO DO
 #write a single function to write to file
@@ -175,19 +176,28 @@ class MarketMatrix:
 
 # these are just tests
 if __name__ == '__main__':
-    mm = MarketMatrix(dbname='TwitterDB')
     query_or = {"words.word" : {"$in": ["shit", "fuck"] }, "date": {"$gt": "2015-04-10", "$lte":  "2015-04-12"}}
     query_and = {"$and": [{"words.word": "shit"}, {'words.word': "fuck"}],
                  "date": {"$gt": "2015-04-10", "$lte": "2015-04-12"}}
     #for the entire vocabulary
     #mm.build(rebuild=True)
+    start = time.time()
+    mm = MarketMatrix(dbname='TwitterDB')
     mm.build()
+    end = time.time()
+    print 'build time:',(end-start)
     #mm.build(query_or)
     #mm.build(query=query_and, limit=100)
-    print "Binary MM"
+    start = time.time()
     mm.buildBinaryMM()
-    print "Binary Count"
+    end = time.time()
+    print "Binary MM time:", (end-start)
+    start = time.time()
     mm.buildCountMM()
-    print "Binary TF"
+    end = time.time()
+    print "Binary Count time:", (end-start)
+    start = time.time()
     mm.buildTFMM()
+    end = time.time()
+    print "Binary TF time:", (end-start)
 

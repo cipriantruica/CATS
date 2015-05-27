@@ -17,36 +17,36 @@ db = client[dbname]
 query_or = {"words.word" : {"$in": ["shit", "fuck"] }, "date": {"$gt": "2015-04-10", "$lte":  "2015-04-12"}}
 cursor = db.documents.find({}, {'words.count': 1, 'words.word': 1})
 
-dick = {}	
+dick = {}
 for elem in cursor:
-	d = {}
-	for e in elem['words']:
-		d[e['word']] = e['count']
-	dick[elem['_id']]  = d
+    d = {}
+    for e in elem['words']:
+        d[e['word']] = e['count']
+    dick[elem['_id']]  = d
 
 df = DataFrame(dick).T.fillna(0)
 print(df.columns.values)
 id2word = {}
 count = 0
 for word in df.columns.values:
-	id2word[count] = word
-	count += 1
-	
+    id2word[count] = word
+    count += 1
+    
 scipy.io.mmwrite("mmout_sparse", scipy.sparse.csr_matrix(df))
 corpus = MmCorpus('mmout_sparse.mtx')
 
 workers = cpu_count()
 lda = LdaMulticore(corpus, num_topics=10, id2word=id2word,workers=workers)
 for i in lda.show_topics():
-	print i, "\n"
+    print i, "\n"
 
 """
 for tweetID, word in sorted(dick.items()):
-	for word in words:
-		if dick[tweetID].get(word, 0) == 0:
-			dick[tweetID][word] = 0
+    for word in words:
+        if dick[tweetID].get(word, 0) == 0:
+            dick[tweetID][word] = 0
 for elem in dick:
-	print elem, dick[elem]
+    print elem, dick[elem]
 print '*********************************'
 print '*********************************'
 print mm2

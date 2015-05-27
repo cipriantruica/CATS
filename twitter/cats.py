@@ -9,7 +9,6 @@ from indexing.vocabulary_index import VocabularyIndex
 from search_mongo import Search
 import pymongo
 from nlplib.lemmatize_text import LemmatizeText
-from bson.regex import Regex
 import re
 
 # Connecting to the database
@@ -44,7 +43,7 @@ def analysis_dashboard_page2():
             similar in SQL to -> where word like '%fuck%'
         """
         regex = re.compile(word.word, re.IGNORECASE)
-    	wordList.append(regex)
+        wordList.append(regex)
         """
             this one will find only the tweets with the matching word
         """
@@ -62,7 +61,7 @@ def analysis_dashboard_page2():
     
 @app.route('/cats/about')
 def about_page(name=None):
-    return render_template('about.html', name=name)    
+    return render_template('about.html', name=name)
 
 @app.route('/cats/analysis/construct_vocabulary')
 def construct_vocabulary():
