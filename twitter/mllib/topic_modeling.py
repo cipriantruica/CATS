@@ -52,7 +52,7 @@ class TopicModeling:
             print topic
 
 
-# this are just tests
+# these are just tests
 if __name__ == '__main__':
     query_or = {"words.word" : {"$in": ["shit", "fuck"] }, "date": {"$gt": "2015-04-10", "$lte":  "2015-04-12"}}
     query_and = {"$and": [{"words.word": "shit"}, {'words.word': "fuck"}], "date": {"$gt": "2015-04-10", "$lte": "2015-04-12"}}
