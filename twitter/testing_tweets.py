@@ -131,7 +131,7 @@ def main(filename, csv_delimiter = '\t', header = True, dbname = 'TwitterDB', la
 
         
 
-#this script receives 5 parameters
+#this script receives 7 parameters
 # 1 - filename
 # 2 - the csv delimiter: t - tab, c - coma, s - semicolon
 # 3 - integer: 1 csv has header, 0 csv does not have hearer

@@ -27,7 +27,6 @@ class MarketMatrix:
             limit: parameter used to limit the numeber of returned line, based on idf
             rebuild: parameter used if the vocabulary should be rebuilt
     """
-
     def build(self, query=None, limit=None, rebuild=False):
         if query:
             # if the vocabulary should be rebuilt
@@ -37,7 +36,7 @@ class MarketMatrix:
             if limit:
                 self.cursor = self.db.vocabulary_query.find(fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, limit=limit, sort=[('idf', pymongo.ASCENDING)])
             else:
-                self.cursor = self.db.vocabulary_query.find(fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, limit=limit, sort=[('idf', pymongo.ASCENDING)])
+                self.cursor = self.db.vocabulary_query.find(fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, sort=[('idf', pymongo.ASCENDING)])
         else:
             # if the vocabulary should be rebuilt
             if rebuild:
@@ -48,26 +47,35 @@ class MarketMatrix:
             else:
                 self.cursor = self.db.vocabulary.find(fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, sort=[('idf', pymongo.ASCENDING)])
 
+    def writeMMFile(self, filename, num_rows, num_columns, num_entries, market_matrix):
+        with open(filename, 'w') as mm_file:
+            mm_file.write('%%MatrixMarket matrix coordinate real general\n%\n')
+            mm_file.write(str(num_rows) + ' ' + str(num_columns) + ' ' + str(num_entries) + '\n')
+            idx = 1
+            for elem in market_matrix:
+                for column, value in elem:
+                    mm_file.write(str(idx) + ' ' + str(column+1) + ' ' + str(value) + '\n')
+                idx += 1
+            mm_file.close()
+
     """
         constructs the binary market matrix
         output:
             the binary market matrix
     """
-
-    def buildBinaryMM(self, filename='mm_binary.mtx'):
+    def buildBinaryMM(self, filename=None):
         if self.cursor:
             self.cursor.rewind()
-            no_entries = 0
+            num_entries = 0
             id2word = {}
             word2id = {}
             wordID = 0
             id2tweetID = {}
             tweetID2id = {}
             tweetID = 0
-            marketMatrix = {}
-            corpus = []
+            market_matrix = []
             for elem in self.cursor:
-                no_entries += len(elem['docIDs'])
+                num_entries += len(elem['docIDs'])
                 if word2id.get(elem['word'], -1) == -1:
                     id2word[wordID] = elem['word']
                     word2id[elem['word']] = wordID
@@ -77,21 +85,14 @@ class MarketMatrix:
                         id2tweetID[tweetID] = doc['docID']
                         tweetID2id[doc['docID']] = tweetID
                         tweetID += 1
-                    # dictionary with {docID: {word1: 1, word2: 1}, ...}, only for words that exist
-                    if marketMatrix.get(tweetID2id[doc['docID']], -1) == -1:
-                        marketMatrix[tweetID2id[doc['docID']]] = {word2id[elem['word']]: 1}
-                        corpus.append([(word2id[elem['word']], 1)])
+                    if len(market_matrix) == tweetID:
+                        market_matrix[tweetID2id[doc['docID']]] += [(word2id[elem['word']], 1)]
                     else:
-                        marketMatrix[tweetID2id[doc['docID']]][word2id[elem['word']]] = 1
-                        corpus[tweetID2id[doc['docID']]] += [(word2id[elem['word']], 1)]
-            with open(filename, 'w') as mm_file:
-                mm_file.write('%%MatrixMarket matrix coordinate real general\n%\n')
-                mm_file.write(str(len(id2tweetID)) + ' ' + str(len(id2word)) + ' ' + str(no_entries) + '\n')
-                for doc in marketMatrix:
-                    for word in marketMatrix[doc]:
-                        mm_file.write(str(doc + 1) + ' ' + str(word + 1) + ' ' + str(marketMatrix[doc][word]) + '\n')
-                mm_file.close()
-            return id2word, id2tweetID, marketMatrix, corpus
+                        market_matrix.append([(word2id[elem['word']], 1)])
+            #if filename is given then write to file
+            if filename:
+                self.writeMMFile(filename=filename, num_rows=len(id2tweetID), num_columns=len(id2word), num_entries=num_entries, market_matrix=market_matrix)
+            return id2word, id2tweetID, market_matrix
 
     """
         constructs the count market matrix
@@ -99,20 +100,19 @@ class MarketMatrix:
             the count market matrix
     """
 
-    def buildCountMM(self, filename='mm_count.mtx'):
+    def buildCountMM(self, filename=None):
         if self.cursor:
             self.cursor.rewind()
-            no_entries = 0
+            num_entries = 0
             id2word = {}
             word2id = {}
             wordID = 0
             id2tweetID = {}
             tweetID2id = {}
             tweetID = 0
-            marketMatrix = {}
-            corpus = []
+            market_matrix = []
             for elem in self.cursor:
-                no_entries += len(elem['docIDs'])
+                num_entries += len(elem['docIDs'])
                 if word2id.get(elem['word'], -1) == -1:
                     id2word[wordID] = elem['word']
                     word2id[elem['word']] = wordID
@@ -122,42 +122,33 @@ class MarketMatrix:
                         id2tweetID[tweetID] = doc['docID']
                         tweetID2id[doc['docID']] = tweetID
                         tweetID += 1
-                    # dictionary with {docID: {word1: 1, word2: 1}, ...}, only for words that exist
-                    if marketMatrix.get(tweetID2id[doc['docID']], -1) == -1 :
-                        marketMatrix[tweetID2id[doc['docID']]] = { word2id[elem['word']]: doc['count'] }
-                        corpus.append([(word2id[elem['word']], doc['count'])])
+                    if len(market_matrix) == tweetID:
+                        market_matrix[tweetID2id[doc['docID']]] += [(word2id[elem['word']], doc['count'])]
                     else:
-                        marketMatrix[tweetID2id[doc['docID']]][word2id[elem['word']]] = doc['count']
-                        corpus[tweetID2id[doc['docID']]] += [(word2id[elem['word']], doc['count'])]
-
-            with open(filename, 'w') as mm_file:
-                mm_file.write('%%MatrixMarket matrix coordinate real general\n%\n')
-                mm_file.write(str(len(id2tweetID)) + ' ' + str(len(id2word)) + ' ' + str(no_entries) + '\n')
-                for doc in marketMatrix:
-                    for word in marketMatrix[doc]:
-                        mm_file.write(str(doc + 1) + ' ' + str(word + 1) + ' ' + str(marketMatrix[doc][word]) + '\n')
-                mm_file.close()
-            return id2word, id2tweetID, marketMatrix, corpus
+                        market_matrix.append([(word2id[elem['word']], doc['count'])])
+            #if filename is given then write to file
+            if filename:
+                self.writeMMFile(filename=filename, num_rows=len(id2tweetID), num_columns=len(id2word), num_entries=num_entries, market_matrix=market_matrix)
+            return id2word, id2tweetID, market_matrix
 
     """
         constructs the TF market matrix
         output:
             the TF market matrix
     """
-    def buildTFMM(self, filename='mm_tf.mtx'):
+    def buildTFMM(self, filename=None):
         if self.cursor:
             self.cursor.rewind()
-            no_entries = 0
+            num_entries = 0
             id2word = {}
             word2id = {}
             wordID = 0
             id2tweetID = {}
             tweetID2id = {}
             tweetID = 0
-            marketMatrix = {}
-            corpus = []
+            market_matrix = []
             for elem in self.cursor:
-                no_entries += len(elem['docIDs'])
+                num_entries += len(elem['docIDs'])
                 if word2id.get(elem['word'], -1) == -1:
                     id2word[wordID] = elem['word']
                     word2id[elem['word']] = wordID
@@ -167,21 +158,14 @@ class MarketMatrix:
                         id2tweetID[tweetID] = doc['docID']
                         tweetID2id[doc['docID']] = tweetID
                         tweetID += 1
-                    # dictionary with {docID: {word1: 1, word2: 1}, ...}, only for words that exist
-                    if marketMatrix.get(tweetID2id[doc['docID']], -1) == -1 :
-                        marketMatrix[tweetID2id[doc['docID']]] = {word2id[elem['word']]: doc['tf']}
-                        corpus.append([(word2id[elem['word']], doc['tf'])])
+                    if len(market_matrix) == tweetID:
+                        market_matrix[tweetID2id[doc['docID']]] += [(word2id[elem['word']], doc['tf'])]
                     else:
-                        marketMatrix[tweetID2id[doc['docID']]][word2id[elem['word']]] = doc['tf']
-                        corpus[tweetID2id[doc['docID']]] += [(word2id[elem['word']], doc['tf'])]
-            with open(filename, 'w') as mm_file:
-                mm_file.write('%%MatrixMarket matrix coordinate real general\n%\n')
-                mm_file.write(str(len(id2tweetID)) + ' ' + str(len(id2word)) + ' ' + str(no_entries) + '\n')
-                for doc in marketMatrix:
-                    for word in marketMatrix[doc]:
-                        mm_file.write(str(doc+1) + ' ' + str(word+1) + ' ' + str(int(marketMatrix[doc][word])) + '\n')
-                mm_file.close()
-            return id2word, id2tweetID, marketMatrix, corpus
+                        market_matrix.append([(word2id[elem['word']], doc['tf'])])
+            #if filename is given then write to file
+            if filename:
+                self.writeMMFile(filename=filename, num_rows=len(id2tweetID), num_columns=len(id2word), num_entries=num_entries, market_matrix=market_matrix)
+            return id2word, id2tweetID, corpus
 
 # these are just tests
 if __name__ == '__main__':
@@ -193,23 +177,23 @@ if __name__ == '__main__':
     start = time.time()
     mm = MarketMatrix(dbname='TwitterDB')
     mm.build()
+    #mm.build(query=query_or)
+    #mm.build(query=query_and, limit=100)
     end = time.time()
     print 'Build time:',(end-start)
-    #mm.build(query_or)
-    #mm.build(query=query_and, limit=100)
 
     start = time.time()
-    mm.buildBinaryMM()
+    id2word, id2tweetID, corpus = mm.buildBinaryMM('mm_binary.mtx')
     end = time.time()
     print "Binary MM time:", (end-start)
-
+    """
     start = time.time()
-    mm.buildCountMM()
+    mm.buildCountMM('mm_count.mtx')
     end = time.time()
     print "Binary Count time:", (end-start)
 
     start = time.time()
-    mm.buildTFMM()
+    mm.buildTFMM('mm_tf.mtx')
     end = time.time()
     print "Binary TF time:", (end-start)
-
+    """

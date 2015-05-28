@@ -32,22 +32,22 @@ Params:
 """
 
 class TopicModeling:
-    def __init__(self, id2word, corpus = None, filename = None):
+    def __init__(self, id2word, corpus=None, filename=None):
         if corpus:
             self.corpus = corpus
         if filename:
             self.corpus = MmCorpus(filename)
         self.id2word = id2word
 
-    def topicsLDA(self, num_topics = 10):
+    def topicsLDA(self, num_topics=10, num_iterations=10000):
         workers = cpu_count()
-        lda = LdaMulticore(corpus = self.corpus, num_topics = num_topics, id2word = self.id2word, workers = workers)
+        lda = LdaMulticore(corpus=self.corpus, num_topics=num_topics, id2word=self.id2word, iterations=num_iterations, workers=workers)
         for topic in lda.show_topics():
             print topic
 
 
-    def topicsLSI(self, num_topics = 10):
-        lsi = LsiModel(corpus = self.corpus, num_topics = num_topics, id2word = self.id2word)
+    def topicsLSI(self, num_topics=10):
+        lsi = LsiModel(corpus=self.corpus, num_topics=num_topics, id2word=self.id2word)
         for topic in lsi.show_topics():
             print topic
 
@@ -91,23 +91,27 @@ if __name__ == '__main__':
 
     filename = 'mm_count2.mm'
 
-    id2word2, id2tweetID, matrix, corpus = mm2.buildCountMM(filename=filename)
+    #id2word2, id2tweetID, corpus = mm2.buildBinaryMM(filename=filename)
     #lda2 = TopicModeling(id2word=id2word2, filename=filename)
+    id2word2, id2tweetID, corpus = mm2.buildCountMM()
     lda2 = TopicModeling(id2word=id2word2, corpus=corpus)
+
     start_count1 = time.time()
     lda2.topicsLDA()
     end_count1 = time.time()
     print 'LDA Count time:', (end_count1 - start_count1)
 
+
     start_count2 = time.time()
     lda2.topicsLSI()
     end_count2 = time.time()
     print 'LSI Count time:', (end_count2 - start_count2)
-
+    """
     filename = 'mm_binary2.mm'
 
-    id2word2, id2tweetID, matrix, corpus = mm2.buildBinaryMM(filename=filename)
+    #id2word2, id2tweetID, corpus = mm2.buildBinaryMM(filename=filename)
     #lda2 = TopicModeling(id2word=id2word2, filename=filename)
+    id2word2, id2tweetID, corpus = mm2.buildBinaryMM()
     lda2 = TopicModeling(id2word=id2word2, corpus=corpus)
     start_binary1 = time.time()
     lda2.topicsLDA()
@@ -121,8 +125,9 @@ if __name__ == '__main__':
 
     filename = 'mm_tf2.mm'
 
-    id2word2, id2tweetID, matrix, corpus = mm2.buildTFMM(filename=filename)
+    #id2word2, id2tweetID, corpus = mm2.buildTFMM(filename=filename)
     #lda2 = TopicModeling(id2word=id2word2, filename=filename)
+    id2word2, id2tweetID, corpus = mm2.buildTFMM()
     lda2 = TopicModeling(id2word=id2word2, corpus=corpus)
     start_tf1 = time.time()
     lda2.topicsLDA()
@@ -136,3 +141,4 @@ if __name__ == '__main__':
 
     end_total = time.time()
     print 'total time:', (end_total - start_total)
+    """
