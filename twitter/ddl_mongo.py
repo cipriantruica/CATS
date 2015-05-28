@@ -28,14 +28,15 @@ sys.setdefaultencoding('utf8')
 # TO_DO should see if other fields are needed
 
 ct = CleanText()
-def populateDatabase(elems, language='EN', dbname='TwitterDB'):
-    print dbname
+#param mode is for the lemmatizer 0 or 1
+def populateDatabase(elems, language='EN', dbname='TwitterDB', mode=0):
+    print dbname, mode
     client = pymongo.MongoClient()
     db = client[dbname]
     if elems:
         documents = []
         #print len(elems)
-        #idx = 1
+        idx = 1
         for elem in elems:
             if len(elem) >= 4:
                 #get language
@@ -48,7 +49,7 @@ def populateDatabase(elems, language='EN', dbname='TwitterDB'):
                 #if clean text exists
                 if len(ct.removePunctuation(cleanText))>0:
                     #extract lemmas and part of speech
-                    lemmas = LemmatizeText(ct.removePunctuation(cleanText), lang)
+                    lemmas = LemmatizeText(rawText=ct.removePunctuation(cleanText), language=lang, mode=mode)
                     lemmas.createLemmaText()
                     lemmaText = lemmas.cleanText
                     if lemmaText and lemmaText != " ":
@@ -73,8 +74,8 @@ def populateDatabase(elems, language='EN', dbname='TwitterDB'):
                         document['attags'] = attags
                         document['hashtags'] = hashtags
                         documents.append(document)
-                        #print idx
-                        #idx += 1
+                        print idx
+                        idx += 1
             else:
                 try:
                     print "tweet with problems: ", elem[0]

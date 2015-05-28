@@ -43,10 +43,10 @@ def getDates():
 
 
 #try to parallelize this
-def populateDB(filename, csv_delimiter, header, language, dbname='TwitterDB',k = 1000):
+def populateDB(filename, csv_delimiter, header, language='EN', dbname='TwitterDB', mode=0, k = 1000):
     start = time.time() 
     h, lines = utils.readCSV(filename, csv_delimiter, header)
-    populateDatabase(lines, language, dbname)
+    populateDatabase(lines, language, dbname, mode)
     #noLines = (len(lines)/k)+1
     #print noLines, len(lines[0: 1000])
     #for idx in range(0, noLines):
@@ -111,16 +111,17 @@ def deleteDocuments(startDate):
         document.delete()
     return docIDs
     
-def main(filename, csv_delimiter = '\t', header = True, dbname = 'TwitterDB', language='EN', initialize = 0, deleteDate=None):
-    connectDB(dbname)    
+def main(filename, csv_delimiter = '\t', header = True, dbname = 'TwitterDB', language='EN', initialize = 0, mode=0, deleteDate=None):
+    connectDB(dbname)
+    print mode
     #initialize everything from the stat
     if initialize == 0:
         Documents.drop_collection() 
-        populateDB(filename, csv_delimiter, header, language, dbname=dbname)
+        populateDB(filename, csv_delimiter, header, language, dbname=dbname, mode=mode)
         constructIndexes(dbname)
     elif initialize == 1: #update the database with new documents, should work, not tested
         last_docDat = getDates()
-        populateDB(filename, csv_delimiter, header, language)
+        populateDB(filename, csv_delimiter, header, language, mode=mode)
         Documents.objects(intText__exists = False).delete()
         updateIndexes(dbname, last_docDat)
     elif initialize == 2: #update the database after documents are deleted, should work, not tested
@@ -137,6 +138,7 @@ def main(filename, csv_delimiter = '\t', header = True, dbname = 'TwitterDB', la
 # 4 - integer: - nr of threads
 # 5 - language: EN or FR
 # 6 - integer: 0 - create the database, 1 - update the database
+# 7 - integer: 0 - use fast lemmatizer (not accurate), 1 - use slow lemmatizer (accurate)
 if __name__ == "__main__":
     filename = sys.argv[1] 
     csv_delimiter = utils.determineDelimiter(sys.argv[2])
@@ -144,4 +146,5 @@ if __name__ == "__main__":
     dbname = sys.argv[4]
     language = sys.argv[5] #currently EN & FR, FR does not work so well
     initialize = int(sys.argv[6])
-    main(filename, csv_delimiter, header, dbname, language, initialize)
+    mode = int(sys.argv[7])
+    main(filename=filename, csv_delimiter=csv_delimiter, header=header, dbname=dbname, language=language, initialize=initialize, mode=mode)
