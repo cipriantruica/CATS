@@ -46,7 +46,7 @@ class MarketMatrix:
                 self.cursor = self.db.vocabulary.find(fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, sort=[('idf', pymongo.ASCENDING)])
 
     """
-        function used to write an market matrix file
+        function used to write a market matrix file
     """
     def writeMMFile(self, filename, num_rows, num_columns, num_entries, market_matrix):
         with open(filename, 'w') as mm_file:
