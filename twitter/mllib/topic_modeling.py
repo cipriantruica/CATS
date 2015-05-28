@@ -44,7 +44,6 @@ class TopicModeling:
         for topic in topic_model.show_topics():
             print topic
 
-
     def topicsLSI(self, num_topics=10):
         lsi = LsiModel(corpus=self.corpus, num_topics=num_topics, id2word=self.id2word)
         for topic in lsi.show_topics():
