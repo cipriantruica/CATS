@@ -26,5 +26,8 @@
 * sudo pip install futures
 * sudo pip install python-dateutil
 
+##IDE
+* PyCharm
+
 ## Other packages
 * install MongoDB - see MongoDB documentation
