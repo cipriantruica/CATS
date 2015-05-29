@@ -11,7 +11,6 @@ import pymongo
 from twitter.indexing.vocabulary_index import VocabularyIndex
 from time import time
 
-
 class MarketMatrix:
     def __init__(self, dbname='TwitterDB'):
         client = pymongo.MongoClient()
