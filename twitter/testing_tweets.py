@@ -12,14 +12,14 @@ import utils
 from ddl_mongo import *
 from models.mongo_models import *
 from indexing.vocabulary_index import VocabularyIndex as VI
+from multiprocessing import cpu_count
+from concurrent.futures import ThreadPoolExecutor
 
 """
 import sys
 import threading
 from datetime import timedelta
 from multiprocessing.pool import ThreadPool
-from multiprocessing import cpu_count
-from concurrent.futures import ThreadPoolExecutor
 from indexing.inverted_index import InvertedIndex as IV
 from indexing.pos_index import POSIndex as PI
 """
@@ -43,28 +43,22 @@ def getDates():
 
 
 #try to parallelize this
-def populateDB(filename, csv_delimiter, header, language='EN', dbname='TwitterDB', mode=0, k = 1000):
+def populateDB(filename, csv_delimiter, header, language='EN', dbname='TwitterDB', mode=0, k = 100):
     start = time.time() 
     h, lines = utils.readCSV(filename, csv_delimiter, header)
     populateDatabase(lines, language, dbname, mode)
-    #noLines = (len(lines)/k)+1
-    #print noLines, len(lines[0: 1000])
-    #for idx in range(0, noLines):
-    #    start, end = idx*k, idx*k+k
-    #    if end<=noLines:
-    #        populateDatabase(lines[start:end], language)
-    #    else:
-    #        populateDatabase(lines[start:], language)
-    #    print idx, idx*k, idx*k+k
-    #    for elem in lines[start: end]:
-    #        print elem
-    #for idx in range(0, noLines):
-    #    start, end = idx*k, idx*k+k
-    #    print idx, idx*k, idx*k+k
-    #    if end<=noLines:
-    #        populateDatabase(lines[start:end], language)
-    #    else:
-    #        populateDatabase(lines[start:], language)
+
+    #using multi threading
+    # noLines = len(lines)
+    # noIter = (noLines/k)+1
+    # no_threads = cpu_count()
+    # with ThreadPoolExecutor(max_workers = no_threads) as e:
+    #     for idx in range(0, noIter):
+    #         l_start, l_end = idx*k, idx*k+k
+    #         if l_end > noLines:
+    #             l_end = noLines
+    #         e.submit(populateDatabase, lines[l_start:l_end], language, dbname, mode, idx)
+
     end = time.time() 
     print "time_populate.append(", (end - start), ")"
 
@@ -116,7 +110,7 @@ def main(filename, csv_delimiter = '\t', header = True, dbname = 'TwitterDB', la
     print mode
     #initialize everything from the stat
     if initialize == 0:
-        Documents.drop_collection() 
+        Documents.drop_collection()
         populateDB(filename, csv_delimiter, header, language, dbname=dbname, mode=mode)
         constructIndexes(dbname)
     elif initialize == 1: #update the database with new documents, should work, not tested
@@ -129,9 +123,7 @@ def main(filename, csv_delimiter = '\t', header = True, dbname = 'TwitterDB', la
             docIDs = deleteDocuments(deleteDate)
             deleteIndexes(dbname, docIDs)
 
-        
-
-#this script receives 7 parameters
+# this script receives 7 parameters
 # 1 - filename
 # 2 - the csv delimiter: t - tab, c - coma, s - semicolon
 # 3 - integer: 1 csv has header, 0 csv does not have hearer
