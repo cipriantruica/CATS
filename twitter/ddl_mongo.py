@@ -7,86 +7,129 @@ __version__ = "0.1"
 __email__ = "ciprian.truica@cs.pub.ro"
 __status__ = "Production"
 
-import sys  
+import sys
 from models.mongo_models import *
 from nlplib.lemmatize_text import LemmatizeText
 from nlplib.named_entities import NamedEntitiesRegonizer
 from nlplib.clean_text import CleanText
 
-
-reload(sys)  
+reload(sys)
 sys.setdefaultencoding('utf8')
 
-# params:
-# list with the fallowing elemets:
-# *elem[0] = title of the document
-# *elem[1] = raw text of the document
-# *elem[2] = the date inside the document
-# *elem[3] = list of tags
-# *elem[4] = list of authors
-# language, default English
-# TO_DO should see if other fields are needed
-
 ct = CleanText()
-#param mode is for the lemmatizer 0 or 1
-def populateDatabase(elems, language='EN', dbname='TwitterDB', mode=0):
+
+# params:
+# elems is list of lists:
+#   !!! KEEP THIS FORMAT FOR THE BULK INSERT TO WORK,
+#   !!! OTHERWISE YOU WILL OPEN THE GATES OF HELL
+#   !!! AND BRING UPON THEE MY WRATH
+#   each elem in elems has the following structure:
+#   * elem[0] = tweet ID - is the PK
+#   * elem[1] = raw text of the document
+#   * elem[2] = the date of the tweet
+#   * elem[3] = author ID of the tweet
+#   * elem[4] = language of the tweet, default English
+#   * elem[5] = location - coordinates
+#   * elem[6] = author age
+#   * elem[7] = author gender
+
+# language, default English
+# param mode is for the lemmatizer 0 - fast but not accurate, 1 slow but more accurate
+
+def populateDatabase(elems, language='EN', dbname='TwitterDB', mode=0, iter=0):
     print dbname, mode
     client = pymongo.MongoClient()
     db = client[dbname]
     if elems:
         documents = []
-        #print len(elems)
         idx = 1
         for elem in elems:
             if len(elem) >= 4:
-                #get language
-                if len(elem) >= 5:
-                    lang = elem[4]
+                # verify if document already in the database
+                # only if it does not exist an new document is added to the documents list
+                exist = db.documents.find_one(spec_or_id={"_id": str(elem[0])})
+                if not exist:
+                    # get language
+                    if len(elem) >= 5:
+                        lang = elem[4]
+                    else:
+                        lang = language
+                    # get clean text
+                    cleanText, hashtags, attags = ct.cleanText(elem[1], lang)
+                    # if clean text exists
+                    if len(ct.removePunctuation(cleanText)) > 0:
+                        # extract lemmas and part of speech
+                        lemmas = LemmatizeText(rawText=ct.removePunctuation(cleanText), language=lang, mode=mode)
+                        lemmas.createLemmaText()
+                        lemmaText = lemmas.cleanText
+                        if lemmaText and lemmaText != " ":
+                            document = {}
+                            lemmas.createLemmas()
+                            words = []
+                            for w in lemmas.wordList:
+                                word = {}
+                                word['word'] = w.word
+                                word['tf'] = w.tf
+                                word['count'] = w.count
+                                word['pos'] = w.wtype
+                                words.append(word)
+
+                            # geo location [x, y]
+                            if len(elem) >= 6:
+                                document['geoLocation'] = elem[5].split(' ')
+                            # author age
+                            if len(elem) >= 7:
+                                document['age'] = int(elem[6])
+                            # author gender
+                            if len(elem) >= 8:
+                                document['gender'] = elem[7]
+
+                            # named entities:
+                            ner = NamedEntitiesRegonizer(text=cleanText, language=lang)
+                            ner.createNamedEntities()
+                            ne = []
+                            if ner.person:
+                                ne.append({'person': ner.person})
+                            if ner.gpe:
+                                ne.append({'gpe': ner.gpe})
+                            if ner.organization:
+                                ne.append({'organization': ner.organization})
+                            if ner.facility:
+                                ne.append({'facility': ner.facility})
+                            if ner.location:
+                                ne.append({'location': ner.location})
+
+                            # construct the document
+                            document['_id'] = elem[0]
+                            document['rawText'] = elem[1]
+                            document['cleanText'] = cleanText
+                            document['lemmaText'] = lemmaText
+                            document['date'] = elem[2]
+                            document['author'] = elem[3]
+                            document['words'] = words
+                            if attags:
+                                document['attags'] = attags
+                            if hashtags:
+                                document['hashtags'] = hashtags
+                            if ne:
+                                document['namedEntities'] = ne
+                            documents.append(document)
+                            print iter, idx
+                            idx += 1
                 else:
-                    lang = language
-                #get clean text
-                cleanText, hashtags, attags = ct.cleanText(elem[1], lang)
-                #if clean text exists
-                if len(ct.removePunctuation(cleanText))>0:
-                    #extract lemmas and part of speech
-                    lemmas = LemmatizeText(rawText=ct.removePunctuation(cleanText), language=lang, mode=mode)
-                    lemmas.createLemmaText()
-                    lemmaText = lemmas.cleanText
-                    if lemmaText and lemmaText != " ":
-                        document = {}
-                        lemmas.createLemmas()
-                        words = []
-                        for w in lemmas.wordList:
-                            word = {}
-                            word['word']=w.word
-                            word['tf']=w.tf
-                            word['count']=w.count
-                            word['pos']=w.wtype
-                            words.append(word)
-                        #construct the document
-                        document['_id'] = elem[0]
-                        document['rawText'] = elem[1]
-                        document['cleanText'] = cleanText
-                        document['lemmaText'] = lemmaText
-                        document['date'] = elem[2]
-                        document['author'] = elem[3]
-                        document['words'] = words
-                        document['attags'] = attags
-                        document['hashtags'] = hashtags
-                        documents.append(document)
-                        print idx
-                        idx += 1
+                    print exist
             else:
                 try:
-                    print "tweet with problems: ", elem[0]
+                    print "tweet with problems: ", iter, elem[0]
                 except Exception, e:
                     print e
         if documents:
-            db.documents.insert( documents)
+            db.documents.insert(documents)
 
-#this function will create the named_entities collection
+# this function will create the named_entities collection
 def createNamedEntitiesCollection(startDate, endDate):
-    documents = Documents.objects(Q(createdAt__gte = startDate) & Q(createdAt__lt = endDate)).only("id", "intText").timeout(False)    
+    documents = Documents.objects(Q(createdAt__gte=startDate) & Q(createdAt__lt=endDate)).only("id", "intText").timeout(
+        False)
     for document in documents:
         namedEntitiesProcess = NamedEntitiesRegonizer(document.intText)
         namedEntitiesProcess.createNamedEntities()
@@ -97,8 +140,7 @@ def createNamedEntitiesCollection(startDate, endDate):
         namedEntity.organization = namedEntitiesProcess.organization
         namedEntity.facility = namedEntitiesProcess.facility
         namedEntity.location = namedEntitiesProcess.location
-        try:        
+        try:
             namedEntity.save()
         except Exception as e:
             print "Update Error!!!", e
-
