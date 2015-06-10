@@ -45,7 +45,6 @@ def populateDatabase(elems, language='EN', dbname='TwitterDB', mode=0):
     db = client[dbname]
     if elems:
         documents = []
-        #single thread
         for elem in elems:
             if len(elem) >= 4:
                 # verify if document already in the database

@@ -45,8 +45,6 @@ def populateDatabase(elems, language='EN', dbname='TwitterDB', mode=0):
     db = client[dbname]
     if elems:
         documents = []
-
-        # multi thread
         no_threads = cpu_count()
         with ThreadPoolExecutor(max_workers = no_threads) as worker:
             for elem in elems:
