@@ -48,12 +48,15 @@ class Search:
         self.db.search_index2.drop()
         self.db.search_index.drop()
         if self.query:
+            print 'I am here!'
             self.db.vocabulary_query.map_reduce(mapFunction, reduceFunction, 'search_index2', query={'word': word})
         else:
             self.db.vocabulary.map_reduce(mapFunction, reduceFunction, 'search_index2', query={'word': word})
         self.db.eval(function)
         response = self.db.search_index.find({'word': word}, {'docIDs': 1, '_id': 0})
         lista = {}
+        #for value in response[0]['docIDs']:
+        #    lista[value['docID']] = value['TFIDF']
         for value in response[0]['docIDs']:
             lista[value['docID']] = value['TFIDF']
         self.db.search_index2.drop()
@@ -64,7 +67,7 @@ class Search:
         keys = []
         scorePhrase = {}
         for word in searchPhrase:
-            if not keys:                
+            if not keys:
                 keys = self.listSearch[word].keys()
             else:
                 keys = list(set(keys) & set(self.listSearch[word].keys()))
@@ -88,9 +91,9 @@ class Search:
         rankedPhrase = {}
         w = ' '.join(word for word in self.words)
         rankedPhrase[w], keys[w] = self.rank(self.words)
-                
+
         distinctKeys = []
-        for key in keys:            
+        for key in keys:
             distinctKeys += keys[key]
         distinctKeys =list(set(distinctKeys))
 
@@ -98,7 +101,7 @@ class Search:
         for key in distinctKeys:
             if rankedPhrase[w].get(key, -1) != -1:
                 answer[key] = max(rankedPhrase[w][key], answer.get(key, -1))
-        
+
         if self.k !=0:
             answer = dict(sorted(answer.items(), key=lambda x: x[1], reverse=True)[:self.k])
         else:
@@ -123,9 +126,11 @@ if __name__ == "__main__":
     time_words = []
     for j in range(0, 1):
         start = time.time()
-        search = Search(searchPhrase = searchPhrase, k = 20000)
-        search.results()
-        end = time.time() 
+        search = Search(searchPhrase = searchPhrase)
+        l = search.results()
+        print len(l)
+        for i in range(0, len(l)):
+            print l[i]
+        end = time.time()
         time_words.append(end-start)
     print "no search words: k = ", 20, 'mean time:', round(sum(time_words)/len(time_words), 2)
-
