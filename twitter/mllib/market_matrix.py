@@ -10,6 +10,7 @@ __status__ = "Production"
 import pymongo
 from twitter.indexing.vocabulary_index import VocabularyIndex
 from time import time
+import codecs
 
 class MarketMatrix:
     def __init__(self, dbname='TwitterDB'):
@@ -176,14 +177,14 @@ if __name__ == '__main__':
     #mm.build(rebuild=True)
     start = time()
     mm = MarketMatrix(dbname='TwitterDB')
-    mm.build()
+    mm.build(limit=1000)
 
     #for given queries with/without limit
     #mm.build(query=query_or)
     #mm.build(query=query_and, limit=100)
     end = time()
     print 'Build time:',(end-start)
-
+    """
     start = time()
     mm.buildBinaryMM('mm_binary.mtx')
     end = time()
@@ -193,7 +194,19 @@ if __name__ == '__main__':
     mm.buildCountMM('mm_count.mtx')
     end = time()
     print "Binary Count time:", (end-start)
+    """
     start = time()
-    mm.buildTFMM('mm_tf.mtx')
+    id2word, id2tweetID, market_matrix = mm.buildTFMM('mm_tf.mtx')
+
+    with codecs.open('id2word.txt', "w", "utf-8") as file1:
+        file1.write("id2word\n")
+        for elem in id2word:
+            file1.write(str(elem) + " " + id2word[elem] + "\n")
+    file1.close()
+    with open('id2tweetID.txt' , 'w') as file2:
+        file2.write("id2tweetID\n")
+        for elem in id2tweetID:
+            file2.write(str(elem) + " " + str(id2tweetID[elem]) + "\n")
+    file2.close()
     end = time()
     print "Binary TF time:", (end-start)
