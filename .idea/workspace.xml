@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fd266f40-3355-4b1e-a6e7-1f696a1f5d5f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/twitter/ddl_mongo_1.py" afterPath="$PROJECT_DIR$/twitter/ddl_mongo_1.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/twitter/ddl_mongo_2.py" afterPath="$PROJECT_DIR$/twitter/ddl_mongo_2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/twitter/ddl_mongo_3.py" afterPath="$PROJECT_DIR$/twitter/ddl_mongo_3.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/twitter/ddl_mongo_2.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/twitter/run_2.sh" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/twitter/testing_tweets_2.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/twitter/run_1.sh" afterPath="$PROJECT_DIR$/twitter/run_1.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/twitter/run_3.sh" afterPath="$PROJECT_DIR$/twitter/run_3.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Twitter.iws" />
@@ -26,82 +28,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ddl_mongo_1.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo_1.py">
+      <file leaf-file-name="run_1.sh" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/twitter/run_1.sh">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="47" column="22" selection-start-line="47" selection-start-column="22" selection-end-line="47" selection-end-column="22" />
-              <folding>
-                <element signature="e#236#246#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="testing_tweets_1.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/twitter/testing_tweets_1.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
-              <folding>
-                <element signature="e#236#247#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="testing_tweets_2.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/twitter/testing_tweets_2.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="59" column="3" selection-start-line="59" selection-start-column="3" selection-end-line="59" selection-end-column="3" />
-              <folding>
-                <element signature="e#236#247#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ddl_mongo_3.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo_3.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="137" column="0" selection-start-line="137" selection-start-column="0" selection-end-line="137" selection-end-column="0" />
-              <folding>
-                <element signature="e#236#246#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ddl_mongo.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="32" column="23" selection-start-line="32" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+              <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ddl_mongo_2.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo_2.py">
+      <file leaf-file-name="run_3.sh" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/twitter/run_3.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.03685504">
-              <caret line="41" column="22" selection-start-line="41" selection-start-column="22" selection-end-line="41" selection-end-column="22" />
+            <state vertical-scroll-proportion="0.48402947">
+              <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="testing_tweets_3.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/twitter/testing_tweets_3.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="23" column="3" selection-start-line="23" selection-start-column="3" selection-end-line="23" selection-end-column="3" />
-              <folding>
-                <element signature="e#236#247#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -158,15 +100,15 @@
         <option value="$PROJECT_DIR$/twitter/testing_tweets.py" />
         <option value="$PROJECT_DIR$/twitter/ddl_mongo.py" />
         <option value="$PROJECT_DIR$/twitter/run.sh" />
-        <option value="$PROJECT_DIR$/twitter/run_1.sh" />
         <option value="$PROJECT_DIR$/twitter/run_2.sh" />
-        <option value="$PROJECT_DIR$/twitter/run_3.sh" />
         <option value="$PROJECT_DIR$/twitter/testing_tweets_2.py" />
         <option value="$PROJECT_DIR$/twitter/testing_tweets_1.py" />
         <option value="$PROJECT_DIR$/twitter/testing_tweets_3.py" />
         <option value="$PROJECT_DIR$/twitter/ddl_mongo_2.py" />
         <option value="$PROJECT_DIR$/twitter/ddl_mongo_1.py" />
         <option value="$PROJECT_DIR$/twitter/ddl_mongo_3.py" />
+        <option value="$PROJECT_DIR$/twitter/run_1.sh" />
+        <option value="$PROJECT_DIR$/twitter/run_3.sh" />
       </list>
     </option>
   </component>
@@ -696,7 +638,13 @@
       <option name="project" value="LOCAL" />
       <updated>1433972639602</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Testing">
+      <created>1433974006618</created>
+      <option name="number" value="00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1433974006618</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TodoView">
@@ -712,7 +660,7 @@
     <frame x="65" y="24" width="1301" height="744" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2543036" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2543036" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32850242" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2657005" sideWeight="0.5031299" order="7" side_tool="true" content_ui="tabs" />
@@ -1068,68 +1016,47 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/twitter/run_1.sh">
+    <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo_3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9262899">
-          <caret line="29" column="37" selection-start-line="29" selection-start-column="37" selection-end-line="29" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/twitter/run_2.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48402947">
-          <caret line="29" column="37" selection-start-line="29" selection-start-column="37" selection-end-line="29" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/twitter/run_3.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48402947">
-          <caret line="29" column="37" selection-start-line="29" selection-start-column="37" selection-end-line="29" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="32" column="23" selection-start-line="32" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/twitter/testing_tweets_3.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="23" column="3" selection-start-line="23" selection-start-column="3" selection-end-line="23" selection-end-column="3" />
+        <state vertical-scroll-proportion="0.11056511">
+          <caret line="3" column="50" selection-start-line="3" selection-start-column="47" selection-end-line="3" selection-end-column="50" />
           <folding>
-            <element signature="e#236#247#0" expanded="true" />
+            <element signature="e#236#246#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo_1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="47" column="22" selection-start-line="47" selection-start-column="22" selection-end-line="47" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.11056511">
+          <caret line="3" column="50" selection-start-line="3" selection-start-column="47" selection-end-line="3" selection-end-column="50" />
           <folding>
             <element signature="e#236#246#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo_3.py">
+    <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="137" column="0" selection-start-line="137" selection-start-column="0" selection-end-line="137" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="40" column="75" selection-start-line="40" selection-start-column="71" selection-end-line="40" selection-end-column="75" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/twitter/testing_tweets_3.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3906634">
+          <caret line="44" column="52" selection-start-line="44" selection-start-column="48" selection-end-line="44" selection-end-column="52" />
           <folding>
-            <element signature="e#236#246#0" expanded="true" />
+            <element signature="e#236#247#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/twitter/testing_tweets_1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state vertical-scroll-proportion="0.84766585">
           <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
           <folding>
             <element signature="e#236#247#0" expanded="true" />
@@ -1137,20 +1064,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/twitter/testing_tweets_2.py">
+    <entry file="file://$PROJECT_DIR$/twitter/run_1.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="59" column="3" selection-start-line="59" selection-start-column="3" selection-end-line="59" selection-end-column="3" />
-          <folding>
-            <element signature="e#236#247#0" expanded="true" />
-          </folding>
+          <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo_2.py">
+    <entry file="file://$PROJECT_DIR$/twitter/run_3.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.03685504">
-          <caret line="41" column="22" selection-start-line="41" selection-start-column="22" selection-end-line="41" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.48402947">
+          <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
           <folding />
         </state>
       </provider>

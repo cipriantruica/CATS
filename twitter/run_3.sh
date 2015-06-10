@@ -27,7 +27,7 @@ MODE=1
 #FILE="/home/cats/data/CATS_demo_May-12-2015_3.csv"
 #on Ciprian computer
 #test data
-FILE="../DATA_SETS/tweets/CATS_demo_50000.csv"
+FILE="../DATA_SETS/tweets/CATS_demo.csv"
 #all data
 #FILE="../DATA_SETS/tweets/CATS_demo.csv"
 DB="TwitterDB_3"
