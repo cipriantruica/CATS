@@ -14,6 +14,7 @@ from nlplib.named_entities import NamedEntitiesRegonizer
 from nlplib.clean_text import CleanText
 from multiprocessing import cpu_count
 from concurrent.futures import ThreadPoolExecutor
+import time
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -38,13 +39,12 @@ ct = CleanText()
 # language, default English
 # param mode is for the lemmatizer 0 - fast but not accurate, 1 slow but more accurate
 
-def populateDatabase(elems, language='EN', dbname='TwitterDB', mode=0, iter=0):
-    print dbname, mode
+def populateDatabase(elems, language='EN', dbname='TwitterDB', mode=0):
+    start = time.time()
     client = pymongo.MongoClient()
     db = client[dbname]
     if elems:
         documents = []
-        idx = 1
         #single thread
         for elem in elems:
             if len(elem) >= 4:
@@ -55,8 +55,6 @@ def populateDatabase(elems, language='EN', dbname='TwitterDB', mode=0, iter=0):
                     document = processElement(elem, language, mode)
                     if document:
                         documents.append(document)
-                    print iter, idx
-                    idx += 1
                 else:
                     print exist
             else:
@@ -64,28 +62,8 @@ def populateDatabase(elems, language='EN', dbname='TwitterDB', mode=0, iter=0):
                     print "tweet with problems: ", iter, elem[0]
                 except Exception, e:
                     print e
-        # multi thread
-        # no_threads = cpu_count()
-        # with ThreadPoolExecutor(max_workers = no_threads) as worker:
-        #     for elem in elems:
-        #         if len(elem) >= 4:
-        #             # verify if document already in the database
-        #             # only if it does not exist an new document is added to the documents list
-        #             exist = db.documents.find_one(spec_or_id={"_id": str(elem[0])})
-        #             if not exist:
-        #                 result = worker.submit(processElement, elem, language, mode)
-        #                 if result.result():
-        #                     documents.append(result.result())
-        #                 print iter, idx
-        #                 idx += 1
-        #             else:
-        #                 print exist
-        #         else:
-        #             try:
-        #                 print "tweet with problems: ", iter, elem[0]
-        #             except Exception, e:
-        #                 print e
-
+        end = time.time()
+        print 'text process time', (end - start)
         if documents:
             db.documents.insert(documents)
 

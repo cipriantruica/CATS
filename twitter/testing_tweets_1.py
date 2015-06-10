@@ -12,8 +12,7 @@ import utils
 from ddl_mongo_1 import *
 from models.mongo_models import *
 from indexing.vocabulary_index import VocabularyIndex as VI
-from multiprocessing import cpu_count
-from concurrent.futures import ThreadPoolExecutor
+
 
 """
 import sys
@@ -40,25 +39,11 @@ def getDates():
     return last_docDate, last_wordDate
     """
 
-
-
 #try to parallelize this
-def populateDB(filename, csv_delimiter, header, language='EN', dbname='TwitterDB', mode=0, k = 100):
+def populateDB(filename, csv_delimiter, header, language='EN', dbname='TwitterDB', mode=0):
     start = time.time() 
     h, lines = utils.readCSV(filename, csv_delimiter, header)
     populateDatabase(lines, language, dbname, mode)
-
-    #using multi threading
-    # noLines = len(lines)
-    # noIter = (noLines/k)+1
-    # no_threads = cpu_count()
-    # with ThreadPoolExecutor(max_workers = no_threads) as e:
-    #     for idx in range(0, noIter):
-    #         l_start, l_end = idx*k, idx*k+k
-    #         if l_end > noLines:
-    #             l_end = noLines
-    #         e.submit(populateDatabase, lines[l_start:l_end], language, dbname, mode, idx)
-
     end = time.time() 
     print "time_populate.append(", (end - start), ")"
 
