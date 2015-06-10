@@ -59,7 +59,7 @@ def populateDatabase(elems, language='EN', dbname='TwitterDB', mode=0):
                     print exist
             else:
                 try:
-                    print "tweet with problems: ", iter, elem[0]
+                    print "tweet with problems: ", elem[0]
                 except Exception, e:
                     print e
         end = time.time()
