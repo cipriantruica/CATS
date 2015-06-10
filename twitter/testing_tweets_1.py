@@ -9,7 +9,7 @@ __status__ = "Production"
 
 import time
 import utils
-from ddl_mongo import *
+from ddl_mongo_1 import *
 from models.mongo_models import *
 from indexing.vocabulary_index import VocabularyIndex as VI
 from multiprocessing import cpu_count
