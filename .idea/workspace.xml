@@ -2,11 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fd266f40-3355-4b1e-a6e7-1f696a1f5d5f" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/twitter/ddl_mongo_2.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/twitter/run_2.sh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/twitter/testing_tweets_2.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/twitter/run_1.sh" afterPath="$PROJECT_DIR$/twitter/run_1.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/twitter/run_3.sh" afterPath="$PROJECT_DIR$/twitter/run_3.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Twitter.iws" />
@@ -28,21 +23,65 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="run_1.sh" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/twitter/run_1.sh">
+      <file leaf-file-name="testing_tweets_3.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/twitter/testing_tweets_3.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <element signature="e#236#247#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ddl_mongo_1.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo_1.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="110" column="51" selection-start-line="110" selection-start-column="51" selection-end-line="110" selection-end-column="51" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="run_3.sh" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ddl_mongo.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="132" column="39" selection-start-line="132" selection-start-column="26" selection-end-line="132" selection-end-column="39" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ddl_mongo_3.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo_3.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="110" column="12" selection-start-line="110" selection-start-column="12" selection-end-line="111" selection-end-column="51" />
+              <folding>
+                <element signature="e#236#246#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="run_3.sh" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/twitter/run_3.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.48402947">
-              <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="30" column="9" selection-start-line="30" selection-start-column="9" selection-end-line="30" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mongo_models.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/twitter/models/mongo_models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.26612905">
+              <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -94,21 +133,21 @@
         <option value="$PROJECT_DIR$/twitter/search_mongo.py" />
         <option value="$PROJECT_DIR$/twitter/mllib/mm_tf.mtx" />
         <option value="$PROJECT_DIR$/twitter/mllib/market_matrix.py" />
-        <option value="$PROJECT_DIR$/twitter/models/mongo_models.py" />
-        <option value="$PROJECT_DIR$/twitter/nlplib/named_entities.py" />
         <option value="$PROJECT_DIR$/twitter/test_concurancy.py" />
         <option value="$PROJECT_DIR$/twitter/testing_tweets.py" />
-        <option value="$PROJECT_DIR$/twitter/ddl_mongo.py" />
         <option value="$PROJECT_DIR$/twitter/run.sh" />
         <option value="$PROJECT_DIR$/twitter/run_2.sh" />
         <option value="$PROJECT_DIR$/twitter/testing_tweets_2.py" />
         <option value="$PROJECT_DIR$/twitter/testing_tweets_1.py" />
         <option value="$PROJECT_DIR$/twitter/testing_tweets_3.py" />
         <option value="$PROJECT_DIR$/twitter/ddl_mongo_2.py" />
-        <option value="$PROJECT_DIR$/twitter/ddl_mongo_1.py" />
-        <option value="$PROJECT_DIR$/twitter/ddl_mongo_3.py" />
         <option value="$PROJECT_DIR$/twitter/run_1.sh" />
         <option value="$PROJECT_DIR$/twitter/run_3.sh" />
+        <option value="$PROJECT_DIR$/twitter/nlplib/named_entities.py" />
+        <option value="$PROJECT_DIR$/twitter/ddl_mongo_3.py" />
+        <option value="$PROJECT_DIR$/twitter/ddl_mongo_1.py" />
+        <option value="$PROJECT_DIR$/twitter/ddl_mongo.py" />
+        <option value="$PROJECT_DIR$/twitter/models/mongo_models.py" />
       </list>
     </option>
   </component>
@@ -163,6 +202,8 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -195,10 +236,44 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Twitter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Twitter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="twitter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nlplib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Twitter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Twitter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="twitter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="models" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -229,7 +304,7 @@
       <recent name="$PROJECT_DIR$/code_tests" />
     </key>
   </component>
-  <component name="RunManager" selected="Bash.run.sh">
+  <component name="RunManager" selected="Bash.run_3.sh">
     <configuration default="false" name="market_matrix_manual" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -243,40 +318,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="Twitter" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/twitter/mllib/market_matrix.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="cats" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/twitter" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="Twitter" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/twitter/cats.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="test_mm" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/twitter" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="Twitter" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/code_tests/test_mm.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -313,6 +354,34 @@
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/twitter/test_concurancy.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="named_entities" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/twitter/nlplib" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Twitter" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/twitter/nlplib/named_entities.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="run_3.sh" type="BashConfigurationType" factoryName="Bash" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="INTERPRETER_PATH" value="/bin/bash" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/twitter" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/twitter/run_3.sh" />
+      <option name="PARAMETERS" value="" />
+      <module name="Twitter" />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="BashConfigurationType" factoryName="Bash">
@@ -462,18 +531,18 @@
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Bash.run.sh" />
       <item index="1" class="java.lang.String" itemvalue="Python.market_matrix_manual" />
-      <item index="2" class="java.lang.String" itemvalue="Python.cats" />
-      <item index="3" class="java.lang.String" itemvalue="Python.test_mm" />
-      <item index="4" class="java.lang.String" itemvalue="Python.search_mongo" />
-      <item index="5" class="java.lang.String" itemvalue="Python.test_concurancy" />
+      <item index="2" class="java.lang.String" itemvalue="Python.search_mongo" />
+      <item index="3" class="java.lang.String" itemvalue="Python.test_concurancy" />
+      <item index="4" class="java.lang.String" itemvalue="Python.named_entities" />
+      <item index="5" class="java.lang.String" itemvalue="Bash.run_3.sh" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.test_concurancy" />
-        <item index="1" class="java.lang.String" itemvalue="Python.market_matrix_manual" />
-        <item index="2" class="java.lang.String" itemvalue="Python.search_mongo" />
-        <item index="3" class="java.lang.String" itemvalue="Python.cats" />
-        <item index="4" class="java.lang.String" itemvalue="Python.test_mm" />
+        <item index="0" class="java.lang.String" itemvalue="Bash.run_3.sh" />
+        <item index="1" class="java.lang.String" itemvalue="Python.named_entities" />
+        <item index="2" class="java.lang.String" itemvalue="Python.test_concurancy" />
+        <item index="3" class="java.lang.String" itemvalue="Python.market_matrix_manual" />
+        <item index="4" class="java.lang.String" itemvalue="Python.search_mongo" />
       </list>
     </recent_temporary>
   </component>
@@ -644,7 +713,19 @@
       <option name="project" value="LOCAL" />
       <updated>1433974006618</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Testing">
+      <created>1433976067954</created>
+      <option name="number" value="00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1433976067954</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Change Named Entities Class">
+      <created>1434004704068</created>
+      <option name="number" value="00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1434004704068</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TodoView">
@@ -660,17 +741,17 @@
     <frame x="65" y="24" width="1301" height="744" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2543036" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2543036" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32850242" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2657005" sideWeight="0.5031299" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32973805" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32819724" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32819724" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24960877" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32973805" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -709,7 +790,8 @@
     <MESSAGE value="minor changes" />
     <MESSAGE value="Testing parallelization" />
     <MESSAGE value="Testing" />
-    <option name="LAST_COMMIT_MESSAGE" value="Testing" />
+    <MESSAGE value="Change Named Entities Class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Change Named Entities Class" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -725,6 +807,32 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="132" column="39" selection-start-line="132" selection-start-column="26" selection-end-line="132" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo_3.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="110" column="12" selection-start-line="110" selection-start-column="12" selection-end-line="111" selection-end-column="51" />
+          <folding>
+            <element signature="e#236#246#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/twitter/run_3.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="30" column="9" selection-start-line="30" selection-start-column="9" selection-end-line="30" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/twitter/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -949,19 +1057,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/twitter/models/mongo_models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31322506">
-          <caret line="43" column="26" selection-start-line="43" selection-start-column="26" selection-end-line="43" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/twitter/nlplib/lemmatize_text.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="11" column="14" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -969,7 +1068,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="20" column="45" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -977,14 +1075,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="23" column="28" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/twitter/nlplib/named_entities.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.5384614">
-          <caret line="77" column="26" selection-start-line="77" selection-start-column="26" selection-end-line="77" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1016,10 +1106,49 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/twitter/testing_tweets_1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.84766585">
+          <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/twitter/run_1.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8574939">
+          <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/twitter/testing_tweets_3.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#236#247#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/twitter/run_3.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="30" column="9" selection-start-line="30" selection-start-column="9" selection-end-line="30" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/twitter/nlplib/named_entities.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="56" column="8" selection-start-line="56" selection-start-column="8" selection-end-line="56" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo_3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.11056511">
-          <caret line="3" column="50" selection-start-line="3" selection-start-column="47" selection-end-line="3" selection-end-column="50" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="110" column="12" selection-start-line="110" selection-start-column="12" selection-end-line="111" selection-end-column="51" />
           <folding>
             <element signature="e#236#246#0" expanded="true" />
           </folding>
@@ -1028,54 +1157,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo_1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.11056511">
-          <caret line="3" column="50" selection-start-line="3" selection-start-column="47" selection-end-line="3" selection-end-column="50" />
-          <folding>
-            <element signature="e#236#246#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0">
+          <caret line="110" column="51" selection-start-line="110" selection-start-column="51" selection-end-line="110" selection-end-column="51" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/twitter/ddl_mongo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="40" column="75" selection-start-line="40" selection-start-column="71" selection-end-line="40" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/twitter/testing_tweets_3.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3906634">
-          <caret line="44" column="52" selection-start-line="44" selection-start-column="48" selection-end-line="44" selection-end-column="52" />
-          <folding>
-            <element signature="e#236#247#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/twitter/testing_tweets_1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.84766585">
-          <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
-          <folding>
-            <element signature="e#236#247#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/twitter/run_1.sh">
-      <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
+          <caret line="132" column="39" selection-start-line="132" selection-start-column="26" selection-end-line="132" selection-end-column="39" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/twitter/run_3.sh">
+    <entry file="file://$PROJECT_DIR$/twitter/models/mongo_models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48402947">
-          <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.26612905">
+          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding />
         </state>
       </provider>
