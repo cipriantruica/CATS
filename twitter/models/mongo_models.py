@@ -64,16 +64,6 @@ class Documents(Document):
     }
 
 
-class InvertedIndex(Document):
-    word = StringField(max_length=255, required=True, unique=True)
-    docIDs = ListField()
-    createdAt = DateTimeField(default=datetime.now)
-
-    meta = {
-        'ordering': ['+createdAt']
-    }
-
-
 class Docs(EmbeddedDocument):
     _auto_id_field = False
     docID = ObjectIdField()
@@ -99,6 +89,13 @@ class Vocabulary(Document):
         ]
     }
 
+class InvertedIndex(Document):
+    word = StringField(max_length=255, required=True, unique=True)
+    docIDs = ListField()
+    createdAt = DateTimeField(default=datetime.now)
 
+    meta = {
+        'ordering': ['+createdAt']
+    }
 
 
