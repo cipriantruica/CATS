@@ -116,7 +116,7 @@ def processElement(elem, language, mode=0):
                 document['geoLocation'] = elem[4].split(' ')
             # author age
             if len(elem) >= 6:
-                document['age'] = int(elem[5])
+                document['age'] = elem[5]
             # author gender
             if len(elem) >= 7:
                 document['gender'] = elem[6]

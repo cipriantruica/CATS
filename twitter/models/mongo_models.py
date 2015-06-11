@@ -57,7 +57,7 @@ class Documents(Document):
     geoLocation = ListField()  # geo location, list with 2 elements: [x, y]
     author = StringField() # author ID
     gender = StringField()  # male or female
-    age = IntField()  # age of author
+    age = StringField()  # age of author given as a range
 
     meta = {
         'ordering': ['+createdAt']
