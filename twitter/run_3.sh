@@ -27,9 +27,9 @@ MODE=1
 #FILE="/home/cats/data/CATS_demo_May-12-2015_3.csv"
 #on Ciprian computer
 #test data
-FILE="../DATA_SETS/tweets/CATS_demo.csv"
+#FILE="../DATA_SETS/tweets/CATS_demo.csv"
 #all data
-#FILE="../DATA_SETS/tweets/CATS_demo_200.csv"
+FILE="../DATA_SETS/tweets/CATS_demo_50000.csv"
 DB="TwitterDB_3"
 echo $FILE
 python testing_tweets_3.py $FILE $DELIMITER $HEADER $DB $LANGUAGE $INIT $MODE
