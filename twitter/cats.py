@@ -187,4 +187,4 @@ def getTweets():
     
     
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0')
+    app.run(host='mediamining.univ-lyon2.fr')
