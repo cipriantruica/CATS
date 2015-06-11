@@ -60,7 +60,7 @@
     
 		    <label id="filter-date" style="width: 20%;">By date (starting and ending date (YYYY-MM-DD) separated by a space, example: "2015-04-06 2015-04-13"): </label><br/>		    <form action="{{ url_for('analysis_dashboard_page2') }}" method="POST">
 		    <input type="text" name="date" class="underlined" style="width:615px;"/><br/>
-		    <label id="filter-keyword">By keywords: </label><br/>
+		    <label id="filter-keyword">By keyword (a list of terms separated by a space, example: "cat dog"): </label><br/>
 		    <input type="text" name="keyword" class="underlined" style="width:615px;"/><br/>
 		    <br/>
 
@@ -97,16 +97,12 @@
 		    	<input type="submit" value="Browse tweets" class="button"/>
 		    </form>
 		    <br/>
-		    <br/>
 		    <h3 id="nlp-ner">Named-entity recognition</h3>
 	
 		    <p>Named-entity recognition (NER) consists in automatically locating specific elements in tweets, such as the names of persons, organizations, locations and so on.</p>
     
-		    <button>Perform NER</button>
-		    <br/>
-		    <br/>
-		    <input type="submit" name="submit" value="Download named-entity list"/><input type="submit" name="submit" value="Browse named-entities"/><input type="submit" value="Visualize named-entities"/>
-
+		    <a href="{{ url_for('getTerms') }}"><button>Download the list of named-entities</button></a>
+		    <a href="{{ url_for('getTermCloud') }}"><button>Visualize named-entities</button></a>
 		    <br/>
 		    <br/>
 
