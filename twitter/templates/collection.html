@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<title>CATS - Tweet analysis dashboard</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css') }}"/>
+</head>
+
+<body>
+
+	<div id="header">
+		<h1><img src="{{ url_for('static', filename = 'logo.png') }}"></img>CATS project: tweet collection dashboard</h1>
+	</div>
+	
+	<div style="background-color:#FFFFFF; height:1px;">
+		
+	</div>
+	
+	<div id="content">
+		<div id="sidebar">
+			<label>Navigate on this page:</label><br/>
+			<label><a href="analysis">Tweet collection dashboard</a></label>
+			<ul>
+				<li>New corpus
+					<ul>
+						<li><a href="#query-keyword">By keyword</a></li>
+						<li><a href="#query-location">By location</a></li>
+						<li><a href="#query-user">By user</a></li>
+					</ul>	
+				</li>
+				<li>Corpora being collected
+				</li>
+				<li>Available corpora
+				</li>
+			</ul>
+			<br/>
+			<label>Browse other pages:</label><br/>
+			<label><a href="analysis">Tweet analysis dashboard</a></label><br/>
+			<label><a href="about">About this project</a></label><br/>
+		</div>
+		
+		<div id="main-content">
+		    
+		    <h2>New corpus</h2>
+    
+		    <label id="filter-date" style="width: 20%;">By keyword (a list of terms separated by a space, example: "cat dog"): </label><br/>		    <form action="{{ url_for('collection_dashboard_page2') }}" method="POST">
+		    <input type="text" name="keyword" class="underlined" style="width:615px;"/><br/>
+		    <label id="filter-keyword">By location (a pair of GPS coordinates (latitude,longitude) separated by a space, example "45.740263,4.864114 45.767055,4.848559"): </label><br/>
+		    <input type="text" name="location" class="underlined" style="width:615px;"/><br/>
+		    <label id="filter-keyword">By user (a list of usernames separated by a space, example: "adrienguille NoelGallagher"): </label><br/>
+		    <input type="text" name="user" class="underlined" style="width:615px;"/><br/>
+		    <br/>
+
+		    	<input type="submit" value="Collect tweets" class="button"/>
+		    </form>
+           	    <label>{% if tweetCount %} {{ tweetCount }}{% endif %} tweets</label>
+
+		    <h2>Corpora being collected</h2>
+	
+		    
+		    <h2>Available corpora</h2>
+        
+		</div>
+		
+		<div class="clear"></div>
+	</div>
+
+</body>
+
+</html>

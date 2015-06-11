@@ -23,6 +23,10 @@ query = {}
 def getTweetCount():
     return db.documents.find(query).count()
 
+@app.route('/cats/collection')
+def collection_dashboard_page(name=None):
+    return render_template('collection.html', name=name) 
+
 @app.route('/cats/analysis')
 def analysis_dashboard_page(name=None):
     tweetCount = getTweetCount()
