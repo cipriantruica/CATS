@@ -48,17 +48,6 @@ def populateDB(filename, csv_delimiter, header, language='EN', dbname='TwitterDB
     h, lines = utils.readCSV(filename, csv_delimiter, header)
     populateDatabase(lines, language, dbname, mode)
 
-    #using multi threading
-    # noLines = len(lines)
-    # noIter = (noLines/k)+1
-    # no_threads = cpu_count()
-    # with ThreadPoolExecutor(max_workers = no_threads) as e:
-    #     for idx in range(0, noIter):
-    #         l_start, l_end = idx*k, idx*k+k
-    #         if l_end > noLines:
-    #             l_end = noLines
-    #         e.submit(populateDatabase, lines[l_start:l_end], language, dbname, mode, idx)
-
     end = time.time() 
     print "time_populate.append(", (end - start), ")"
 
