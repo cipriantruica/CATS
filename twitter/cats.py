@@ -13,7 +13,7 @@ import re
 
 # Connecting to the database
 client = pymongo.MongoClient()
-dbname = 'TwitterDB'
+dbname = 'TwitterDB2'
 db = client[dbname]
 
 app = Flask(__name__)
@@ -26,6 +26,10 @@ def getTweetCount():
 @app.route('/cats/collection')
 def collection_dashboard_page(name=None):
     return render_template('collection.html', name=name) 
+
+@app.route('/cats/collection', methods=['POST'])
+def collection_dashboard_page2():
+    return collection_dashboard_page()
 
 @app.route('/cats/analysis')
 def analysis_dashboard_page(name=None):
@@ -184,7 +188,13 @@ def getTweets():
     html += "</tbody></table></body></html>"
     return html
 
+@app.route('/cats/analysis/named_entities.csv')
+def getNamedEntities():
+    return ""
     
+@app.route('/cats/analysis/named_entities')
+def visualizeNamedEntities():
+    return ""
     
 if __name__ == '__main__':
-    app.run(host='mediamining.univ-lyon2.fr')
+    app.run(debug=True,host='mediamining.univ-lyon2.fr')

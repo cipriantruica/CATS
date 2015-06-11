@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-	<title>CATS - Tweet analysis dashboard</title>
+	<title>CATS - Tweet collection dashboard</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css') }}"/>
 </head>
@@ -20,7 +20,7 @@
 	<div id="content">
 		<div id="sidebar">
 			<label>Navigate on this page:</label><br/>
-			<label><a href="analysis">Tweet collection dashboard</a></label>
+			<label><a href="collection">Tweet collection dashboard</a></label>
 			<ul>
 				<li>New corpus
 					<ul>
@@ -54,7 +54,6 @@
 
 		    	<input type="submit" value="Collect tweets" class="button"/>
 		    </form>
-           	    <label>{% if tweetCount %} {{ tweetCount }}{% endif %} tweets</label>
 
 		    <h2>Corpora being collected</h2>
 	

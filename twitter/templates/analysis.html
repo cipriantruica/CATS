@@ -97,13 +97,12 @@
 		    	<input type="submit" value="Browse tweets" class="button"/>
 		    </form>
 		    <br/>
-		    <br/>
 		    <h3 id="nlp-ner">Named-entity recognition</h3>
 	
 		    <p>Named-entity recognition (NER) consists in automatically locating specific elements in tweets, such as the names of persons, organizations, locations and so on.</p>
     
-		    <a href="{{ url_for('getNamedEntities') }}"><button>Download the list of named-entities</button></a>
-		    <a href="{{ url_for('visualizeNamedEntities') }}"><button>Visualize named-entities</button></a>
+		    <a href="{{ url_for('getTerms') }}"><button>Download the list of named-entities</button></a>
+		    <a href="{{ url_for('getTermCloud') }}"><button>Visualize named-entities</button></a>
 		    <br/>
 		    <br/>
 
