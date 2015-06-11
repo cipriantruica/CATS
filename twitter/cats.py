@@ -13,7 +13,7 @@ import re
 
 # Connecting to the database
 client = pymongo.MongoClient()
-dbname = 'TwitterDB2'
+dbname = 'TwitterDB'
 db = client[dbname]
 
 app = Flask(__name__)
