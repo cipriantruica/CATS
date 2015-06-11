@@ -13,13 +13,9 @@ import nltk
 class NamedEntitiesRegonizer:
     def __init__(self, text, language='EN'):
         self.ner = []
-        self.gpe = []
-        self.person = []
-        self.organization = []
-        self.facility = []
-        self.location = []
         self.text = text
         self.language = language
+
 
     def createNamedEntities(self):
         #only for English for now :)
@@ -30,24 +26,9 @@ class NamedEntitiesRegonizer:
                 sentences = [nltk.pos_tag(sent) for sent in sentences]
                 sentences = [nltk.ne_chunk(sent) for sent in sentences]
                 for tree in sentences:
-                    self.ner += [(ne.label(), ' '.join(map(lambda x: x[0], ne.leaves()))) for ne in tree if isinstance(ne, nltk.tree.Tree)]
-                for elem in self.ner:
-                    if elem[0] == "PERSON":
-                        self.person.append(elem[1])
-                    elif elem[0] == "GPE":
-                        self.gpe.append(elem[1])
-                    elif elem[0] == "ORGANIZATION":
-                        self.organization.append(elem[1])
-                    elif elem[0] == "FACILITY":
-                        self.facility.append(elem[1])
-                    elif elem[0] == "LOCATION":
-                        self.location.append(elem[1])
+                    self.ner += [{'type': ne.label(), 'entity':' '.join(map(lambda x: x[0], ne.leaves()))} for ne in tree if isinstance(ne, nltk.tree.Tree)]
                 #remove duplicates
-                self.person = list(set(self.person))
-                self.gpe = list(set(self.gpe))
-                self.organization = list(set(self.organization))
-                self.facility = list(set(self.facility))
-                self.location = list(set(self.location))
+                self.ner = [dict(elem) for elem in set(tuple(item.items()) for item in self.ner)]
         except Exception as e:
             print self.text, '\n', e
 
@@ -61,19 +42,17 @@ if __name__ == '__main__':
         "I liked a video from Wiz Khalifa - See You Again ft. Charlie Puth [Official Video]",
         "I was rly close with Leo, I never rly spoke to Charlie bc he was studying all the time for gcses??",
         "charlie I no u will not see this and I no it is so cheesy but I love u so much",
-        "Wiz Khalifa - See You Again ft. Charlie Puth [Official Video] Furious 7 Soundtrack. Emotional",
+        "Wiz Khalifa - See You Again ft. Charlie Puth [Official Video] Furious 7 Soundtrack. Emotional. I liked the video from Khalifa.",
         "Everyone was like \\who the fuck is Charlie\\\" mate use yo brains\"",
         "Happy birthday Cardiff Charlie!! Have a good one darling One love????",
         "Charlie Mulgrew has the most beautiful family ever",
-        "Telling that Averil Power, and not. Charlie McConalogue is acting as FF spokesperson for education on tonight. She is much better."
+        "Telling that Averil Power, and not. Charlie McConalogue is acting as FF spokesperson for education on tonight. She is much better.",
+        "Wiz Khalifa, Wiz Khalifa, Wiz Khalifa",
     ]
 
     for text in texts:
         print text
         ner = NamedEntitiesRegonizer(text=text)
         ner.createNamedEntities()
-        print "person:", ner.person
-        print "organization:", ner.organization
-        print "gpe:", ner.gpe
-        print "facility:", ner.facility
-        print "location:", ner.location
+        for elem in ner.ner:
+            print elem

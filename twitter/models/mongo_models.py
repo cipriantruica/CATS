@@ -29,6 +29,14 @@ class Word(EmbeddedDocument):
         'ordering': ['+word']
     }
 
+class NamedEntities(EmbeddedDocument):
+    _auto_id_field = False
+    type = StringField()
+    entity = StringField()
+
+    meta = {
+        'ordering': ['+entity']
+    }
 
 class Documents(Document):
     _auto_id_field = False
@@ -44,6 +52,7 @@ class Documents(Document):
     date = DateTimeField()
     language = StringField()
     words = ListField(EmbeddedDocumentField("Word"))
+    namedEntities = ListField(EmbeddedDocumentField("NamedEntities"))
     tags = ListField()
     geoLocation = ListField()  # geo location, list with 2 elements: [x, y]
     author = StringField() # author ID
@@ -91,11 +100,5 @@ class Vocabulary(Document):
     }
 
 
-class NamedEntities(Document):
-    docID = ObjectIdField()
-    createdAt = DateTimeField(default=datetime.now)
-    gpe = ListField()
-    person = ListField()
-    organization = ListField()
-    facility = ListField()
-    location = ListField()
+
+

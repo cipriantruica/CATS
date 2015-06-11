@@ -129,17 +129,8 @@ def processElement(elem, language, mode=0):
             # named entities:
             ner = NamedEntitiesRegonizer(text=cleanText, language=lang)
             ner.createNamedEntities()
-            ne = []
-            if ner.person:
-                ne.append({'person': ner.person})
-            if ner.gpe:
-                ne.append({'gpe': ner.gpe})
-            if ner.organization:
-                ne.append({'organization': ner.organization})
-            if ner.facility:
-                ne.append({'facility': ner.facility})
-            if ner.location:
-                ne.append({'location': ner.location})
+            if ner.ner:
+                document['namedEntities'] = ner.ner
 
             # construct the document
             document['_id'] = elem[0]
@@ -153,6 +144,4 @@ def processElement(elem, language, mode=0):
                 document['attags'] = attags
             if hashtags:
                 document['hashtags'] = hashtags
-            if ne:
-                document['namedEntities'] = ne
     return document
