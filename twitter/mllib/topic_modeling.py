@@ -110,9 +110,9 @@ if __name__ == '__main__':
     start = time.time()
 
     #create market matrix file
-    #filename = 'mm_count2.mm'
-    #id2word, id2tweetID, corpus = mm.buildBinaryMM(filename=filename)
-    #topic_model = TopicModeling(id2word=id2word, filename=filename)
+    # filename = 'mm_count2.mm'
+    # id2word, id2tweetID, corpus = mm.buildBinaryMM(filename=filename)
+    # topic_model = TopicModeling(id2word=id2word, filename=filename)
 
     #without creating the file
     id2word, id2tweetID, corpus = mm.buildCountMM()
@@ -126,17 +126,17 @@ if __name__ == '__main__':
     end = time.time()
     print 'LDA Count time:', (end - start)
 
-    start = time.time()
-    topic_model.topicsLSI()
-    end = time.time()
-    print 'LSI Count time:', (end - start)
-
-    start = time.time()
-    topic_model.topicsHDP()
-    end = time.time()
-    print 'HDP Count time:', (end - start)
-
-    start = time.time()
+    # start = time.time()
+    # topic_model.topicsLSI()
+    # end = time.time()
+    # print 'LSI Count time:', (end - start)
+    #
+    # start = time.time()
+    # topic_model.topicsHDP()
+    # end = time.time()
+    # print 'HDP Count time:', (end - start)
+    #
+    # start = time.time()
 
     #create market matrix file
     #filename = 'mm_binary2.mm'
@@ -144,57 +144,57 @@ if __name__ == '__main__':
     #topic_model = TopicModeling(id2word=id2word, filename=filename)
 
     #without creating the market matrix file
-    id2word, id2tweetID, corpus = mm.buildBinaryMM()
-
-    end = time.time()
-    print 'Construct Binary MM time:', (end - start)
-
-    topic_model = TopicModeling(id2word=id2word, corpus=corpus)
-
-    start = time.time()
-    topic_model.topicsLDA()
-    end = time.time()
-    print 'LDA Binary time:', (end - start)
-
-    start = time.time()
-    topic_model.topicsLSI()
-    end = time.time()
-    print 'LSI Binary time:', (end - start)
-
-    start = time.time()
-    topic_model.topicsHDP()
-    end = time.time()
-    print 'HDP Count time:', (end - start)
-
-    start = time.time()
-
-    #create market matrix file
-    #filename = 'mm_tf2.mm'
-    #id2word, id2tweetID, corpus = mm.buildTFMM(filename=filename)
-    #topic_model = TopicModeling(id2word=id2word, filename=filename)
-
-    #without creating the market matrix file
-    id2word, id2tweetID, corpus = mm.buildTFMM()
-
-    end = time.time()
-    print 'Construct TF MM time:', (end - start)
-
-    topic_model = TopicModeling(id2word=id2word, corpus=corpus)
-
-    start = time.time()
-    topic_model.topicsLDA()
-    end = time.time()
-    print 'LDA TF time:', (end - start)
-
-    start = time.time()
-    topic_model.topicsLSI()
-    end = time.time()
-    print 'LSI TF time:', (end - start)
-
-    start = time.time()
-    topic_model.topicsHDP()
-    end = time.time()
-    print 'HDP Count time:', (end - start)
-
-    end_total = time.time()
-    print 'total time:', (end_total - start_total)
+    # id2word, id2tweetID, corpus = mm.buildBinaryMM()
+    #
+    # end = time.time()
+    # print 'Construct Binary MM time:', (end - start)
+    #
+    # topic_model = TopicModeling(id2word=id2word, corpus=corpus)
+    #
+    # start = time.time()
+    # topic_model.topicsLDA()
+    # end = time.time()
+    # print 'LDA Binary time:', (end - start)
+    #
+    # start = time.time()
+    # topic_model.topicsLSI()
+    # end = time.time()
+    # print 'LSI Binary time:', (end - start)
+    #
+    # start = time.time()
+    # topic_model.topicsHDP()
+    # end = time.time()
+    # print 'HDP Count time:', (end - start)
+    #
+    # start = time.time()
+    #
+    # #create market matrix file
+    # #filename = 'mm_tf2.mm'
+    # #id2word, id2tweetID, corpus = mm.buildTFMM(filename=filename)
+    # #topic_model = TopicModeling(id2word=id2word, filename=filename)
+    #
+    # #without creating the market matrix file
+    # id2word, id2tweetID, corpus = mm.buildTFMM()
+    #
+    # end = time.time()
+    # print 'Construct TF MM time:', (end - start)
+    #
+    # topic_model = TopicModeling(id2word=id2word, corpus=corpus)
+    #
+    # start = time.time()
+    # topic_model.topicsLDA()
+    # end = time.time()
+    # print 'LDA TF time:', (end - start)
+    #
+    # start = time.time()
+    # topic_model.topicsLSI()
+    # end = time.time()
+    # print 'LSI TF time:', (end - start)
+    #
+    # start = time.time()
+    # topic_model.topicsHDP()
+    # end = time.time()
+    # print 'HDP Count time:', (end - start)
+    #
+    # end_total = time.time()
+    # print 'total time:', (end_total - start_total)

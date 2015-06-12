@@ -47,7 +47,7 @@ def populateDatabase(elems, language='EN', dbname='TwitterDB', mode=0):
         # idx = 1
         # single thread
         # for elem in elems:
-        #     if len(elem) >= 4:
+        #     if len(elem) >= 7:
         #         # verify if document already in the database
         #         # only if it does not exist an new document is added to the documents list
         #         exist = db.documents.find_one(spec_or_id={"_id": str(elem[0])})
@@ -131,7 +131,7 @@ def processElement(elem, language, mode=0):
             document['age'] = elem[5]
             # author gender
             document['gender'] = elem[6]
-            
+
             if attags:
                 document['attags'] = attags
             if hashtags:
