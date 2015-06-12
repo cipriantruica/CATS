@@ -8,7 +8,7 @@ __email__ = "ciprian.truica@cs.pub.ro"
 __status__ = "Production"
 
 import pymongo
-from twitter.indexing import vocabulary_index
+from twitter.indexing.vocabulary_index import VocabularyIndex
 from time import time
 import codecs
 
@@ -29,7 +29,7 @@ class MarketMatrix:
         if query:
             # if the vocabulary should be rebuilt
             if rebuild:
-                vocab = vocabulary_index.VocabularyIndex(self.dbname)
+                vocab = VocabularyIndex(self.dbname)
                 vocab.createIndex(query)
             if limit:
                 self.cursor = self.db.vocabulary_query.find(fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, limit=limit, sort=[('idf', pymongo.ASCENDING)])
@@ -38,7 +38,7 @@ class MarketMatrix:
         else:
             # if the vocabulary should be rebuilt
             if rebuild:
-                vocab = vocabulary_index.VocabularyIndex(self.dbname)
+                vocab = VocabularyIndex(self.dbname)
                 vocab.createIndex()
             if limit:
                 self.cursor = self.db.vocabulary.find(fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, limit=limit, sort=[('idf', pymongo.ASCENDING)])
