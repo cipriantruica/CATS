@@ -66,7 +66,7 @@ def populateDatabase(elems, language='EN', dbname='TwitterDB', mode=0):
         no_threads = cpu_count()
         with ThreadPoolExecutor(max_workers = no_threads) as worker:
             for elem in elems:
-                if len(elem) >= 4:
+                if len(elem) >= 7:
                     # verify if document already in the database
                     # only if it does not exist an new document is added to the documents list
                     exist = db.documents.find_one(spec_or_id={"_id": str(elem[0])})
@@ -111,16 +111,6 @@ def processElement(elem, language, mode=0):
                 word['pos'] = w.wtype
                 words.append(word)
 
-            # geo location [x, y]
-            if len(elem) >= 5:
-                document['geoLocation'] = elem[4].split(' ')
-            # author age
-            if len(elem) >= 6:
-                document['age'] = elem[5]
-            # author gender
-            if len(elem) >= 7:
-                document['gender'] = elem[6]
-
             # named entities:
             ner = NamedEntitiesRegonizer(text=cleanText, language=lang)
             ner.createNamedEntities()
@@ -135,6 +125,13 @@ def processElement(elem, language, mode=0):
             document['date'] = elem[2]
             document['author'] = elem[3]
             document['words'] = words
+            # geo location [x, y]
+            document['geoLocation'] = elem[4].split(' ')
+            # author age
+            document['age'] = elem[5]
+            # author gender
+            document['gender'] = elem[6]
+            
             if attags:
                 document['attags'] = attags
             if hashtags:
