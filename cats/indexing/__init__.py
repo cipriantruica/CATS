@@ -9,21 +9,17 @@ __status__ = "Production"
 
 #this is the init file for the indexes
 
+print "INDEXING init"
 # __all__ = ['inverted_index', 'pos_index', 'vocabulary_index']
-
+#
 # import os
 # package_dir = os.path.abspath(os.path.dirname(__file__))
 # os.sys.path.append(package_dir)
-# print package_dir
-
+#
 # import sys
-# print 'indexing init'
 # for elem in  sorted(sys.path):
 #     print elem
-#
-#
-#
-#
+
 # from inverted_index import InvertedIndex
 # from pos_index import POSIndex
 # from vocabulary_index import VocabularyIndex

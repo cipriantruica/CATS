@@ -9,21 +9,21 @@ __status__ = "Production"
 
 #this is the init file for the ml lib
 
+print "MLLIB init"
+
 # __all__ = ['market_matrix', 'topic_modeling']
 
 # import os
-# package_dir = os.path.abspath(os.path.dirname(__file__))
+# package_dir = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 # os.sys.path.append(package_dir)
-#
+
 # import sys
-# print "mllib init"
 # for elem in  sorted(sys.path):
 #     print elem
-#
+
 # from market_matrix import MarketMatrix
 # from topic_modeling import TopicModeling
-#
-#
+
 # from cats.mllib.market_matrix import MarketMatrix
 # from cats.mllib.topic_modeling import TopicModeling
 

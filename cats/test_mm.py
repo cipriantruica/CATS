@@ -10,8 +10,6 @@ if __name__ == '__main__':
     start = time()
     mm = MarketMatrix(dbname='TwitterDB')
 
-
-
     mm.build(query=query_or)
     #mm.build(query=query_and, limit=100)
     end = time()
