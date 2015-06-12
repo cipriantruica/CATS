@@ -18,8 +18,8 @@ __all__ = ['inverted_index', 'pos_index', 'vocabulary_index']
 from inverted_index import InvertedIndex
 from pos_index import POSIndex
 from vocabulary_index import VocabularyIndex
-"""
 
 from cats.indexing.inverted_index import InvertedIndex
 from cats.indexing.pos_index import POSIndex
 from cats.indexing.vocabulary_index import VocabularyIndex
+"""

@@ -10,7 +10,6 @@ __status__ = "Production"
 #this is the init file for the ml lib
 import os
 package_dir = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-print package_dir
 os.sys.path.append(package_dir)
 
 __all__ = ['market_matrix', 'topic_modeling']
