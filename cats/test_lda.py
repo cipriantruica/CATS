@@ -13,16 +13,13 @@ import time
 
 if __name__ == '__main__':
     start_total = time.time()
-
     start = time.time()
     mm = MarketMatrix(dbname='TwitterDB')
 
     #entire vocabulary
     mm.build()
-
     end = time.time()
     print 'Build time:', (end - start)
-
     start = time.time()
 
     #without creating the market matrix file
@@ -30,23 +27,28 @@ if __name__ == '__main__':
 
     end = time.time()
     print 'Construct TF MM time:', (end - start)
-
     topic_model = TopicModeling(id2word=id2word, corpus=corpus)
 
+    print 'LDA'
     start = time.time()
-    topic_model.topicsLDA(num_topics=50)
+    for topic in topic_model.topicsLDA(num_topics=50):
+        print topic
     end = time.time()
     print 'LDA TF time:', (end - start)
 
-    # start = time.time()
-    # topic_model.topicsLSI()
-    # end = time.time()
-    # print 'LSI TF time:', (end - start)
-    #
-    # start = time.time()
-    # topic_model.topicsHDP()
-    # end = time.time()
-    # print 'HDP Count time:', (end - start)
-    #
-    # end_total = time.time()
-    # print 'total time:', (end_total - start_total)
+    print 'LSI:'
+    start = time.time()
+    for topic in topic_model.topicsLSI():
+        print topic
+    end = time.time()
+    print 'LSI TF time:', (end - start)
+
+    print 'HDP:'
+    start = time.time()
+    for topic in topic_model.topicsHDP():
+        print topic
+    end = time.time()
+    print 'HDP Count time:', (end - start)
+
+    end_total = time.time()
+    print 'total time:', (end_total - start_total)
