@@ -1,6 +1,6 @@
 from time import time
 from mllib.market_matrix import MarketMatrix
-from indexing.vocabulary_index import VocabularyIndex
+
 # these are just tests
 if __name__ == '__main__':
     query_or = {"words.word" : {"$in": ["shit", "fuck"] }, "date": {"$gt": "2015-04-10", "$lte":  "2015-04-12"}}
