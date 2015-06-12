@@ -24,11 +24,11 @@ from mongo_models import Vocabulary
 from mongo_models import NamedEntities
 
 
-from twitter.models.mongo_models import Word
-from twitter.models.mongo_models import Documents
-from twitter.models.mongo_models import Vocabulary
-from twitter.models.mongo_models import InvertedIndex
-from twitter.models.mongo_models import Docs
-from twitter.models.mongo_models import Vocabulary
-from twitter.models.mongo_models import NamedEntities
+from cats.models.mongo_models import Word
+from cats.models.mongo_models import Documents
+from cats.models.mongo_models import Vocabulary
+from cats.models.mongo_models import InvertedIndex
+from cats.models.mongo_models import Docs
+from cats.models.mongo_models import Vocabulary
+from cats.models.mongo_models import NamedEntities
 """

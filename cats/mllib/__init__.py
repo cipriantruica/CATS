@@ -20,6 +20,6 @@ from market_matrix import MarketMatrix
 from topic_modeling import TopicModeling
 
 
-from twitter.mllib.market_matrix import MarketMatrix
-from twitter.mllib.topic_modeling import TopicModeling
+from cats.mllib.market_matrix import MarketMatrix
+from cats.mllib.topic_modeling import TopicModeling
 """

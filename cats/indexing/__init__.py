@@ -20,6 +20,6 @@ from pos_index import POSIndex
 from vocabulary_index import VocabularyIndex
 """
 
-from twitter.indexing.inverted_index import InvertedIndex
-from twitter.indexing.pos_index import POSIndex
-from twitter.indexing.vocabulary_index import VocabularyIndex
+from cats.indexing.inverted_index import InvertedIndex
+from cats.indexing.pos_index import POSIndex
+from cats.indexing.vocabulary_index import VocabularyIndex

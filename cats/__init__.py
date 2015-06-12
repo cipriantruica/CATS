@@ -21,11 +21,11 @@ import mllib
 import models
 
 
-import twitter.indexing.vocabulary_index
-import twitter.nlplib.clean_text
-import twitter.nlplib.lemmatize_text
-import twitter.nlplib.named_entities
-import twitter.mllib.market_matrix
-import twitter.mllib.topic_modeling
-import twitter.models.mongo_models
+import cats.indexing.vocabulary_index
+import cats.nlplib.clean_text
+import cats.nlplib.lemmatize_text
+import cats.nlplib.named_entities
+import cats.mllib.market_matrix
+import cats.mllib.topic_modeling
+import cats.models.mongo_models
 """

@@ -4,7 +4,7 @@ __version__ = "0.1"
 __email__ = "adrien.guille@univ-lyon2.fr"
 __status__ = "Production"
 
-from twitter import *
+from cats import *
 import datetime
 
 tweets_per_file = 5

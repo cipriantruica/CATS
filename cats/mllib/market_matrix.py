@@ -8,7 +8,7 @@ __email__ = "ciprian.truica@cs.pub.ro"
 __status__ = "Production"
 
 import pymongo
-from twitter.indexing.vocabulary_index import VocabularyIndex
+from cats.indexing.vocabulary_index import VocabularyIndex
 from time import time
 import codecs
 

@@ -19,7 +19,7 @@ from clean_text import CleanText
 from lemmatize_text import LemmatizeText
 from named_entities import NamedEntitiesRegonizer
 
-from twitter.nlplib.clean_text import CleanText
-from twitter.nlplib.lemmatize_text import LemmatizeText
-from twitter.nlplib.named_entities import NamedEntitiesRegonizer
+from cats.nlplib.clean_text import CleanText
+from cats.nlplib.lemmatize_text import LemmatizeText
+from cats.nlplib.named_entities import NamedEntitiesRegonizer
 """
