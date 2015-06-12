@@ -8,9 +8,8 @@ __email__ = "ciprian.truica@cs.pub.ro"
 __status__ = "Production"
 
 import pymongo
-from indexing.vocabulary_index import VocabularyIndex
-from time import time
-import codecs
+# from time import time
+# import codecs
 
 class MarketMatrix:
     def __init__(self, dbname='TwitterDB'):
@@ -21,25 +20,16 @@ class MarketMatrix:
 
     """
         input:
-            query: a query used to build the vocabulary, if no query is given then we use the entire vocabulary
+            query: if true Then use vocabulary_query, if False use the entire vocabulary
             limit: parameter used to limit the numeber of returned line, based on idf
-            rebuild: parameter used if the vocabulary should be rebuilt
     """
-    def build(self, query=None, limit=None, rebuild=False):
+    def build(self, query=False, limit=None):
         if query:
-            # if the vocabulary should be rebuilt
-            if rebuild:
-                vocab = VocabularyIndex(self.dbname)
-                vocab.createIndex(query)
             if limit:
                 self.cursor = self.db.vocabulary_query.find(fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, limit=limit, sort=[('idf', pymongo.ASCENDING)])
             else:
                 self.cursor = self.db.vocabulary_query.find(fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, sort=[('idf', pymongo.ASCENDING)])
         else:
-            # if the vocabulary should be rebuilt
-            if rebuild:
-                vocab = VocabularyIndex(self.dbname)
-                vocab.createIndex()
             if limit:
                 self.cursor = self.db.vocabulary.find(fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, limit=limit, sort=[('idf', pymongo.ASCENDING)])
             else:
@@ -170,43 +160,38 @@ class MarketMatrix:
 
 # these are just tests
 if __name__ == '__main__':
-    query_or = {"words.word" : {"$in": ["shit", "fuck"] }, "date": {"$gt": "2015-04-10", "$lte":  "2015-04-12"}}
-    query_and = {"$and": [{"words.word": "shit"}, {'words.word': "fuck"}],
-                 "date": {"$gt": "2015-04-10", "$lte": "2015-04-12"}}
-    #for the entire vocabulary
-    #mm.build(rebuild=True)
-    start = time()
+    # start = time()
     mm = MarketMatrix(dbname='TwitterDB')
     mm.build(limit=1000)
 
-    #for given queries with/without limit
-    #mm.build(query=query_or)
-    #mm.build(query=query_and, limit=100)
-    end = time()
-    print 'Build time:',(end-start)
-    """
-    start = time()
-    mm.buildBinaryMM('mm_binary.mtx')
-    end = time()
-    print "Binary MM time:", (end-start)
+    # for given queries with/without limit
+    # mm.build(query=True)
+    # mm.build(query=True, limit=100)
+    # end = time()
+    # print 'Build time:',(end-start)
 
-    start = time()
-    mm.buildCountMM('mm_count.mtx')
-    end = time()
-    print "Binary Count time:", (end-start)
-    """
-    start = time()
+    # start = time()
+    # mm.buildBinaryMM('mm_binary.mtx')
+    # end = time()
+    # print "Binary MM time:", (end-start)
+
+    # start = time()
+    # mm.buildCountMM('mm_count.mtx')
+    # end = time()
+    # print "Binary Count time:", (end-start)
+
+    # start = time()
     id2word, id2tweetID, market_matrix = mm.buildTFMM('mm_tf.mtx')
-
-    with codecs.open('id2word.txt', "w", "utf-8") as file1:
-        file1.write("id2word\n")
-        for elem in id2word:
-            file1.write(str(elem) + " " + id2word[elem] + "\n")
-    file1.close()
-    with open('id2tweetID.txt' , 'w') as file2:
-        file2.write("id2tweetID\n")
-        for elem in id2tweetID:
-            file2.write(str(elem) + " " + str(id2tweetID[elem]) + "\n")
-    file2.close()
-    end = time()
-    print "Binary TF time:", (end-start)
+    #
+    # with codecs.open('id2word.txt', "w", "utf-8") as file1:
+    #     file1.write("id2word\n")
+    #     for elem in id2word:
+    #         file1.write(str(elem) + " " + id2word[elem] + "\n")
+    # file1.close()
+    # with open('id2tweetID.txt' , 'w') as file2:
+    #     file2.write("id2tweetID\n")
+    #     for elem in id2tweetID:
+    #         file2.write(str(elem) + " " + str(id2tweetID[elem]) + "\n")
+    # file2.close()
+    # end = time()
+    # print "Binary TF time:", (end-start)

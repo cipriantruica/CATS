@@ -57,8 +57,11 @@ class Search:
         lista = {}
         #for value in response[0]['docIDs']:
         #    lista[value['docID']] = value['TFIDF']
-        for value in response[0]['docIDs']:
-            lista[value['docID']] = value['TFIDF']
+        try:
+            for value in response[0]['docIDs']:
+                lista[value['docID']] = value['TFIDF']
+        except Exception as exp:
+            print exp
         self.db.search_index2.drop()
         self.db.search_index.drop()
         return lista
@@ -113,7 +116,7 @@ class Search:
             l.append({ 'id': key, 'rawText': d['rawText'], 'author': d['author'], 'date': d['date'], 'score':answer[key] })
         return l
 
-    def __init__(self, searchPhrase, dbname='TwitterDB', query={}, k=0):
+    def __init__(self, searchPhrase, dbname='TwitterDB', query=False, k=0):
         client = pymongo.MongoClient()
         self.db = client[dbname]
         self.words = [word.split('/')[0] for word in lemmatize(cleanText.removeStopWords(cleanText.cleanText(searchPhrase)[0]))]

@@ -50,12 +50,12 @@ def analysis_dashboard_page2():
             This example will construct a regex that contains the lemma
             similar in SQL to -> where word like '%fuck%'
         """
-        regex = re.compile(word.word, re.IGNORECASE)
-        wordList.append(regex)
+        #regex = re.compile(word.word, re.IGNORECASE)
+        #wordList.append(regex)
         """
             this one will find only the tweets with the matching word
         """
-        #wordList.append(word.word)
+        wordList.append(word.word)
     global query
     query = {}
     if wordList:
@@ -63,7 +63,11 @@ def analysis_dashboard_page2():
     if date:
         start, end = date.split(" ") 
         query["date"] = {"$gt": start, "$lte": end}
-    print query
+
+    if query:
+        vocab = VocabularyIndex(dbname)
+        vocab.createIndex(query)
+
     tweetCount = getTweetCount()
     return render_template('analysis.html', tweetCount=tweetCount)  
     
@@ -141,8 +145,6 @@ def getTermCloud():
 @app.route('/cats/analysis/vocabulary.csv')
 def getTerms():
     if query:
-        vocab = VocabularyIndex(dbname)
-        vocab.createIndex(query)
         voc = db.vocabulary_query.find(fields={'word':1,'idf':1}, limit=1000, sort=[('idf',pymongo.ASCENDING)])
     else:
         voc = db.vocabulary.find(fields={'word':1,'idf':1}, limit=1000, sort=[('idf',pymongo.ASCENDING)])
@@ -154,7 +156,10 @@ def getTerms():
 @app.route('/cats/analysis/tweets',methods=['POST'])
 def getTweets():
     searchPhrase = request.form['cooccurringwords']
-    search = Search(searchPhrase=searchPhrase, dbname=dbname, query=query)
+    query_exists = False
+    if query:
+        query_exists = True
+    search = Search(searchPhrase=searchPhrase, dbname=dbname, query=query_exists)
     results = search.results()
     csv = 'author,timestamp,text,score\n'
     html = """  
@@ -198,3 +203,5 @@ def visualizeNamedEntities():
     
 if __name__ == '__main__':
     app.run(debug=True,host='mediamining.univ-lyon2.fr')
+    # run local
+    # app.run(debug=True,host='127.0.0.1')
