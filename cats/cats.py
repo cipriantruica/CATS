@@ -113,12 +113,27 @@ def getTweets():
 
 @app.route('/cats/analysis/named_entities.csv')
 def getNamedEntities():
+    # similar to getTerms()
+    csv='named_entity,frequency,type\n'
+    return Response(csv,mimetype="text/csv") 
+    
+@app.route('/cats/analysis/named_entity_cloud')
+def getNamedEntityCloud():
+    # similar to getTermCloud
+    render_template('word_cloud.html', ne=ne)
+    
+@app.route('/cats/analysis')
+def trainLDA():
     return ""
     
-@app.route('/cats/analysis/named_entities')
-def visualizeNamedEntities():
-    return ""
+@app.route('/cats/analysis/lda_topics.csv')
+def getTopics():
+    return ""   
     
+@app.route('/cats/analysis/lda_topic_browser')
+def browseTopics():
+    return ""  
+        
 if __name__ == '__main__':
     app.run(debug=True,host='mediamining.univ-lyon2.fr')
     # run local

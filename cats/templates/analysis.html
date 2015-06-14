@@ -72,7 +72,7 @@
 	
 		    <h3 id="nlp-lemmatization">Lemmatization</h3>
     
-		    <p>Lemmatization is the process of reducing inflectional forms and sometimes derivationally related forms of a word to a common base form, so they can be analysed as a single item. By default, all the functionnalities offers by CATS are based on lemmatized tweets.</p>
+		    <p>Lemmatization is the process of reducing inflectional forms and sometimes derivationally related forms of a word to a common base form, so they can be analysed as a single item. By default, all the functionnalities offered by CATS are based on lemmatized tweets.</p>
     
 		    <input type="checkbox" name="lemmatization" value="on" checked > Activate lemmatization 
 		    <br/>
@@ -99,7 +99,7 @@
 		    <br/>
 		    <h3 id="nlp-ner">Named-entity recognition</h3>
 	
-		    <p>Named-entity recognition (NER) consists in automatically locating specific elements in tweets, such as the names of persons, organizations, locations and so on.</p>
+		    <p>Named-entity recognition (NER) consists in automatically locating names of persons, organizations and locations in tweets.</p>
     
 		    <a href="{{ url_for('getTerms') }}"><button>Download the list of named-entities</button></a>
 		    <a href="{{ url_for('getTermCloud') }}"><button>Visualize named-entities</button></a>
@@ -114,12 +114,16 @@
 
 		    <p>LDA (i.e. Latent Dirichlet Allocation) is a model that represents tweets as mixtures of topics, each topic being associated to a probability distribution over a set of words.</p>
 
-		    <label>Number of topics: </label><input type="text" name="k" class="underlined"/>
-			
-			<button>Perform LDA</button>
-		    <br/>
-		    <br/>
-		    <input type="submit" name="submit" value="Download topics"/><input type="submit" name="submit" value="Browse topics"/><input type="submit" name="submit" value="Visualize topics"/>
+		    <label>Number of topics (example: "10"):</label>
+			<br/>
+		    <form action="{{ url_for('trainLDA') }}" method="POST"><input type="text" name="k" class="underlined" style="width: 615px;"/>
+				<br/>
+				<br/>
+		    	<input type="submit" value="Train LDA" class="button"/>
+		    </form>
+			<br/>
+		    <a href="{{ url_for('getTopics') }}"><button>Download topics</button></a>
+		    <a href="{{ url_for('browseTopics') }}"><button>Browse topics</button></a>
 		    <br/>
 		    <br/>
 		    <h3 id="topic-hlda">Hierarchical LDA</h3>
