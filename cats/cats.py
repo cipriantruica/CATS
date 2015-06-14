@@ -165,6 +165,7 @@ def getTweets():
     html = """  
     <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="/static/style.css">
         <link rel="stylesheet" type="text/css" href="/static/jquery.dataTables.css">
         <style type="text/css" class="init"></style>
         <script type="text/javascript" language="javascript" src="/static/jquery-1.11.1.min.js"></script>
@@ -176,21 +177,37 @@ def getTweets():
         </script>
     </head>
     <body>
-        <table id="example" class="display" cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th>Author</th>
-                    <th>Timestamp</th>
-                    <th>Text</th>
-                    <th>Score</th>
-                </tr>
-            </thead>
-            <tbody>
+    	<div id="header">
+    		<h1><img src="/static/logo.png"></img>CATS project: tweet browser</h1>
+    	</div>
+    	<div style="background-color:#FFFFFF; height:1px;"></div>
+    	<div id="content">
+    		<div id="sidebar">
+    		</div>
+		<div id="main-content">
+            <table id="example" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Author</th>
+                        <th>Timestamp</th>
+                        <th>Text</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
     """
     for doc in results :
-        html += "<tr><td>"+str(doc['author'])+'</td><td>'+str(doc['date'])+'</td><td>'+doc['rawText']+'</td><td>'+str(doc['score'])+'</td></tr>'
+        html += "<tr><td><p>"+str(doc['author'])+'</p></td><td><p>'+str(doc['date'])+'</p></td><td><p>'+doc['rawText']+'</p></td><td><p>'+str(doc['score'])+'</p></td></tr>'
         csv += str(doc['author'])+','+str(doc['date'])+','+doc['rawText']+','+str(doc['score'])+'\n'
-    html += "</tbody></table></body></html>"
+    html += """
+                </tbody>
+            </table>
+	    </div>
+	    <div class="clear"></div>
+	  </div>
+    </body>
+</html>
+    """
     return html
 
 @app.route('/cats/analysis/named_entities.csv')
