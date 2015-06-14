@@ -161,54 +161,7 @@ def getTweets():
         query_exists = True
     search = Search(searchPhrase=searchPhrase, dbname=dbname, query=query_exists)
     results = search.results()
-    csv = 'author,timestamp,text,score\n'
-    html = """  
-    <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="/static/style.css">
-        <link rel="stylesheet" type="text/css" href="/static/jquery.dataTables.css">
-        <style type="text/css" class="init"></style>
-        <script type="text/javascript" language="javascript" src="/static/jquery-1.11.1.min.js"></script>
-    	<script type="text/javascript" language="javascript" src="/static/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" class="init">
-            $(document).ready(function() {
-    	        $('#example').DataTable();
-            } );
-        </script>
-    </head>
-    <body>
-    	<div id="header">
-    		<h1><img src="/static/logo.png"></img>CATS project: tweet browser</h1>
-    	</div>
-    	<div style="background-color:#FFFFFF; height:1px;"></div>
-    	<div id="content">
-    		<div id="sidebar">
-    		</div>
-		<div id="main-content">
-            <table id="example" class="display" cellspacing="0" width="100%">
-                <thead>
-                    <tr>
-                        <th>Author</th>
-                        <th>Timestamp</th>
-                        <th>Text</th>
-                        <th>Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-    """
-    for doc in results :
-        html += "<tr><td><p>"+str(doc['author'])+'</p></td><td><p>'+str(doc['date'])+'</p></td><td><p>'+doc['rawText']+'</p></td><td><p>'+str(doc['score'])+'</p></td></tr>'
-        csv += str(doc['author'])+','+str(doc['date'])+','+doc['rawText']+','+str(doc['score'])+'\n'
-    html += """
-                </tbody>
-            </table>
-	    </div>
-	    <div class="clear"></div>
-	  </div>
-    </body>
-</html>
-    """
-    return html
+    return render_template('tweet_browser.html', results=results) 
 
 @app.route('/cats/analysis/named_entities.csv')
 def getNamedEntities():
