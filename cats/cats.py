@@ -114,17 +114,23 @@ def getTweets():
     results = search.results()
     return render_template('tweet_browser.html', results=results) 
 
-def namedEntities():
+def namedEntities(limit=None):
     if query:
         # if there is a query then we construct a smaller NE_INDEX
         query_ner = {'namedEntities': {'$exists': 'true'}}
         query_ner.update(query)
         ne = NEIndex(dbname)
         ne.createIndex(query_ner)
-        cursor = db.named_entities_query.find(sort=[('count',pymongo.DESCENDING)])
+        if limit:
+            cursor = db.named_entities_query.find(sort=[('count',pymongo.DESCENDING)], limit=limit)
+        else:
+            cursor = db.named_entities_query.find(sort=[('count',pymongo.DESCENDING)])
     else:
         # use the already build NE_INDEX
-        cursor = db.named_entities.find(sort=[('count',pymongo.DESCENDING)])
+        if limit:
+            cursor = db.named_entities.find(sort=[('count',pymongo.DESCENDING)], limit=limit)
+        else:
+            cursor = db.named_entities.find(sort=[('count',pymongo.DESCENDING)])
     return cursor
 
 @app.route('/cats/analysis/named_entities.csv')
@@ -137,7 +143,7 @@ def getNamedEntities():
     
 @app.route('/cats/analysis/named_entity_cloud')
 def getNamedEntityCloud():
-    return render_template('named_entity_cloud.html', ne=namedEntities())
+    return render_template('named_entity_cloud.html', ne=namedEntities(250))
     
 @app.route('/cats/analysis')
 def trainLDA():
