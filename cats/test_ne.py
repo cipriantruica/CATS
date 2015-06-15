@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     start = time.time()
     ne = NEIndex(dbname)
-    ne.createIndex(query)
+    ne.createIndex()
     end = time.time()
     print 'NE creation time:', (end-start)
 

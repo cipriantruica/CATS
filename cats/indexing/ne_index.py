@@ -29,17 +29,28 @@ reduceFunction = """function(key, value){
 
 
 functionCreate = """function(){
-                        db.named_entities.drop();
                         var items = db.map_reduce_ner.find().addOption(DBQuery.Option.noTimeout);
                         documents = Array();
                         while(items.hasNext()){
                             var item = items.next();
-                            document = {entity: item._id.entity, type: item._id.type, count: item.value.count};
+                            document = {entity: item._id.entity, type: item._id.type, count: Math.round(Math.log(item.value.count) * 100)/100};
                             documents.push(document);
                         }
                         db.named_entities.insert(documents);
                         db.map_reduce_ner.drop();
                     }"""
+
+functionCreateQuery = """function(){
+                            var items = db.map_reduce_ner.find().addOption(DBQuery.Option.noTimeout);
+                            documents = Array();
+                            while(items.hasNext()){
+                                var item = items.next();
+                                document = {entity: item._id.entity, type: item._id.type, count: Math.round(Math.log(item.value.count) * 100)/100};
+                                documents.push(document);
+                            }
+                            db.named_entities_query.insert(documents);
+                            db.map_reduce_ner.drop();
+                        }"""
 
 class NEIndex:
     def __init__(self, dbname):
@@ -47,9 +58,14 @@ class NEIndex:
         self.db = client[dbname]
 
     def createIndex(self, query = None):
-        self.db.named_entities.drop()
         if query:
+            # only if we have a query
+            self.db.named_entities_query.drop()
             self.db.documents.map_reduce(mapFunction, reduceFunction, "map_reduce_ner", query = query)
+            self.db.eval(functionCreateQuery)
         else:
-            self.db.documents.map_reduce(mapFunction, reduceFunction, "map_reduce_ner")
-        self.db.eval(functionCreate)
+            # this is going to be static
+            # built for the entire corpus
+            self.db.named_entities.drop()
+            self.db.documents.map_reduce(mapFunction, reduceFunction, "map_reduce_ner", query = {'namedEntities': {'$exists': 'true'}})
+            self.db.eval(functionCreate)
