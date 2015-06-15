@@ -12,6 +12,7 @@ import utils
 from ddl_mongo import *
 from models.mongo_models import *
 from indexing.vocabulary_index import VocabularyIndex as VI
+from indexing.ne_index import VocabularyIndex as NE
 from multiprocessing import cpu_count
 from concurrent.futures import ThreadPoolExecutor
 
@@ -66,12 +67,19 @@ def deleteIndexes(dbname, docIDs):
     print "vocabulary_delete.append(", (end - start) , ")"
 
 def constructIndexes(dbname):
+    #build Vocabulary
     start = time.time()
     vocab = VI(dbname)
     vocab.createIndex()
     end = time.time()
-    print "vocabulary_build.append(", (end - start) , ")"    
-    
+    print "vocabulary_build.append(", (end - start) , ")"
+
+    # built the NE Index
+    start = time.time()
+    ner = NE(dbname)
+    ner.createIndex()
+    end = time.time()
+    print "vocabulary_build.append(", (end - start) , ")"
     """
     start = time.time()
     iv = IV(dbname)
