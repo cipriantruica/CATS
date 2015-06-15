@@ -31,6 +31,6 @@ if __name__ == '__main__':
     cursor = db.named_entities.find(sort=[('count',pymongo.DESCENDING)])
     idx = 0
     for elem in cursor:
-        print elem['entity'].decode('utf8').encode('utf8'), elem['count'], elem['type']
+        print elem['entity'].encode('utf8'), elem['count'], elem['type']
     end = time.time()
     print 'Time :', (end-start)
