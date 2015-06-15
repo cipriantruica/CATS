@@ -12,7 +12,7 @@ import utils
 from ddl_mongo import *
 from models.mongo_models import *
 from indexing.vocabulary_index import VocabularyIndex as VI
-from indexing.ne_index import VocabularyIndex as NE
+from indexing.ne_index import NEIndex as NE
 from multiprocessing import cpu_count
 from concurrent.futures import ThreadPoolExecutor
 
