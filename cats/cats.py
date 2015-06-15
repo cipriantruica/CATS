@@ -10,6 +10,9 @@ from search_mongo import Search
 import pymongo
 from nlplib.lemmatize_text import LemmatizeText
 import re
+from indexing.ne_index import NEIndex
+import time
+import jinja2
 
 # Connecting to the database
 client = pymongo.MongoClient()
@@ -113,14 +116,26 @@ def getTweets():
 
 @app.route('/cats/analysis/named_entities.csv')
 def getNamedEntities():
-    # similar to getTerms()
-    csv='named_entity,frequency,type\n'
+    query_ner = {'namedEntities': {'$exists': 'true'}}
+    if query:
+        query_ner.update(query)
+    ne = NEIndex(dbname)
+    ne.createIndex(query_ner)
+    cursor = db.named_entities.find(sort=[('count',pymongo.DESCENDING)])
+    csv='named_entity,count,type\n'
+    for elem in cursor:
+        csv += elem['entity'].encode('utf8')+','+str(elem['count'])+','+elem['type']+'\n'
     return Response(csv,mimetype="text/csv") 
     
 @app.route('/cats/analysis/named_entity_cloud')
 def getNamedEntityCloud():
-    # similar to getTermCloud
-    render_template('word_cloud.html', ne=ne)
+    query_ner = {'namedEntities': {'$exists': 'true'}}
+    if query:
+        query_ner.update(query)
+    ne = NEIndex(dbname)
+    ne.createIndex(query_ner)
+    cursor = db.named_entities.find(sort=[('count',pymongo.DESCENDING)],limit=250)
+    return render_template('named_entity_cloud.html', ne=cursor)
     
 @app.route('/cats/analysis')
 def trainLDA():

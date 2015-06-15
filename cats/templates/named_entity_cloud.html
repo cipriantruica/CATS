@@ -34,12 +34,12 @@
 				<div role="main">
 					<div id="wordcloud2" class="wordcloud">
 						{% set firstLine = 0 %}
-						{% for doc in voc %}
+						{% for doc in ne %}
 						  {% if firstLine == 0 %}
 						    {% set firstLine = 1 %}
-						    {% set max = 1/doc['idf'] %}
+						    {% set max = doc['count'] %}
 						  {% endif %}
-							<span data-weight="{{92*(1/doc['idf'])/max) }}">{{ doc['word'] }}</span>
+							<span data-weight="{{ 333*doc['count']/max | log(10) }}">{{ doc['entity'] }}</span>
 					  	{% endfor %}
 					</div>
 					<script>
