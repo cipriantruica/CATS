@@ -39,29 +39,29 @@ if __name__ == '__main__':
     #             print ne, count, key
     # cursor.rewind()
 
-
-    # print 'test2'
-    # namedEntitiesDict2 = list()
-    # for elem in cursor:
-    #     for ne in elem['namedEntities']:
-    #         if ne['type'] != 'GPE':
-    #             ok = True
-    #             for elem in namedEntitiesDict2:
-    #                 if elem['entity'] == ne['entity']:
-    #                     ok = False
-    #                     elem['count'] += 1
-    #                     break
-    #             if ok:
-    #                 namedEntitiesDict2.append({'entity': ne['entity'], 'count': 1, 'type': ne['type']})
-    #
-    #
-    #
-    # for elem in namedEntitiesDict2:
-    #     print elem['entity'], elem['count'], elem['type']
-
     start = time.time()
-    idx = 0
+    print 'test2'
+    namedEntitiesDict2 = list()
     for elem in cursor:
+        for ne in elem['namedEntities']:
+            if ne['type'] != 'GPE':
+                ok = True
+                for elem in namedEntitiesDict2:
+                    if elem['entity'] == ne['entity']:
+                        ok = False
+                        elem['count'] += 1
+                        break
+                if ok:
+                    namedEntitiesDict2.append({'entity': ne['entity'], 'count': 1, 'type': ne['type']})
+
+
+    idx = 0
+    for elem in namedEntitiesDict2:
+        # print elem['entity'], elem['count'], elem['type']
         idx += 1
+
+    # idx = 0
+    # for elem in cursor:
+    #     idx += 1
     end = time.time()
     print 'Time :', (end-start)
