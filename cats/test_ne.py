@@ -1,6 +1,7 @@
 __author__ = 'sheepman'
 
 import pymongo
+import time
 
 if __name__ == '__main__':
     client = pymongo.MongoClient()
@@ -58,6 +59,9 @@ if __name__ == '__main__':
     # for elem in namedEntitiesDict2:
     #     print elem['entity'], elem['count'], elem['type']
 
+    start = time.time()
+    idx = 0
     for elem in cursor:
-        print elem
-
+        idx += 1
+    end = time.time()
+    print 'Time :', (end-start)
