@@ -13,7 +13,7 @@
 	    <link rel="stylesheet" type="text/css" href="/static/style.css">
 		<style type="text/css">
 			.wordcloud {
-			border: 1px solid #036;
+			border: 0px;
 			height: 7in;
 			margin: 0.5in auto;
 			padding: 0;
@@ -39,7 +39,9 @@
 						    {% set firstLine = 1 %}
 						    {% set max = doc['count'] %}
 						  {% endif %}
-							<span data-weight="{{ 333*doc['count']/max | log(10) }}">{{ doc['entity'] }}</span>
+						  {% if doc['type'] != 'GPE' %}
+							<span data-weight="{{ 50+(50*doc['count']/max) }}">{{ doc['entity'] }}</span>
+						  {% endif %}	
 					  	{% endfor %}
 					</div>
 					<script>
@@ -53,7 +55,7 @@
 									"color" : "random-dark",
 									"rotationRatio" : 0.35
 								},
-								"font" : "'Times New Roman', Times, serif",
+								"font" : "OpenSans, sans-serif",
 								"shape" : "circle"
 							});
 						});

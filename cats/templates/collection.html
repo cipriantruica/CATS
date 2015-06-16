@@ -24,9 +24,10 @@
 			<ul>
 				<li>New corpus
 					<ul>
-						<li><a href="#query-keyword">By keyword</a></li>
-						<li><a href="#query-location">By location</a></li>
-						<li><a href="#query-user">By user</a></li>
+						<li><a href="#duration">Duration</a></li>
+						<li><a href="#query-keyword">Keyword filter</a></li>
+						<li><a href="#query-location">Location filter</a></li>
+						<li><a href="#query-user">User filter</a></li>
 					</ul>	
 				</li>
 				<li>Corpora being collected
@@ -43,13 +44,15 @@
 		<div id="main-content">
 		    
 		    <h2>New corpus</h2>
-    
-		    <label id="filter-date" style="width: 20%;">By keyword (a list of terms separated by a space, example: "cat dog"): </label><br/>		    <form action="{{ url_for('collection_dashboard_page2') }}" method="POST">
+		    <label id="duration">Duration (number of days during which tweets should be collected, example "30"): </label><br/>
+    		<input type="text" name="user" class="underlined" style="width:615px;"/><br/>
+		    <label id="filter-date" style="width: 20%;">Keyword filter (a list of terms separated by a space, example: "cat dog"): </label><br/>		    <form action="{{ url_for('collection_dashboard_page2') }}" method="POST">
 		    <input type="text" name="keyword" class="underlined" style="width:615px;"/><br/>
-		    <label id="filter-keyword">By location (a pair of GPS coordinates (latitude,longitude) separated by a space, example "45.740263,4.864114 45.767055,4.848559"): </label><br/>
+		    <label id="filter-keyword">Location filter (a pair of GPS coordinates (latitude,longitude) separated by a space, example "45.740263,4.864114 45.767055,4.848559"): </label><br/>
 		    <input type="text" name="location" class="underlined" style="width:615px;"/><br/>
-		    <label id="filter-keyword">By user (a list of usernames separated by a space, example: "adrienguille NoelGallagher"): </label><br/>
+		    <label id="filter-keyword">User filter (a list of usernames separated by a space, example: "adrienguille NoelGallagher"): </label><br/>
 		    <input type="text" name="user" class="underlined" style="width:615px;"/><br/>
+			
 		    <br/>
 
 		    	<input type="submit" value="Collect tweets" class="button"/>
@@ -57,8 +60,21 @@
 
 		    <h2>Corpora being collected</h2>
 	
-		    
+			<p>No corpus being currently collected.</p>
+			
 		    <h2>Available corpora</h2>
+			
+			<ul>
+				<li><a href="analysis">Corpus #1</a>
+				<ul>
+					<li>Tweet count: 878810</li>
+					<li>Collection period: [2015-04-06 00:00:08 ; 2015-06-11 11:48:32]</li>
+					<li>Keyword filter: none</li>
+					<li>Location filter: 49.186288,0.043709 53.186288,-8.043709</li>
+					<li>User filter: none</li>
+				</ul>
+				</li>
+			</ul>
         
 		</div>
 		

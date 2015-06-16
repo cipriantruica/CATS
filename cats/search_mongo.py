@@ -14,6 +14,7 @@ from nlplib.clean_text import CleanText
 from concurrent.futures import ThreadPoolExecutor
 from multiprocessing import cpu_count
 import time
+import math
 
 cleanText = CleanText()
 
@@ -113,7 +114,7 @@ class Search:
         for key in answer:
             d = {}
             d = self.db.documents.find_one(spec_or_id={"_id": key})
-            l.append({ 'id': key, 'rawText': d['rawText'], 'author': d['author'], 'date': d['date'], 'score':answer[key] })
+            l.append({ 'id': key, 'rawText': d['rawText'], 'author': d['author'], 'date': d['date'], 'score':math.log(1+answer[key]) })
         return l
 
     def __init__(self, searchPhrase, dbname='TwitterDB', query=False, k=0):

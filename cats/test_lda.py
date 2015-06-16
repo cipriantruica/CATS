@@ -35,7 +35,7 @@ if __name__ == '__main__':
         print topic
     end = time.time()
     print 'LDA TF time:', (end - start)
-
+    """
     print 'LSI:'
     start = time.time()
     for topic in topic_model.topicsLSI():
@@ -52,3 +52,4 @@ if __name__ == '__main__':
 
     end_total = time.time()
     print 'total time:', (end_total - start_total)
+    """

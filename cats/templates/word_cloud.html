@@ -13,13 +13,16 @@
 	    <link rel="stylesheet" type="text/css" href="/static/style.css">
 		<style type="text/css">
 			.wordcloud {
-			border: 1px solid #036;
+			border: 0px;
 			height: 7in;
 			margin: 0.5in auto;
 			padding: 0;
 			page-break-after: always;
 			page-break-inside: avoid;
 			width: 7in;
+			}
+			.word{
+			font-family: OpenSans, sans-serif;
 			}
 		</style>
 	</head>
@@ -39,7 +42,7 @@
 						    {% set firstLine = 1 %}
 						    {% set max = 1/doc['idf'] %}
 						  {% endif %}
-							<span data-weight="{{92*(1/doc['idf'])/max) }}">{{ doc['word'] }}</span>
+							<span data-weight="{{ 50+(50/doc['idf']/max) }}">{{ doc['word'] }}</span>
 					  	{% endfor %}
 					</div>
 					<script>
@@ -53,7 +56,7 @@
 									"color" : "random-dark",
 									"rotationRatio" : 0.35
 								},
-								"font" : "'Times New Roman', Times, serif",
+								"font" : "OpenSans, sans-serif",
 								"shape" : "circle"
 							});
 						});
