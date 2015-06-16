@@ -114,7 +114,7 @@ class Search:
         for key in answer:
             d = {}
             d = self.db.documents.find_one(spec_or_id={"_id": key})
-            l.append({ 'id': key, 'rawText': d['rawText'], 'author': d['author'], 'date': d['date'], 'score':math.log(1+answer[key]) })
+            l.append({ 'id': key, 'rawText': d['rawText'], 'author': d['author'], 'date': d['date'], 'score':math.log(1+answer[key],2) })
         return l
 
     def __init__(self, searchPhrase, dbname='TwitterDB', query=False, k=0):

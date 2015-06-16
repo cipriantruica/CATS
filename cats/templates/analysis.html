@@ -22,7 +22,7 @@
 			<label>Navigate on this page:</label><br/>
 			<label><a href="analysis">Tweet analysis dashboard</a></label>
 			<ul>
-				<li>Filtering
+				<li>Corpus filtering
 					<ul>
 						<li><a href="#filter-date">By date</a></li>
 						<li><a href="#filter-keyword">By keyword</a></li>
@@ -30,22 +30,26 @@
 						<li><a href="#filter-age">By age</a></li>
 					</ul>	
 				</li>
-				<li>Natural Language Processing
+				<li>Corpus browsing
 					<ul>
-						<li><a href="#nlp-ner">Named-entity recognition</a></li>
-						<li><a href="#nlp-vocabulary">Vocabulary analysis</a></li>
-						<li><a href="#nlp-cooccurrence">Term co-occurrence exploration</a></li>
+						<li><a href="#vocabulary">Vocabulary</a></li>
+						<li><a href="#tweets">Tweets</a></li>
 					</ul>	
 				</li>
-				<li>Topic Modeling
+				<li>Corpus mining
 					<ul>
-						<li><a href="#topic-lda">LDA</a></li>
-						<li><a href="#topic-hlda">Hierarchical LDA</a></li>
-					</ul>
-				</li>
-				<li>Event Detection and Tracking
-					<ul>
-						<li><a href="#edt-mabed">MABED</a></li>
+						<li><a href="#ner">Named-entities recognition</a>
+						<li><a href="#tm">Topic modeling
+							<ul>
+								<li><a href="#lda">LDA</a></li>
+								<li><a href="#hlda">Hierarchical LDA</a></li>
+							</ul>
+						</li>
+						<li><a href="#edt">Event detection & tracking
+							<ul>
+								<li><a href="#mabed">MABED</a></li>
+							</ul>
+						</li>
 					</ul>
 				</li>
 			</ul>
@@ -57,9 +61,10 @@
 		
 		<div id="main-content">
 		    
-		    <h2>Filtering</h2>
+		    <h2>Corpus filtering</h2>
     
-		    <label id="filter-date" style="width: 20%;">By date (starting and ending date (YYYY-MM-DD) separated by a space, example: "2015-04-06 2015-04-13"): </label><br/>		    <form action="{{ url_for('analysis_dashboard_page2') }}" method="POST">
+		    <label id="filter-date" style="width: 20%;">By date (starting and ending date (YYYY-MM-DD) separated by a space, example: "2015-04-06 2015-04-13"): </label><br/>
+			<form action="{{ url_for('analysis_dashboard_page2') }}" method="POST">
 		    <input type="text" name="date" class="underlined" style="width:615px;"/><br/>
 		    <label id="filter-keyword">By keyword (a list of terms separated by a space, example: "cat dog"): </label><br/>
 		    <input type="text" name="keyword" class="underlined" style="width:615px;"/><br/>
@@ -71,21 +76,20 @@
 
 		    <input type="submit" value="Filter tweets" class="button"/>
 		    </form>
-           	    <label>{% if tweetCount %} {{ tweetCount }}{% endif %} tweets</label>
+           	<label>{% if tweetCount %} {{ tweetCount }}{% endif %} tweets</label>
 
-		    <h2>Natural language processing</h2>
+		    <h2>Corpus browsing</h2>
 	
-		    <h3 id="nlp-vocabulary">Vocabulary analysis</h3>
-		    
-			<p>The vocabulary is the list of all lemmas sorted in terms of their frequency in tweets.</p>
+		    <h3 id="vocabulary">Vocabulary</h3>
+			<p>The vocabulary is the set of all terms weighted by their frequency in tweets. You can either download the entire vocabulary as a CSV file or visualize it as a cloud.</p>
 			<br/>
 		    <a href="{{ url_for('getTerms') }}"><button>Download the vocabulary</button></a>
 		    <a href="{{ url_for('getTermCloud') }}"><button>Visualize the vocabulary</button></a>
 		    <br/>
 		    <br/>
-		    <h3 id="nlp-cooccurrence">Term co-occurrence exploration</h3>
-    
-		    <p>A set of terms are said to be co-occurring when are present in the same tweet. Co-occurence analysis can help understand semantics or dicover linguistic patterns for instance.</p>
+			
+		    <h3 id="tweets">Tweets</h3>
+		    <p>This interface allows you to browse through the tweets matching the query below. If the query consists of a single term it matches all the tweets that contain this term, if the query consists of several terms it matches all the tweets in which these terms cooccur. Co-occurence analysis can help understand semantics or dicover linguistic patterns for instance.</p>
 
 		    <label>Terms (separated by a space, example: "cat dog"): </label> 
 		    <br/>
@@ -95,56 +99,76 @@
 		    	<input type="submit" value="Browse tweets" class="button"/>
 		    </form>
 		    <br/>
-		    <h3 id="nlp-ner">Named-entity recognition</h3>
+			
+		    <h2>Corpus mining</h2>
+			
+		    <h3 id="ner">Named-entity recognition</h3>
 	
-		    <p>Named-entity recognition (NER) consists in automatically locating names of persons, organizations and locations in tweets.</p>
-    
+		    <p>Named-entity recognition consists in automatically locating names of persons, organizations and locations in tweets. You can either download the set of detected named-entities (weighted by their frequency in tweets) as a CSV file or visualize it as a cloud.</p>
+    		<br/>
 		    <a href="{{ url_for('getNamedEntities') }}"><button>Download the list of named-entities</button></a>
 		    <a href="{{ url_for('getNamedEntityCloud') }}"><button>Visualize named-entities</button></a>
 		    <br/>
 		    <br/>
 
-		    <h2>Topic modeling</h2>
+		    <h3 id="tm">Topic modeling</h3>
 
 		    <p>Topic modeling is a way of automatically discovering hidden themes that pervade a collection of tweets. Topic models can help organizing, understanding, and summarizing large amounts of tweets.</p>
 
-		    <h3 id="topic-lda">LDA</h3>
+		    <h3 id="lda">LDA</h3>
 
 		    <p>LDA (i.e. Latent Dirichlet Allocation) is a model that represents tweets as mixtures of topics, each topic being associated to a probability distribution over a set of words.</p>
 
 		    <label>Number of topics (example: "10"):</label>
 			<br/>
-		    <form action="{{ url_for('trainLDA') }}" method="POST"><input type="text" name="k" class="underlined" style="width: 615px;"/>
+		    <form action="{{ url_for('trainLDA') }}" method="POST"><input type="text" name="k-lda" class="underlined" style="width: 615px;"/>
 				<br/>
 				<br/>
-		    	<input type="submit" value="Train LDA" class="button"/>
+		    	<input type="submit" value="Run LDA" class="button"/>
 		    </form>
 			<br/>
 		    <a href="{{ url_for('getTopics') }}"><button>Download topics</button></a>
 		    <a href="{{ url_for('browseTopics') }}"><button>Browse topics</button></a>
 		    <br/>
 		    <br/>
-		    <h3 id="topic-hlda">Hierarchical LDA</h3>
+		    <h3 id="hlda">Hierarchical LDA</h3>
     
 		    <p>Hierarchical LDA (hLDA) is an extension of LDA where topics are joined together in a hierarchy.</p>
     
-		    <label>Number of topics (example: "10"): </label><input type="text" name="k" class="underlined"/>
-			
-			<button>Perform hLDA</button>
-		    <br/>
-		    <br/>
-		    <input type="submit" name="submit" value="Download topics"/><input type="submit" name="submit" value="Browse topics"/><input type="submit" name="submit" value="Visualize hierarchy"/>
-    
+		    <label>Number of topics (example: "10"):</label>
+			<br/>
+		    <form action="{{ url_for('trainLDA') }}" method="POST"><input type="text" name="k-hlda" class="underlined" style="width: 615px;"/>
+				<br/>
+				<br/>
+		    	<input type="submit" value="Run hLDA" class="button"/>
+		    </form>
+			<br/>
+		    <a href="{{ url_for('getTopics') }}"><button>Download topics</button></a>
+		    <a href="{{ url_for('browseTopics') }}"><button>Browse topics</button></a>
 		    <br/>
 		    <br/>
 
-		    <h2>Event detection</h2>
+		    <h3 id="edt">Event detection & tracking</h3>
     
-		    <p>Event detection refers</p>
+		    <p>Event detection consists in automatically identifying and describing (temporally and textually speaking) events reported in tweets.</p>
     
-		    <h3 id="edt-mabed">MABED</h3>
+		    <h3 id="mabed">MABED</h3>
     
-		    <p>MABED (i.e. Mention-Anomaly-Based Event Detection) is a statistical method for automatically detecting significant events reported in a collection of tweets.</p>
+		    <p>MABED (i.e. Mention-Anomaly-Based Event Detection) is a statistical method for automatically detecting events that catch Twitter users' attention.</p>
+			
+		    <label>Number of events (example: "10" will return the 10 most impactful detected events):</label>
+			<br/>
+		    <form action="{{ url_for('trainLDA') }}" method="POST"><input type="text" name="k-mabed" class="underlined" style="width: 615px;"/>
+				<br/>
+				<br/>
+		    	<input type="submit" value="Run MABED" class="button"/>
+		    </form>
+			<br/>
+		    <a href="{{ url_for('getTopics') }}"><button>Download events</button></a>
+		    <a href="{{ url_for('browseTopics') }}"><button>Browse events</button></a>
+		    <br/>
+		    <br/>
+			
 		</div>
 		
 		<div class="clear"></div>
