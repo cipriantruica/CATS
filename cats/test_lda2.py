@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
 
     vi = VocabularyIndex(dbname='TwitterDB')
-    vi.createIndex(query={'gender': 'home'})
+    vi.createIndex(query={'gender': 'homme'})
 
     #entire vocabulary
     mm = MarketMatrix(dbname='TwitterDB')
