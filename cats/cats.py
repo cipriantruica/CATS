@@ -155,7 +155,7 @@ def getTopics():
     
 @app.route('/cats/analysis/lda_topic_browser')
 def browseTopics():
-    return ""  
+    return render_template('topic_browser.html') 
         
 if __name__ == '__main__':
     app.run(debug=True,host='mediamining.univ-lyon2.fr')
