@@ -57,7 +57,7 @@ functionCreateQuery = """function(query){
                         }
                         db.vocabulary_query.insert(documents);
                         db.vocabulary_query.ensureIndex({'idf':1});
-                        db.temp_collection.drop();
+                        //db.temp_collection.drop();
                     }"""
 
 functionUpdate ="""
