@@ -88,9 +88,9 @@ def construct_vocabulary():
 @app.route('/cats/analysis/vocabulary_cloud')
 def getTermCloud():
     if query:
-        voc = db.vocabulary_query.find(fields={'word':1,'idf':1},limit=250, sort=[('idf',pymongo.ASCENDING)])
+        voc = db.vocabulary_query.find(fields={'word':1,'idf':1},limit=150, sort=[('idf',pymongo.ASCENDING)])
     else:
-        voc = db.vocabulary.find(fields={'word':1,'idf':1},limit=250, sort=[('idf',pymongo.ASCENDING)])
+        voc = db.vocabulary.find(fields={'word':1,'idf':1},limit=150, sort=[('idf',pymongo.ASCENDING)])
     return render_template('word_cloud.html', voc=voc)     
     
 @app.route('/cats/analysis/vocabulary.csv')
