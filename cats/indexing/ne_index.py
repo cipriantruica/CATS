@@ -33,7 +33,7 @@ functionCreate = """function(){
                         documents = Array();
                         while(items.hasNext()){
                             var item = items.next();
-                            document = {entity: item._id.entity, type: item._id.type, count: Math.round(Math.log2(1+item.value.count) * 100)/100};
+                            document = {entity: item._id.entity, type: item._id.type, count: Math.round(Math.log(1+item.value.count)/Math.LN2 * 100)/100};
                             documents.push(document);
                         }
                         db.named_entities.insert(documents);
@@ -45,7 +45,7 @@ functionCreateQuery = """function(){
                             documents = Array();
                             while(items.hasNext()){
                                 var item = items.next();
-                                document = {entity: item._id.entity, type: item._id.type, count: Math.round(Math.log2(1+item.value.count) * 100)/100};
+                                document = {entity: item._id.entity, type: item._id.type, count: Math.round(Math.log(1+item.value.count)/Math.LN2 * 100)/100};
                                 documents.push(document);
                             }
                             db.named_entities_query.insert(documents);
