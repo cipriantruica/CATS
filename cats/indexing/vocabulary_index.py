@@ -31,13 +31,15 @@ functionCreate = """function(){
                         var noDocs = db.documents.count();
                         var start = new Date();
                         var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
+                        documents = Array();
                         while(items.hasNext()){
                             var item = items.next();
                             var n = item.value.ids.length;
                             var widf = 1 + Math.round(Math.log(noDocs/n) * 100)/100;
                             doc = {word: item._id, idf: widf, createdAt: new Date(), docIDs: item.value.ids};
-                            db.vocabulary.insert(doc);
+                            documents.push(doc);
                         }
+                        db.vocabulary.insert(documents);
                         db.vocabulary.ensureIndex({'idf':1});
                         db.temp_collection.drop();
                     }"""
@@ -45,13 +47,15 @@ functionCreateQuery = """function(query){
                         var noDocs = db.documents.count(query);
                         var start = new Date();
                         var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
+                        documents = Array();
                         while(items.hasNext()){
                             var item = items.next();
                             var n = item.value.ids.length;
                             var widf = 1 + Math.round(Math.log(noDocs/n) * 100)/100;
                             doc = {word: item._id, idf: widf, createdAt: new Date(), docIDs: item.value.ids};
-                            db.vocabulary_query.insert(doc);
+                            documents.push(doc);
                         }
+                        db.vocabulary_query.insert(documents);
                         db.vocabulary_query.ensureIndex({'idf':1});
                         db.temp_collection.drop();
                     }"""
