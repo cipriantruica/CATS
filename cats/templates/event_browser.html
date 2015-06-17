@@ -1,0 +1,43 @@
+<html>
+	<head>
+		<title>CATS - Topic browser</title>
+	    <link rel="stylesheet" type="text/css" href="/static/style.css">
+	    <link rel="stylesheet" type="text/css" href="/static/jquery.dataTables.css">
+	    <style type="text/css" class="init"></style>
+	    <script type="text/javascript" language="javascript" src="/static/jquery-1.11.1.min.js"></script>
+		<script type="text/javascript" language="javascript" src="/static/jquery.dataTables.min.js"></script>
+	    <script type="text/javascript" class="init">
+	        $(document).ready(function() {
+		        $('#tweets').DataTable();
+	        } );
+	    </script>
+	</head>
+	<body>
+		<div id="header">
+			<h1><img src="/static/logo.png"></img>CATS project: tweet analysis dashboard</h1>
+		</div>
+		<div style="background-color:#FFFFFF; height:1px;"></div>
+		<div id="content">
+			<div id="sidebar"></div>
+			<div id="main-content">
+		        <table id="tweets" class="display" cellspacing="0" width="100%">
+		            <thead>
+		                <tr>
+		                    <th>Event id</th>
+		                    <th>Time interval</th>
+		                    <th>Topic</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+						<tr><td><p>0</p></td><td><p>2015-05-06 19:00:00 - 2015-05-08 19:00:00</p></td><td><p>ge2015 seat poll</p></td></tr>
+						<tr><td><p>1</p></td><td><p>2015-05-07 18:00:00 - 2015-05-08 20:00:00</p></td><td><p>tories labour have people more fuck</p></td></tr>
+						<tr><td><p>2</p></td><td><p>2015-05-02 01:00:00 - 2015-05-03 16:00:00</p></td><td><p>fight mayweather watch maypac go</p></td></tr>
+						<tr><td><p>3</p></td><td><p>2015-05-16 16:00:00 - 2015-05-16 21:00:00</p></td><td><p>bbcdebate ed farag about natali</p></td></tr>
+						<tr><td><p>4</p></td><td><p>2015-05-06 15:30:00 - 2015-05-07 10:30:00</p></td><td><p>messi just ronaldo goal best boateng world ever player</p></td></tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</body>
+</html>
