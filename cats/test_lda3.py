@@ -32,7 +32,7 @@ if __name__ == '__main__':
     start = time.time()
     topic_model = TopicModeling(id2word=id2word, corpus=corpus)
     print 'LDA'
-    for topic in topic_model.topicsLDA(num_topics=50):
+    for topic in topic_model.topicsLDA(num_topics=15):
         print topic, '\n'
     end = time.time()
 
