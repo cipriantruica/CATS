@@ -28,8 +28,9 @@ if __name__ == '__main__':
         documents.append(document['lemmaText'].split())
     dictionary = corpora.Dictionary(documents)
     corpus = [dictionary.doc2bow(document) for document in documents]
-
-    topic_model = TopicModeling(id2word=dictionary, corpus=corpus)
+    tfidf = models.TfidfModel(corpus)
+    corpus_tfidf = tfidf[corpus]
+    topic_model = TopicModeling(id2word=dictionary, corpus=corpus_tfidf)
     print 'LDA using lemma text'
     for topic in topic_model.topicsLDA(num_topics=15):
         print topic, '\n'
