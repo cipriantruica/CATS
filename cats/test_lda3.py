@@ -24,7 +24,7 @@ if __name__ == '__main__':
     documents = []
     documentsDB = db.documents.find({'gender': 'homme'}, {'lemmaText': 1, '_id': 0})
     for document in documentsDB:
-        print document['lemmaText']
+        print document['lemmaText'].encode('utf8')
     #     documents.append(document['lemmaText'].split())
     # dictionary = corpora.Dictionary(documents)
     # corpus = [dictionary.doc2bow(document) for document in documents]
