@@ -145,9 +145,15 @@ def getNamedEntities():
 def getNamedEntityCloud():
     return render_template('named_entity_cloud.html', ne=namedEntities(250))
     
-@app.route('/cats/analysis')
+@app.route('/cats/analysis/train_lda',methods=['POST'])
 def trainLDA():
-    return ""
+    k = int(request.form['k-lda'])
+    print(k," topics")
+    print("query:",query_tweets)
+    cursor = db.documents.find({{},{'lemmaText': 1, '_id': 0}})
+    for elem in cursor:
+        print elem
+    return analysis_dashboard_page()
     
 @app.route('/cats/analysis/lda_topics.csv')
 def getTopics():
