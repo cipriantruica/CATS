@@ -18,31 +18,31 @@ import math
 
 cleanText = CleanText()
 
-function = """function(){
-                var items = db.search_index2.find().addOption(DBQuery.Option.noTimeout);
-                while(items.hasNext()){
-                var item = items.next();
-                    doc = {word: item._id, docIDs: item.value.docIDs};
-                    db.search_index.insert(doc);
-                }
-            }"""
-
-mapFunction = """function() {
-                var key = this.word;
-                for (var idx=0; idx<this.docIDs.length; idx++){
-                    var tfidf = this.idf * this.docIDs[idx].tf;
-                    value = { 'docID': this.docIDs[idx].docID, 'TFIDF': tfidf };
-                    emit(key, {'docIDs': [value]});
-                }
-            }"""
-
-reduceFunction = """function(key, values){
-                var result = {'docIDs': []};
-                values.forEach(function(v){
-                    result.docIDs = v.docIDs.concat(result.docIDs);
-                });
-                return result;
-            }"""
+# function = """function(){
+#                 var items = db.search_index2.find().addOption(DBQuery.Option.noTimeout);
+#                 while(items.hasNext()){
+#                 var item = items.next();
+#                     doc = {word: item._id, docIDs: item.value.docIDs};
+#                     db.search_index.insert(doc);
+#                 }
+#             }"""
+#
+# mapFunction = """function() {
+#                 var key = this.word;
+#                 for (var idx=0; idx<this.docIDs.length; idx++){
+#                     var tfidf = this.idf * this.docIDs[idx].tf;
+#                     value = { 'docID': this.docIDs[idx].docID, 'TFIDF': tfidf };
+#                     emit(key, {'docIDs': [value]});
+#                 }
+#             }"""
+#
+# reduceFunction = """function(key, values){
+#                 var result = {'docIDs': []};
+#                 values.forEach(function(v){
+#                     result.docIDs = v.docIDs.concat(result.docIDs);
+#                 });
+#                 return result;
+#             }"""
 
 class Search:
 
