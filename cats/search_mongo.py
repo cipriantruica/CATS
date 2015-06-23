@@ -118,7 +118,7 @@ class Search:
             if rankedPhrase[w].get(key, -1) != -1:
                 answer[key] = max(rankedPhrase[w][key], answer.get(key, -1))
 
-        if self.k !=0:
+        if self.k != 0:
             answer = dict(sorted(answer.items(), key=lambda x: x[1], reverse=True)[:self.k])
         else:
             answer = dict(sorted(answer.items(), key=lambda x: x[1], reverse=True))
