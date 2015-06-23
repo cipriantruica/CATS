@@ -45,26 +45,38 @@ reduceFunction = """function(key, values){
             }"""
 
 class Search:
+
+    # def score(self, word):
+    #     self.db.search_index2.drop()
+    #     self.db.search_index.drop()
+    #     if self.query:
+    #         print 'I am here!'
+    #         self.db.vocabulary_query.map_reduce(mapFunction, reduceFunction, 'search_index2', query={'word': word})
+    #     else:
+    #         self.db.vocabulary.map_reduce(mapFunction, reduceFunction, 'search_index2', query={'word': word})
+    #     self.db.eval(function)
+    #     response = self.db.search_index.find({'word': word}, {'docIDs': 1, '_id': 0})
+    #     lista = {}
+    #     #for value in response[0]['docIDs']:
+    #     #    lista[value['docID']] = value['TFIDF']
+    #     try:
+    #         for value in response[0]['docIDs']:
+    #             lista[value['docID']] = value['TFIDF']
+    #     except Exception as exp:
+    #         print exp
+    #     self.db.search_index2.drop()
+    #     self.db.search_index.drop()
+    #     return lista
+
     def score(self, word):
-        self.db.search_index2.drop()
-        self.db.search_index.drop()
         if self.query:
-            print 'I am here!'
-            self.db.vocabulary_query.map_reduce(mapFunction, reduceFunction, 'search_index2', query={'word': word})
+            cursor = self.db.vocabulary_query.find({'word': word}, fields={'idf': 1, 'docIDs': 1})
         else:
-            self.db.vocabulary.map_reduce(mapFunction, reduceFunction, 'search_index2', query={'word': word})
-        self.db.eval(function)
-        response = self.db.search_index.find({'word': word}, {'docIDs': 1, '_id': 0})
+            cursor = self.db.vocabulary.find({'word': word}, fields={'idf': 1, 'docIDs': 1})
         lista = {}
-        #for value in response[0]['docIDs']:
-        #    lista[value['docID']] = value['TFIDF']
-        try:
-            for value in response[0]['docIDs']:
-                lista[value['docID']] = value['TFIDF']
-        except Exception as exp:
-            print exp
-        self.db.search_index2.drop()
-        self.db.search_index.drop()
+        for elem in cursor:
+            for doc in elem['docIDs']:
+                lista[doc['docID']] = doc['tf'] * elem['idf']
         return lista
 
     def rank(self, searchPhrase):
@@ -126,7 +138,7 @@ class Search:
         self.k = k
 
 if __name__ == "__main__":
-    searchPhrase = "fuck shit"
+    searchPhrase = "like get"
     time_words = []
     for j in range(0, 1):
         start = time.time()
