@@ -187,7 +187,7 @@ class MarketMatrix:
                     if len(market_matrix) == tweetID:
                         market_matrix[tweetID2id[doc['docID']]] += [(word2id[elem['word']], doc['tf']*elem['idf'])]
                     else:
-                        market_matrix.append([(word2id[elem['word']], doc['tf'])])
+                        market_matrix.append([(word2id[elem['word']], doc['tf']*elem['idf'])])
             #if filename is given then write to file
             if filename:
                 self.writeMMFile(filename=filename, num_rows=len(id2tweetID), num_columns=len(id2word), num_entries=num_entries, market_matrix=market_matrix)

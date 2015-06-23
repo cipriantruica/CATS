@@ -30,9 +30,9 @@ if __name__ == '__main__':
     corpus = [dictionary.doc2bow(document) for document in documents]
     tfidf = models.TfidfModel(corpus)
     corpus_tfidf = tfidf[corpus]
-    topic_model1 = TopicModeling(id2word=dictionary, corpus=corpus_tfidf, num_iterations=500)
+    topic_model1 = TopicModeling(id2word=dictionary, corpus=corpus_tfidf)
     print 'LDA using lemma text'
-    for topic in topic_model1.topicsLDA(num_topics=15):
+    for topic in topic_model1.topicsLDA(num_topics=15, num_iterations=500):
         print topic, '\n'
     end = time.time()
 
@@ -61,9 +61,9 @@ if __name__ == '__main__':
     # for elem in id2word:
     #     print elem, id2word[elem]
 
-    topic_model2 = TopicModeling(id2word=id2word, corpus=corpus, num_iterations=500)
+    topic_model2 = TopicModeling(id2word=id2word, corpus=corpus)
 
-    for topic in topic_model2.topicsLDA(num_topics=15):
+    for topic in topic_model2.topicsLDA(num_topics=15, num_iterations=500):
         print topic, '\n'
     end = time.time()
     print 'LDA TF time:', (end - start)
