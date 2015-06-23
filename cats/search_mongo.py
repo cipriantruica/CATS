@@ -103,6 +103,8 @@ class Search:
                 result = e.submit(self.score, word)
                 self.listSearch[word] = result.result()
 
+        print self.listSearch
+
         keys = {}
         rankedPhrase = {}
         w = ' '.join(word for word in self.words)
