@@ -46,10 +46,11 @@ if __name__ == '__main__':
     #     print key, od[key]
     # print corpus
 
-    start = time.time()
-    vi = VocabularyIndex(dbname='TwitterDB')
+    vi = VocabularyIndex(dbname=dbname)
     vi.createIndex(query={'gender': 'homme'})
 
+    print 'LDA with Matrix Market'
+    start = time.time()
     # entire vocabulary
     mm = MarketMatrix(dbname='TwitterDB')
     mm.build(query=True)
@@ -60,8 +61,7 @@ if __name__ == '__main__':
     # for elem in id2word:
     #     print elem, id2word[elem]
 
-    print 'LDA with Matrix Market'
-    start = time.time()
+
     for topic in topic_model.topicsLDA(num_topics=15):
         print topic, '\n'
     end = time.time()
