@@ -15,6 +15,7 @@ from multiprocessing import cpu_count
 from market_matrix import MarketMatrix
 
 """
+!!! DOES NOT WORK CORRECTLY !!!
 class for topic modeling
 implemets:
 - LDA (Latent Dirichlet Allocation)
