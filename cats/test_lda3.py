@@ -73,7 +73,7 @@ if __name__ == '__main__':
     print 'LDA simple'
     start = time.time()
     documents = []
-    documentsDB = db.documents.find({'gender': 'home'}, {'lemmaText': 1, '_id': 0})
+    documentsDB = db.documents.find({'gender': 'homme'}, {'lemmaText': 1, '_id': 0})
     for document in documentsDB:
         # print document['lemmaText'].encode('utf8')
         documents.append(document['lemmaText'].split())
