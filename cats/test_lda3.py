@@ -68,22 +68,39 @@ if __name__ == '__main__':
     # end = time.time()
     # print 'LDA TF time:', (end - start)
 
-
     # simple LDA
-    print 'LDA simple'
-    start = time.time()
-    documents = []
-    documentsDB = db.documents.find({'gender': 'homme'}, {'lemmaText': 1, '_id': 0})
-    for document in documentsDB:
-        # print document['lemmaText'].encode('utf8')
-        documents.append(document['lemmaText'].split())
-    dictionary = corpora.Dictionary(documents)
-    corpus = [dictionary.doc2bow(document) for document in documents]
-    tfidf = models.TfidfModel(corpus)
-    corpus_tfidf = tfidf[corpus]
+    # print 'LDA simple'
+    # start = time.time()
+    # documents = []
+    # documentsDB = db.documents.find({'gender': 'homme'}, {'lemmaText': 1, '_id': 0})
+    # for document in documentsDB:
+    #     # print document['lemmaText'].encode('utf8')
+    #     documents.append(document['lemmaText'].split())
+    # dictionary = corpora.Dictionary(documents)
+    # corpus = [dictionary.doc2bow(document) for document in documents]
+    # tfidf = models.TfidfModel(corpus)
+    # corpus_tfidf = tfidf[corpus]
+    #
+    # lda = models.LdaModel(corpus=corpus_tfidf, id2word=dictionary, iterations=500, num_topics=15)
+    # for elem in lda.show_topics(num_topics=15, num_words=10, formatted=False):
+    #     print elem
+    # end = time.time()
+    # print 'LDA Simple time:', (end - start)
 
-    lda = models.LdaModel(corpus=corpus_tfidf, id2word=dictionary, iterations=500, num_topics=15)
+    # simple LDA market matrix
+    print 'LDA simple MM'
+    start = time.time()
+    mm = MarketMatrix(dbname=dbname)
+    mm.build(query=True)
+
+    # without creating the market matrix file
+    id2word, id2tweetID, corpus = mm.buildTFIDFMM()
+
+    lda = models.LdaModel(corpus=corpus, id2word=id2word, iterations=500, num_topics=15)
     for elem in lda.show_topics(num_topics=15, num_words=10, formatted=False):
         print elem
     end = time.time()
     print 'LDA Simple time:', (end - start)
+
+
+
