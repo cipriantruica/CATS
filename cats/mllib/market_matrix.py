@@ -20,7 +20,7 @@ class MarketMatrix:
 
     """
         input:
-            query: if true Then use vocabulary_query, if False use the entire vocabulary
+            query: if True then use vocabulary_query, if False use the entire vocabulary
             limit: parameter used to limit the numeber of returned line, based on idf
     """
     def build(self, query=False, limit=None):
@@ -151,6 +151,41 @@ class MarketMatrix:
                         tweetID += 1
                     if len(market_matrix) == tweetID:
                         market_matrix[tweetID2id[doc['docID']]] += [(word2id[elem['word']], doc['tf'])]
+                    else:
+                        market_matrix.append([(word2id[elem['word']], doc['tf'])])
+            #if filename is given then write to file
+            if filename:
+                self.writeMMFile(filename=filename, num_rows=len(id2tweetID), num_columns=len(id2word), num_entries=num_entries, market_matrix=market_matrix)
+            return id2word, id2tweetID, market_matrix
+    """
+        constructs the TFIDF market matrix
+        output:
+            the TF market matrix
+    """
+    def buildTFIDFMM(self, filename=None):
+        if self.cursor:
+            self.cursor.rewind()
+            num_entries = 0
+            id2word = {}
+            word2id = {}
+            wordID = 0
+            id2tweetID = {}
+            tweetID2id = {}
+            tweetID = 0
+            market_matrix = []
+            for elem in self.cursor:
+                num_entries += len(elem['docIDs'])
+                if word2id.get(elem['word'], -1) == -1:
+                    id2word[wordID] = elem['word']
+                    word2id[elem['word']] = wordID
+                    wordID += 1
+                for doc in elem['docIDs']:
+                    if tweetID2id.get(doc['docID'], -1) == -1:
+                        id2tweetID[tweetID] = doc['docID']
+                        tweetID2id[doc['docID']] = tweetID
+                        tweetID += 1
+                    if len(market_matrix) == tweetID:
+                        market_matrix[tweetID2id[doc['docID']]] += [(word2id[elem['word']], doc['tf']*elem['idf'])]
                     else:
                         market_matrix.append([(word2id[elem['word']], doc['tf'])])
             #if filename is given then write to file

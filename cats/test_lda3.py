@@ -10,7 +10,7 @@ __status__ = "Production"
 from mllib.topic_modeling import TopicModeling
 import time
 import pymongo
-from gensim import corpora
+from gensim import corpora, models
 import collections
 from indexing.vocabulary_index import VocabularyIndex
 from mllib.market_matrix import MarketMatrix
@@ -48,14 +48,14 @@ if __name__ == '__main__':
 
     start = time.time()
     vi = VocabularyIndex(dbname='TwitterDB')
-    vi.createIndex(query={'gender': 'femme'})
+    vi.createIndex(query={'gender': 'homme'})
 
     # entire vocabulary
     mm = MarketMatrix(dbname='TwitterDB')
     mm.build(query=True)
 
     # without creating the market matrix file
-    id2word, id2tweetID, corpus = mm.buildTFMM()
+    id2word, id2tweetID, corpus = mm.buildTFIDFMM()
 
     # for elem in id2word:
     #     print elem, id2word[elem]
