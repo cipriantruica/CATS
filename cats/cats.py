@@ -178,7 +178,7 @@ def trainLDA():
 @app.route('/cats/analysis/detect_events',methods=['POST']) 
 def runMABED():
     html_output = ""
-    for output_line in run_command('java -jar /home/adrien/CATS/GitHub/CATS/cats/mabed/MABED.jar 30 40'):
+    for output_line in run_command('java -jar /home/adrien/CATS/GitHub/CATS/cats/mabed/MABED-CATS.jar 30 40'):
         html_output += output_line
         print(output_line)
     return html_output
