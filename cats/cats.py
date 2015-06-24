@@ -183,6 +183,6 @@ def browseEvents():
     return render_template('event_browser.html') 
         
 if __name__ == '__main__':
-    # app.run(debug=True,host='mediamining.univ-lyon2.fr')
+    app.run(debug=True,host='mediamining.univ-lyon2.fr')
     # run local
-    app.run(debug=True,host='127.0.0.1')
+    # app.run(debug=True,host='127.0.0.1')
