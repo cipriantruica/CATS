@@ -174,7 +174,7 @@ def trainLDA():
         topics.append([i,scores[i],results[0][i]])
     return render_template('topic_browser.html', topics=topics)
    
-@app.route('/cats/analysis/detect_events') 
+@app.route('/cats/analysis/detect_events',methods=['POST']) 
 def runMABED():
     html_output = ""
     for output_line in run_command('java -jar /home/adrien/CATS/GitHub/CATS/cats/mabed/MABED.jar 30 40'):
