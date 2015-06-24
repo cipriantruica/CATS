@@ -13,6 +13,7 @@ import re
 from indexing.ne_index import NEIndex
 import time
 import jinja2
+from mllib.train_lda import TrainLDA
 
 # Connecting to the database
 client = pymongo.MongoClient()
@@ -148,12 +149,18 @@ def getNamedEntityCloud():
 @app.route('/cats/analysis/train_lda',methods=['POST'])
 def trainLDA():
     k = int(request.form['k-lda'])
-    print(k," topics")
-    print("query:",query_tweets)
-    cursor = db.documents.find({{},{'lemmaText': 1, '_id': 0}})
-    for elem in cursor:
-        print elem
-    return analysis_dashboard_page()
+    print(k,"topics")
+    lda = TrainLDA()
+    results = lda.fitLDA(query=query, num_topics=k, num_words=10, iterations=500)
+    scores = [0]*k
+    for doc in results[1]:
+        for topic in doc:
+            scores[int(topic[0])] += float(topic[1])
+    topics = []
+    for i in range(0,k-1):
+        print(results[0][i])
+        topics.append([i,scores[i],results[0][i]])
+    return render_template('topic_browser.html', topics=topics) 
     
 @app.route('/cats/analysis/lda_topics.csv')
 def getTopics():

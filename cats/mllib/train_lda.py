@@ -18,12 +18,12 @@ class TrainLDA:
     def __init__(self, dbname='TwitterDB', language='EN' ):
         client = pymongo.MongoClient()
         self.db = client[dbname]
-        if language == 'EN':
+	if language == 'EN':
             self.sw = cachedStopWords_en
-        elif language == 'FR':
+	elif language == 'FR':
             self.sw = cachedStopWords_fr
 
-    def trainLDA(self, query={}, num_topics=15, num_words=10, iterations=500):
+    def fitLDA(self, query={}, num_topics=15, num_words=10, iterations=500):
         try:
             documents = []
             documentsDB = self.db.documents.find(query, {'lemmaText': 1, '_id': 0})
@@ -33,19 +33,9 @@ class TrainLDA:
             corpus = [dictionary.doc2bow(document) for document in documents]
             tfidf = models.TfidfModel(corpus)
             corpus_tfidf = tfidf[corpus]
-
             lda = models.LdaModel(corpus=corpus_tfidf, id2word=dictionary, iterations=iterations, num_topics=num_topics)
-            result = {}
-            tpd = lda[corpus_tfidf] # topic probability distribution
-            for topics in tpd:
-                for elem in topics:
-                    if result.get(elem[0], -1) == -1:
-                        words = lda.show_topic(elem[0], topn=num_words)
-                        result[elem[0]] = {'weight': elem[1], 'words': words}
-                    else:
-                        result[elem[0]]['weight'] += elem[1]
-            return result
+            corpus_lda = lda[corpus_tfidf]
+            return [lda.show_topics(num_topics=num_topics, num_words=num_words, formatted=False),corpus_lda]
         except Exception as e:
             print e
-            return None
 

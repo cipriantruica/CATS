@@ -30,11 +30,11 @@
 		            </thead>
 		            <tbody>
 						{% for topic in topics %}
-						<tr><td><p>{{ topic['id'] }}</p></td><td><p>{{ topic['weight'] }}</p></td>
-							{% for word in topic['words'] %}
-								<td><p>{{ word }}</p></td>
+						<tr><td><p>{{ topic[0] }}</p></td><td><p>{{ topic[1] }}</p></td><td><p>
+							{% for weighted_word in topic[2] %}
+								{{ weighted_word[1] }}
 							{% endfor %}
-						</tr>
+						</p></td></tr>
 					  	{% endfor %}
 					</tbody>
 				</table>
