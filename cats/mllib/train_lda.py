@@ -20,7 +20,7 @@ class TrainLDA:
         self.db = client[dbname]
 	if language == 'EN':
             self.sw = cachedStopWords_en
-	elif language == 'FR'
+	elif language == 'FR':
             self.sw = cachedStopWords_fr
 
     def trainLDA(self, query={}, num_topics=15, num_words=10, iterations=500):

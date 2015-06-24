@@ -24,7 +24,7 @@ class MarketMatrix:
         self.cursor = None
         if language == 'EN':
             self.sw = {'word': {'$nin': cachedStopWords_en}}
-        elif language == 'FR'
+        elif language == 'FR':
             self.sw = {'word': {'$nin': cachedStopWords_fr}}
 
     """
