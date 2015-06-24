@@ -157,7 +157,7 @@ def trainLDA():
         for topic in doc:
             scores[int(topic[0])] += float(topic[1])
     topics = []
-    for i in range(0,k-1):
+    for i in range(0,k):
         print(results[0][i])
         topics.append([i,scores[i],results[0][i]])
     return render_template('topic_browser.html', topics=topics) 
