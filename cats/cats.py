@@ -46,7 +46,7 @@ def analysis_dashboard_page2():
     date = request.form['date']
     checked_genders = request.form.getlist('gender')
     checked_ages = request.form.getlist('age')
-    print checked_genders, checked_ages
+    # print checked_genders, checked_ages
     lem = LemmatizeText(keywords)
     lem.createLemmaText()
     lem.createLemmas()
@@ -73,7 +73,9 @@ def analysis_dashboard_page2():
     if checked_ages and 0 < len(checked_ages) < 6:
         query["age"] = { "$in": checked_ages }
     if checked_genders and len(checked_genders) == 1:
-        query["gender"] = checked_genders
+        query["gender"] = checked_genders[0]
+
+    # print query
 
     if query:
         vocab = VocabularyIndex(dbname)
@@ -181,6 +183,6 @@ def browseEvents():
     return render_template('event_browser.html') 
         
 if __name__ == '__main__':
-    app.run(debug=True,host='mediamining.univ-lyon2.fr')
+    # app.run(debug=True,host='mediamining.univ-lyon2.fr')
     # run local
-    # app.run(debug=True,host='127.0.0.1')
+    app.run(debug=True,host='127.0.0.1')
