@@ -66,10 +66,14 @@ def analysis_dashboard_page2():
     global query
     query = {}
     if wordList:
-        query["words.word"] = {"$in": wordList }
+        query["words.word"] = { "$in": wordList }
     if date:
         start, end = date.split(" ") 
-        query["date"] = {"$gt": start, "$lte": end}
+        query["date"] = { "$gt": start, "$lte": end }
+    if checked_ages and 0 < len(checked_ages) < 6:
+        query["age"] = { "$in": checked_ages }
+    if checked_genders and len(checked_genders) == 1:
+        query["gender"] = checked_genders
 
     if query:
         vocab = VocabularyIndex(dbname)
