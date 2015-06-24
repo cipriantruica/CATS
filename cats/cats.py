@@ -24,6 +24,10 @@ app = Flask(__name__)
 
 query = {}
 
+def run_command(command):
+    p = subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+    return iter(p.stdout.readline, b'')
+
 def getTweetCount():
     return db.documents.find(query).count()
 
@@ -168,7 +172,15 @@ def trainLDA():
     for i in range(0,k):
         print(results[0][i])
         topics.append([i,scores[i],results[0][i]])
-    return render_template('topic_browser.html', topics=topics) 
+    return render_template('topic_browser.html', topics=topics)
+   
+@app.route('/cats/analysis/detect_events') 
+def runMABED():
+    html_output = ""
+    for output_line in run_command('java -jar /home/adrien/CATS/GitHub/CATS/cats/mabed/MABED.jar 30 40'):
+        html_output += output_line
+        print(output_line)
+    return html_output
     
 @app.route('/cats/analysis/lda_topics.csv')
 def getTopics():
