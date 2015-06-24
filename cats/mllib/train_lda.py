@@ -18,9 +18,9 @@ class TrainLDA:
     def __init__(self, dbname='TwitterDB', language='EN' ):
         client = pymongo.MongoClient()
         self.db = client[dbname]
-	if language == 'EN':
+        if language == 'EN':
             self.sw = cachedStopWords_en
-	elif language == 'FR':
+        elif language == 'FR':
             self.sw = cachedStopWords_fr
 
     def fitLDA(self, query={}, num_topics=15, num_words=10, iterations=500):
