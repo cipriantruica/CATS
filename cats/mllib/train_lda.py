@@ -9,19 +9,26 @@ __status__ = "Production"
 
 import pymongo
 from gensim import corpora, models
+from nltk.corpus import stopwords
 
+cachedStopWords_en = stopwords.words("english")
+cachedStopWords_fr = stopwords.words("french") + ["ce", "cet", "cette", "le", "les"]
 
 class TrainLDA:
-    def __init__(self, dbname='TwitterDB' ):
+    def __init__(self, dbname='TwitterDB', language='EN' ):
         client = pymongo.MongoClient()
         self.db = client[dbname]
+	if language == 'EN':
+            self.sw = cachedStopWords_en
+	elif language == 'FR'
+            self.sw = cachedStopWords_fr
 
     def trainLDA(self, query={}, num_topics=15, num_words=10, iterations=500):
         try:
             documents = []
             documentsDB = self.db.documents.find(query, {'lemmaText': 1, '_id': 0})
             for document in documentsDB:
-                documents.append(document['lemmaText'].split())
+                documents.append([lemma for lemma in document['lemmaText'].split() if lemma not in self.sw])
             dictionary = corpora.Dictionary(documents)
             corpus = [dictionary.doc2bow(document) for document in documents]
             tfidf = models.TfidfModel(corpus)

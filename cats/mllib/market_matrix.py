@@ -22,10 +22,10 @@ class MarketMatrix:
         self.dbname = dbname
         self.db = client[self.dbname]
         self.cursor = None
-	if language == 'EN':
-		self.sw = {'word': {'$nin': cachedStopWords_en}}
-	elif language == 'FR'
-		self.sw = {'word': {'$nin': cachedStopWords_fr}}
+        if language == 'EN':
+            self.sw = {'word': {'$nin': cachedStopWords_en}}
+        elif language == 'FR'
+            self.sw = {'word': {'$nin': cachedStopWords_fr}}
 
     """
         input:
