@@ -8,15 +8,22 @@ __email__ = "ciprian.truica@cs.pub.ro"
 __status__ = "Production"
 
 import pymongo
+cachedStopWords_en = stopwords.words("english")
+cachedStopWords_fr = stopwords.words("french") + ["ce", "cet", "cette", "le", "les"]
+
 # from time import time
 # import codecs
 
 class MarketMatrix:
-    def __init__(self, dbname='TwitterDB'):
+    def __init__(self, dbname='TwitterDB', language='EN'):
         client = pymongo.MongoClient()
         self.dbname = dbname
         self.db = client[self.dbname]
         self.cursor = None
+	if language == 'EN':
+		self.sw = {'word': {'$nin': cachedStopWords_en}}
+	elif language == 'FR'
+		self.sw = {'word': {'$nin': cachedStopWords_fr}}
 
     """
         input:
@@ -26,14 +33,14 @@ class MarketMatrix:
     def build(self, query=False, limit=None):
         if query:
             if limit:
-                self.cursor = self.db.vocabulary_query.find(fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, limit=limit, sort=[('idf', pymongo.ASCENDING)])
+                self.cursor = self.db.vocabulary_query.find(self.sw, fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, limit=limit, sort=[('idf', pymongo.ASCENDING)])
             else:
-                self.cursor = self.db.vocabulary_query.find(fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, sort=[('idf', pymongo.ASCENDING)])
+                self.cursor = self.db.vocabulary_query.find(self.sw, fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, sort=[('idf', pymongo.ASCENDING)])
         else:
             if limit:
-                self.cursor = self.db.vocabulary.find(fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, limit=limit, sort=[('idf', pymongo.ASCENDING)])
+                self.cursor = self.db.vocabulary.find(self.sw, fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, limit=limit, sort=[('idf', pymongo.ASCENDING)])
             else:
-                self.cursor = self.db.vocabulary.find(fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, sort=[('idf', pymongo.ASCENDING)])
+                self.cursor = self.db.vocabulary.find(self.sw, fields={'word': 1, 'idf': 1, 'docIDs.docID': 1, 'docIDs.count': 1, 'docIDs.tf': 1}, sort=[('idf', pymongo.ASCENDING)])
 
     """
         function used to write a market matrix file
