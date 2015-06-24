@@ -8,6 +8,8 @@ __email__ = "ciprian.truica@cs.pub.ro"
 __status__ = "Production"
 
 import pymongo
+from nltk.corpus import stopwords
+
 cachedStopWords_en = stopwords.words("english")
 cachedStopWords_fr = stopwords.words("french") + ["ce", "cet", "cette", "le", "les"]
 
