@@ -35,43 +35,38 @@ def collection_dashboard_page(name=None):
 def collection_dashboard_page2():
     return collection_dashboard_page()
 
-@app.route('/cats/analysis')
-def analysis_dashboard_page(name=None):
-    tweetCount = getTweetCount()
-    return render_template('analysis.html', name=name, tweetCount=tweetCount) 
+@app.route('/cats/analysis', methods=['POST','GET'])
+def analysis_dashboard_page():
+    if request:
+        keywords = request.form['keyword']
+        date = request.form['date']
+        lem = LemmatizeText(keywords)
+        lem.createLemmaText()
+        lem.createLemmas()
+        wordList = []
+        for word in lem.wordList:
+            """
+                If you want to use a regex,
+                This example will construct a regex that contains the lemma
+                similar in SQL to -> where word like '%fuck%'
+            """
+            #regex = re.compile(word.word, re.IGNORECASE)
+            #wordList.append(regex)
+            """
+                this one will find only the tweets with the matching word
+            """
+            wordList.append(word.word)
+        global query
+        query = {}
+        if wordList:
+            query["words.word"] = {"$in": wordList }
+        if date:
+            start, end = date.split(" ") 
+            query["date"] = {"$gt": start, "$lte": end}
 
-@app.route('/cats/analysis', methods=['POST'])
-def analysis_dashboard_page2():
-    keywords = request.form['keyword']
-    date = request.form['date']
-    lem = LemmatizeText(keywords)
-    lem.createLemmaText()
-    lem.createLemmas()
-    wordList = []
-    for word in lem.wordList:
-        """
-            If you want to use a regex,
-            This example will construct a regex that contains the lemma
-            similar in SQL to -> where word like '%fuck%'
-        """
-        #regex = re.compile(word.word, re.IGNORECASE)
-        #wordList.append(regex)
-        """
-            this one will find only the tweets with the matching word
-        """
-        wordList.append(word.word)
-    global query
-    query = {}
-    if wordList:
-        query["words.word"] = {"$in": wordList }
-    if date:
-        start, end = date.split(" ") 
-        query["date"] = {"$gt": start, "$lte": end}
-
-    if query:
-        vocab = VocabularyIndex(dbname)
-        vocab.createIndex(query)
-
+        if query:
+            vocab = VocabularyIndex(dbname)
+            vocab.createIndex(query)
     tweetCount = getTweetCount()
     return render_template('analysis.html', tweetCount=tweetCount)  
     
