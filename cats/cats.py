@@ -44,8 +44,9 @@ def analysis_dashboard_page(name=None):
 def analysis_dashboard_page2():
     keywords = request.form['keyword']
     date = request.form['date']
-    if request.form['gender-female']:
-        print("female")
+    checked_genders = request.form.getlist('gender')
+    checked_ages = request.form.getlist('age')
+    print checked_genders, checked_ages
     lem = LemmatizeText(keywords)
     lem.createLemmaText()
     lem.createLemmas()
