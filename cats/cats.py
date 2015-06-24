@@ -14,6 +14,7 @@ from indexing.ne_index import NEIndex
 import time
 import jinja2
 from mllib.train_lda import TrainLDA
+import subprocess
 
 # Connecting to the database
 client = pymongo.MongoClient()
