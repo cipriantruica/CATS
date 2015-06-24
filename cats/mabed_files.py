@@ -27,7 +27,7 @@ class MabedFiles:
             else:
                 startDate = datetime.strptime(self.db.documents.find(spec=query, fields={'date': 1, '_id': 0}, limit=1, sort=[('date',pymongo.ASCENDING)])[0]['date'], '%Y-%m-%d %H:%M:%S') - timedelta(0, 1)
                 endDate = datetime.strptime(self.db.documents.find(spec=query, fields={'date': 1, '_id': 0}, limit=1, sort=[('date',pymongo.DESCENDING)])[0]['date'], '%Y-%m-%d %H:%M:%S')
-            print slice, startDate, endDate
+            # print slice, startDate, endDate
             idx = 0
             filelen = 8
             while startDate < endDate:
@@ -35,7 +35,7 @@ class MabedFiles:
                 if intDate > endDate:
                     intDate = endDate
                 query["date"] = { "$gt": str(startDate), "$lte": str(intDate) }
-                print idx, startDate, intDate, query
+                # print idx, startDate, intDate, query
                 documents = self.db.documents.find(spec=query, fields={'rawText': 1, 'date': 1, '_id': 0})
                 if documents.count() > 0:
                     filename = filepath + '/' + '0'*(filelen-len(str(idx))) + str(idx)
@@ -62,23 +62,23 @@ if __name__ == '__main__':
     start = time()
     mf.buildFiles(query1, filepath='1/', slice=3600)
     end = time()
-    print (end-start)
+    print 'Time',(end-start), query1
     start = time()
     mf.buildFiles(query2, filepath='2/', slice=3600)
     end = time()
-    print (end-start)
+    print 'Time',(end-start), query2
     start = time()
     mf.buildFiles(query3, filepath='3/', slice=3600)
     end = time()
-    print (end-start)
+    print 'Time',(end-start), query3
     start = time()
     mf.buildFiles(query4, filepath='4/', slice=3600)
     end = time()
-    print (end-start)
+    print 'Time',(end-start), query4
     start = time()
     mf.buildFiles(query5, filepath='5/', slice=3600)
     end = time()
-    print (end-start)
+    print 'Time',(end-start), query5
 
 
 
