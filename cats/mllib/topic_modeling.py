@@ -42,14 +42,21 @@ class TopicModeling:
 
     def topicsLDA(self, num_topics=10, num_iterations=10000, num_words=10):
         # LdaModel(corpus=None, num_topics=100, id2word=None, distributed=False, chunksize=2000, passes=1, update_every=1, alpha='symmetric', eta=None, decay=0.5, offset=1.0, eval_every=10, iterations=50, gamma_threshold=0.001)
-        lsa = LdaModel(corpus=self.corpus, num_topics=num_topics, id2word=self.id2word, iterations=num_iterations)
-
-        # show_topics(num_topics=10, num_words=10, log=False, formatted=True)
-        # For num_topics number of topics, return num_words most significant words (10 words per topic, by default).
-        # The topics are returned as a list – a list of strings if formatted is True, or a list of (probability, word) 2-tuples if False.
-        # If log is True, also output this result to log.
-        # Unlike LSA, there is no natural ordering between the topics in LDA. The returned num_topics <= self.num_topics subset of all topics is therefore arbitrary and may change between two LDA training runs.
-        return lsa.show_topics(num_topics=num_topics, num_words=num_words, formatted=False)
+        try:
+            lda = LdaModel(corpus=self.corpus, num_topics=num_topics, id2word=self.id2word, iterations=num_iterations)
+            result = {}
+            tpd = lda[self.corpus] # topic probability distribution
+            for topics in tpd:
+                for elem in topics:
+                    if result.get(elem[0], -1) == -1:
+                        words = lda.show_topic(elem[0], topn=num_words)
+                        result[elem[0]] = {'weight': elem[1], 'words': words}
+                    else:
+                        result[elem[0]]['weight'] += elem[1]
+            return result
+        except Exception as e:
+            print e
+            return None
 
     def topicsLSI(self, num_topics=10, num_words=10):
         # LsiModel(corpus=None, num_topics=200, id2word=None, chunksize=20000, decay=1.0, distributed=False, onepass=True, power_iters=2, extra_samples=100)
