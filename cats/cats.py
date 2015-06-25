@@ -47,7 +47,7 @@ def analysis_dashboard_page2():
     date = request.form['date']
     checked_genders = request.form.getlist('gender')
     checked_ages = request.form.getlist('age')
-    # print checked_genders, checked_ages
+    print date,keywords,checked_genders,checked_ages
     lem = LemmatizeText(keywords)
     lem.createLemmaText()
     lem.createLemmas()
@@ -75,7 +75,6 @@ def analysis_dashboard_page2():
         query["age"] = { "$in": checked_ages }
     if checked_genders and len(checked_genders) == 1:
         query["gender"] = checked_genders[0]
-    print query
     if query:
         vocab = VocabularyIndex(dbname)
         vocab.createIndex(query)
