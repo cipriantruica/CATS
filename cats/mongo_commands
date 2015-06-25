@@ -1,0 +1,15 @@
+# export the database
+mongoexport --db TwitterDB --collection vocabulary --out vocabulary.json --journal
+mongoexport --db TwitterDB --collection documents --out documents.json --journal
+
+# import the database
+mongoimport --db TwitterDB --collection vocabulary --file vocabulary.json --journal
+mongoimport --db TwitterDB --collection documents --file documents.json --journal
+
+
+# manualy added indexes
+db.documents.ensureIndex({date: 1})
+db.documents.ensureIndex({gender: 1})
+db.documents.ensureIndex({age: 1})
+db.documents.ensureIndex({'words.word': 1})
+db.vocabulary.ensureIndex({idf: 1})
