@@ -142,6 +142,7 @@ def namedEntities(limit=None):
 
 @app.route('/cats/analysis/named_entities.csv')
 def getNamedEntities():
+    print("NE: ",query)
     cursor = namedEntities()
     csv='named_entity,count,type\n'
     for elem in cursor:
