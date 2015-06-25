@@ -16,17 +16,19 @@ class MabedFiles:
     def __init__(self, dbname='TwitterDB'):
         client = pymongo.MongoClient()
         self.db = client[dbname]
+        self.query = {}
 
     # slice is given in seconds
     def buildFiles(self, query={}, slice=3600, filepath=''):
         try:
             # get date
-            if query and query.get("date"):
-                startDate = datetime.strptime(query["date"]["$gt"] + " 00:00:00", '%Y-%m-%d %H:%M:%S')
-                endDate = datetime.strptime(query["date"]["$lte"] + " 00:00:00", '%Y-%m-%d %H:%M:%S')
+            self.query = query
+            if self.query and self.query.get("date"):
+                startDate = datetime.strptime(self.query["date"]["$gt"] + " 00:00:00", '%Y-%m-%d %H:%M:%S')
+                endDate = datetime.strptime(self.query["date"]["$lte"] + " 00:00:00", '%Y-%m-%d %H:%M:%S')
             else:
-                startDate = datetime.strptime(self.db.documents.find(spec=query, fields={'date': 1, '_id': 0}, limit=1, sort=[('date',pymongo.ASCENDING)])[0]['date'], '%Y-%m-%d %H:%M:%S') - timedelta(0, 1)
-                endDate = datetime.strptime(self.db.documents.find(spec=query, fields={'date': 1, '_id': 0}, limit=1, sort=[('date',pymongo.DESCENDING)])[0]['date'], '%Y-%m-%d %H:%M:%S')
+                startDate = datetime.strptime(self.db.documents.find(spec=self.query, fields={'date': 1, '_id': 0}, limit=1, sort=[('date',pymongo.ASCENDING)])[0]['date'], '%Y-%m-%d %H:%M:%S') - timedelta(0, 1)
+                endDate = datetime.strptime(self.db.documents.find(spec=self.query, fields={'date': 1, '_id': 0}, limit=1, sort=[('date',pymongo.DESCENDING)])[0]['date'], '%Y-%m-%d %H:%M:%S')
             # print slice, startDate, endDate
             idx = 0
             filelen = 8
@@ -34,9 +36,9 @@ class MabedFiles:
                 intDate = startDate + timedelta(0, slice)
                 if intDate > endDate:
                     intDate = endDate
-                query["date"] = { "$gt": str(startDate), "$lte": str(intDate) }
+                self.query["date"] = { "$gt": str(startDate), "$lte": str(intDate) }
                 # print idx, startDate, intDate, query
-                documents = self.db.documents.find(spec=query, fields={'rawText': 1, 'date': 1, '_id': 0})
+                documents = self.db.documents.find(spec=self.query, fields={'rawText': 1, 'date': 1, '_id': 0})
                 if documents.count() > 0:
                     filename = filepath + '/' + '0'*(filelen-len(str(idx))) + str(idx)
                     idx += 1
