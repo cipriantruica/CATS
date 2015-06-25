@@ -180,9 +180,11 @@ def trainLDA():
 @app.route('/cats/analysis/detect_events',methods=['POST']) 
 def runMABED():
     mf = MabedFiles(dbname='TwitterDB')
-    mf.buildFiles(query, filepath='/home/adrien/CATS/GitHub/CATS/cats/mabed/input/', slice=3600)
-    subprocess.call(['java', '-jar', '/home/adrien/CATS/GitHub/CATS/cats/mabed/MABED-CATS.jar', '30', '40'])
-    return analysis_dashboard_page()
+    mf.buildFiles(query, filepath='/home/adrien/CATS/GitHub/CATS/cats/mabed/input/', slice=60*60)
+    p = subprocess.Popen("java -jar mabed/MABED-CATS.jar 60 40", stdout=subprocess.PIPE)
+    result = p.communicate()[0]
+    print result
+    return render_template('event_browser.html', events=result, filter=query_pretty)
     
 @app.route('/cats/analysis/lda_topics.csv')
 def getTopics():
