@@ -181,9 +181,7 @@ def trainLDA():
 def runMABED():
     mf = MabedFiles(dbname='TwitterDB')
     mf.buildFiles(query, filepath='/home/adrien/CATS/GitHub/CATS/cats/mabed/input/', slice=60*60)
-    p = subprocess.Popen("java -jar mabed/MABED-CATS.jar 60 40", stdout=subprocess.PIPE)
-    result = p.communicate()[0]
-    print result
+    result = subprocess.check_output(['java', '-jar', '/home/adrien/CATS/GitHub/CATS/cats/mabed/MABED-CATS.jar', '60', '40'])
     return render_template('event_browser.html', events=result, filter=query_pretty)
     
 @app.route('/cats/analysis/lda_topics.csv')
