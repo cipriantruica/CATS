@@ -71,17 +71,17 @@ def analysis_dashboard_page2():
     global query_pretty
     query_pretty = ""
     if wordList:
-        query_pretty += " Keywords: "+wordList
+        query_pretty += " Keywords: "+' '.join(wordList)
         query["words.word"] = { "$in": wordList }
     if date:
         query_pretty += " Date: "+date
         start, end = date.split(" ") 
         query["date"] = { "$gt": start, "$lte": end }
     if checked_ages and 0 < len(checked_ages) < 6:
-        query_pretty += " Age: "+checked_ages
+        query_pretty += " Age: "+' '.join(checked_ages)
         query["age"] = { "$in": checked_ages }
     if checked_genders and len(checked_genders) == 1:
-        query_pretty += " Gender: "+checked_genders
+        query_pretty += " Gender: "+' '.join(checked_genders)
         query["gender"] = checked_genders[0]
     if query:
         vocab = VocabularyIndex(dbname)
