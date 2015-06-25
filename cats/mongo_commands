@@ -7,7 +7,7 @@ mongoimport --db TwitterDB --collection vocabulary --file vocabulary.json --jour
 mongoimport --db TwitterDB --collection documents --file documents.json --journal
 
 
-# manualy added indexes
+# manually added indexes
 db.documents.ensureIndex({date: 1})
 db.documents.ensureIndex({gender: 1})
 db.documents.ensureIndex({age: 1})
