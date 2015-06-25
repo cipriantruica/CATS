@@ -71,7 +71,7 @@ def analysis_dashboard_page2():
     global query_pretty
     query_pretty = ""
     if wordList:
-        query_pretty += " Keywords: "+wordlist
+        query_pretty += " Keywords: "+wordList
         query["words.word"] = { "$in": wordList }
     if date:
         query_pretty += " Date: "+date
