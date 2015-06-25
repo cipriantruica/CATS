@@ -75,9 +75,7 @@ def analysis_dashboard_page2():
         query["age"] = { "$in": checked_ages }
     if checked_genders and len(checked_genders) == 1:
         query["gender"] = checked_genders[0]
-
-    # print query
-
+    print query
     if query:
         vocab = VocabularyIndex(dbname)
         vocab.createIndex(query)
