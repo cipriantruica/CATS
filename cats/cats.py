@@ -159,7 +159,7 @@ def getNamedEntities():
     
 @app.route('/cats/analysis/named_entity_cloud')
 def getNamedEntityCloud():
-    return render_template('named_entity_cloud.html', ne=namedEntities(250))
+    return render_template('named_entity_cloud.html', ne=namedEntities(250), filter=query_pretty)
     
 @app.route('/cats/analysis/train_lda',methods=['POST'])
 def trainLDA():
