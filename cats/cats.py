@@ -25,6 +25,8 @@ app = Flask(__name__)
 
 query = {}
 
+query_pretty = ""
+
 def getTweetCount():
     return db.documents.find(query).count()
 
@@ -47,7 +49,7 @@ def analysis_dashboard_page2():
     date = request.form['date']
     checked_genders = request.form.getlist('gender')
     checked_ages = request.form.getlist('age')
-    # print checked_genders, checked_ages
+    print date,keywords,checked_genders,checked_ages
     lem = LemmatizeText(keywords)
     lem.createLemmaText()
     lem.createLemmas()
@@ -66,18 +68,21 @@ def analysis_dashboard_page2():
         wordList.append(word.word)
     global query
     query = {}
+    global query_pretty
+    query_pretty = ""
     if wordList:
+        query_pretty += " Keywords: "+' '.join(wordList)
         query["words.word"] = { "$in": wordList }
     if date:
+        query_pretty += " Date: "+date
         start, end = date.split(" ") 
         query["date"] = { "$gt": start, "$lte": end }
     if checked_ages and 0 < len(checked_ages) < 6:
+        query_pretty += " Age: "+' '.join(checked_ages)
         query["age"] = { "$in": checked_ages }
     if checked_genders and len(checked_genders) == 1:
+        query_pretty += " Gender: "+' '.join(checked_genders)
         query["gender"] = checked_genders[0]
-
-    # print query
-
     if query:
         vocab = VocabularyIndex(dbname)
         vocab.createIndex(query)
@@ -101,7 +106,7 @@ def getTermCloud():
         voc = db.vocabulary_query.find(fields={'word':1,'idf':1},limit=150, sort=[('idf',pymongo.ASCENDING)])
     else:
         voc = db.vocabulary.find(fields={'word':1,'idf':1},limit=150, sort=[('idf',pymongo.ASCENDING)])
-    return render_template('word_cloud.html', voc=voc)     
+    return render_template('word_cloud.html', voc=voc, filter=query_pretty)     
     
 @app.route('/cats/analysis/vocabulary.csv')
 def getTerms():
@@ -122,7 +127,7 @@ def getTweets():
         query_exists = True
     search = Search(searchPhrase=searchPhrase, dbname=dbname, query=query_exists)
     results = search.results()
-    return render_template('tweet_browser.html', results=results) 
+    return render_template('tweet_browser.html', results=results, filter=query_pretty) 
 
 def namedEntities(limit=None):
     if query:
@@ -153,7 +158,7 @@ def getNamedEntities():
     
 @app.route('/cats/analysis/named_entity_cloud')
 def getNamedEntityCloud():
-    return render_template('named_entity_cloud.html', ne=namedEntities(250))
+    return render_template('named_entity_cloud.html', ne=namedEntities(250), filter=query_pretty)
     
 @app.route('/cats/analysis/train_lda',methods=['POST'])
 def trainLDA():
@@ -169,7 +174,7 @@ def trainLDA():
     for i in range(0,k):
         print(results[0][i])
         topics.append([i,scores[i],results[0][i]])
-    return render_template('topic_browser.html', topics=topics)
+    return render_template('topic_browser.html', topics=topics, filter=query_pretty)
    
 @app.route('/cats/analysis/detect_events',methods=['POST']) 
 def runMABED():
