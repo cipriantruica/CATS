@@ -14,6 +14,7 @@ from indexing.ne_index import NEIndex
 import time
 import jinja2
 from mllib.train_lda import TrainLDA
+from mabed.mabed_files import MabedFiles
 import subprocess
 
 # Connecting to the database
@@ -178,6 +179,7 @@ def trainLDA():
    
 @app.route('/cats/analysis/detect_events',methods=['POST']) 
 def runMABED():
+    mf = MabedFiles(dbname='TwitterDB')
     subprocess.call(['java', '-jar', '/home/adrien/CATS/GitHub/CATS/cats/mabed/MABED-CATS.jar', '30', '40'])
     return analysis_dashboard_page()
     
