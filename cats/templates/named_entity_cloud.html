@@ -32,8 +32,8 @@
 		<div id="content">
 			<div id="sidebar"></div>
 			<div id="main-content">
-				<p></p>
-				<div{{ filter }} role="main">
+				<p>Filters - {{ filter }}</p>
+				<div role="main">
 					<div id="wordcloud2" class="wordcloud">
 						{% set firstLine = 0 %}
 						{% for doc in ne %}

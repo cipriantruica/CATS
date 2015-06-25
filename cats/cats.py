@@ -106,7 +106,7 @@ def getTermCloud():
         voc = db.vocabulary_query.find(fields={'word':1,'idf':1},limit=150, sort=[('idf',pymongo.ASCENDING)])
     else:
         voc = db.vocabulary.find(fields={'word':1,'idf':1},limit=150, sort=[('idf',pymongo.ASCENDING)])
-    return render_template('word_cloud.html', voc=voc)     
+    return render_template('word_cloud.html', voc=voc, filter=query_pretty)     
     
 @app.route('/cats/analysis/vocabulary.csv')
 def getTerms():
@@ -127,7 +127,7 @@ def getTweets():
         query_exists = True
     search = Search(searchPhrase=searchPhrase, dbname=dbname, query=query_exists)
     results = search.results()
-    return render_template('tweet_browser.html', results=results) 
+    return render_template('tweet_browser.html', results=results, filter=query_pretty) 
 
 def namedEntities(limit=None):
     if query:
@@ -150,7 +150,6 @@ def namedEntities(limit=None):
 
 @app.route('/cats/analysis/named_entities.csv')
 def getNamedEntities():
-    print("NE: ",query_pretty)
     cursor = namedEntities()
     csv='named_entity,count,type\n'
     for elem in cursor:
@@ -175,7 +174,7 @@ def trainLDA():
     for i in range(0,k):
         print(results[0][i])
         topics.append([i,scores[i],results[0][i]])
-    return render_template('topic_browser.html', topics=topics)
+    return render_template('topic_browser.html', topics=topics, filter=query_pretty)
    
 @app.route('/cats/analysis/detect_events',methods=['POST']) 
 def runMABED():
