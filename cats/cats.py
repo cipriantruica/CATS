@@ -244,7 +244,7 @@ def threadMABED(k):
     result = subprocess.check_output(['java', '-jar', '/home/adrien/CATS/GitHub/CATS/cats/mabed/MABED-CATS.jar', '60', '40'])
     print "Done."
     os.remove('mabed.lock')
-    pickle.dump(results,open("mabed_events.p","wb"))  
+    pickle.dump(result,open("mabed_events.p","wb"))  
     pickle.dump(query_pretty,open("mabed_query.p","wb"))
     
 @app.route('/cats/analysis/lda_topics.csv')
