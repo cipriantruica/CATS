@@ -18,6 +18,7 @@ from mabed.mabed_files import MabedFiles
 import subprocess
 import os, shutil
 from functools import wraps
+import threading
 
 # Connecting to the database
 client = pymongo.MongoClient()
@@ -187,7 +188,6 @@ def getNamedEntityCloud():
 @app.route('/cats/analysis/train_lda',methods=['POST'])
 def trainLDA():
     k = int(request.form['k-lda'])
-    print(k,"topics")
     lda = TrainLDA()
     results = lda.fitLDA(query=query, num_topics=k, num_words=10, iterations=500)
     scores = [0]*k
@@ -202,6 +202,16 @@ def trainLDA():
    
 @app.route('/cats/analysis/detect_events',methods=['POST']) 
 def runMABED():
+    k = int(request.form['k-mabed'])
+    t = threading.Thread(target=threadLDA, args=(k,))
+    threads.append(t)
+    t.start()
+    return render_template('event_browser.html', events=result, filter=query_pretty)
+    
+def threadMABED(k):
+    file = open("static/mabed.html", "w")
+    file.write("MABED is still running, the results will be available soon.")
+    file.close()
     for the_file in os.listdir('mabed/input'):
         file_path = os.path.join('mabed/input', the_file)
         try:
@@ -213,7 +223,9 @@ def runMABED():
     mf = MabedFiles(dbname='TwitterDB')
     mf.buildFiles(query, filepath='/home/adrien/CATS/GitHub/CATS/cats/mabed/input/', slice=60*60)
     result = subprocess.check_output(['java', '-jar', '/home/adrien/CATS/GitHub/CATS/cats/mabed/MABED-CATS.jar', '60', '40'])
-    return render_template('event_browser.html', events=result, filter=query_pretty)
+    file = open("static/mabed.html", "w")
+    file.write(render_template('event_browser.html', events=result, filter=query_pretty))
+    file.close()
     
 @app.route('/cats/analysis/lda_topics.csv')
 def getTopics():
@@ -225,7 +237,7 @@ def browseTopics():
     
 @app.route('/cats/analysis/mabed_event_browser')
 def browseEvents():
-    return render_template('event_browser.html') 
+    return send_static_file('mabed.html')
         
 if __name__ == '__main__':
     app.run(debug=True,host='mediamining.univ-lyon2.fr')
