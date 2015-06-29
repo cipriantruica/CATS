@@ -203,7 +203,7 @@ def trainLDA():
 @app.route('/cats/analysis/detect_events',methods=['POST']) 
 def runMABED():
     k = int(request.form['k-mabed'])
-    t = threading.Thread(target=threadLDA, args=(k,))
+    t = threading.Thread(target=threadMABED, args=(k,))
     threads.append(t)
     t.start()
     return render_template('event_browser.html', events=result, filter=query_pretty)
