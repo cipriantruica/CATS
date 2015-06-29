@@ -197,7 +197,7 @@ def trainLDA():
         return render_template('already_running.html',method_name='LDA')
    
 def threadLDA(k):
-    file = open("static/lda.lock", "w")
+    file = open("lda.lock", "w")
     file.write(" ")
     file.close()
     print "Training LDA..."
@@ -227,7 +227,7 @@ def runMABED():
         return render_template('already_running.html',method_name='MABED')
     
 def threadMABED(k):
-    file = open("static/mabed.lock", "w")
+    file = open("mabed.lock", "w")
     file.write(" ")
     file.close()
     print "Running MABED..."
@@ -253,12 +253,12 @@ def getTopics():
     
 @app.route('/cats/analysis/lda_topic_browser')
 def browseTopics():
-    if os.path.isfile('lda_topics.p'):
+    if os.path.isfile('lda.lock'):
+        return render_template('waiting.html',method_name='LDA')
+    elif os.path.isfile('lda_topics.p'):
         r = pickle.load(open("lda_topics.p","rb"))
         qp = pickle.load(open("lda_query.p","rb"))
         return render_template('topic_browser.html', topics=r, filter=qp)
-    elif os.path.isfile('lda.lock'):
-        return render_template('waiting.html',method_name='LDA')
     else:
         return render_template('unavailable.html',method_name='LDA')
     
@@ -268,12 +268,12 @@ def getEvents():
     
 @app.route('/cats/analysis/mabed_event_browser')
 def browseEvents():
-    if os.path.isfile('mabed_events.p'):
+    if os.path.isfile('lda.lock'):
+        return render_template('waiting.html',method_name='MABED')
+    elif os.path.isfile('lda_topics.p'):
         r = pickle.load(open("mabed_events.p","rb"))
         qp = pickle.load(open("mabed_query.p","rb"))
         return render_template('event_browser.html', events=r, filter=qp)
-    elif os.path.isfile('mabed.lock'):
-        return render_template('waiting.html',method_name='MABED')
     else:
         return render_template('unavailable.html',method_name='MABED')
         
