@@ -236,7 +236,7 @@ def browseTopics():
     
 @app.route('/cats/analysis/mabed_event_browser')
 def browseEvents():
-    return send_static_file('mabed.html')
+    return app.send_static_file('mabed.html')
         
 if __name__ == '__main__':
     app.run(debug=True,host='mediamining.univ-lyon2.fr')
