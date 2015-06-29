@@ -203,7 +203,7 @@ def trainLDA():
 @app.route('/cats/analysis/detect_events',methods=['POST']) 
 def runMABED():
     for the_file in os.listdir('mabed/input'):
-        file_path = os.path.join(folder, the_file)
+        file_path = os.path.join('mabed/input', the_file)
         try:
             if os.path.isfile(file_path):
                 os.unlink(file_path)
