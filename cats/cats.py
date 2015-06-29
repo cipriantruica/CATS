@@ -197,8 +197,6 @@ def trainLDA():
         return render_template('already_running.html',method_name='LDA')
    
 def threadLDA(k):
-    os.remove('lda_topics.p')
-    os.remove('lda_query.p')
     file = open("static/lda.lock", "w")
     file.write(" ")
     file.close()
@@ -229,8 +227,6 @@ def runMABED():
         return render_template('already_running.html',method_name='MABED')
     
 def threadMABED(k):
-    os.remove('mabed_events.p')
-    os.remove('mabed_query.p')
     file = open("static/mabed.lock", "w")
     file.write(" ")
     file.close()
