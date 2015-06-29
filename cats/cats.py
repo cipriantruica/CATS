@@ -188,6 +188,14 @@ def getNamedEntityCloud():
 @app.route('/cats/analysis/train_lda',methods=['POST'])
 def trainLDA():
     k = int(request.form['k-lda'])
+    t = threading.Thread(target=threadLDA, args=(k,))
+    t.start()
+    return render_template('waiting.html',method_name='LDA')
+   
+def threadLDA(k):
+    file = open("static/lda.html", "w")
+    file.write("LDA is still running, the results will be available soon.")
+    file.close()
     lda = TrainLDA()
     results = lda.fitLDA(query=query, num_topics=k, num_words=10, iterations=500)
     scores = [0]*k
@@ -198,8 +206,10 @@ def trainLDA():
     for i in range(0,k):
         print(results[0][i])
         topics.append([i,scores[i],results[0][i]])
-    return render_template('topic_browser.html', topics=topics, filter=query_pretty)
-   
+    file = open("static/lda.html", "w")
+    file.write(render_template('topic_browser.html', topics=topics, filter=query_pretty))
+    file.close()
+       
 @app.route('/cats/analysis/detect_events',methods=['POST']) 
 def runMABED():
     k = int(request.form['k-mabed'])
@@ -232,7 +242,11 @@ def getTopics():
     
 @app.route('/cats/analysis/lda_topic_browser')
 def browseTopics():
-    return render_template('topic_browser.html') 
+    return app.send_static_file('lda.html')
+    
+@app.route('/cats/analysis/mabed_events.csv')
+def getEvents():
+    return ""
     
 @app.route('/cats/analysis/mabed_event_browser')
 def browseEvents():
