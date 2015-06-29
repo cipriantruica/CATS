@@ -188,7 +188,7 @@ def getNamedEntityCloud():
     
 @app.route('/cats/analysis/train_lda',methods=['POST'])
 def trainLDA():
-    if not os.path.isfile('lda_topics.p'):
+    if not os.path.isfile('lda.lock'):
         k = int(request.form['k-lda'])
         t = threading.Thread(target=threadLDA, args=(k,))
         t.start()
@@ -199,6 +199,9 @@ def trainLDA():
 def threadLDA(k):
     os.remove('lda_topics.p')
     os.remove('lda_query.p')
+    file = open("static/lda.lock", "w")
+    file.write(" ")
+    file.close()
     lda = TrainLDA()
     results = lda.fitLDA(query=query, num_topics=k, num_words=10, iterations=500)
     scores = [0]*k
@@ -209,12 +212,13 @@ def threadLDA(k):
     for i in range(0,k):
         print(results[0][i])
         topics.append([i,scores[i],results[0][i]])
+    os.remove('lda.lock')
     pickle.dump(topics,open("lda_topics.p","wb"))  
     pickle.dump(query_pretty,open("lda_query.p","wb"))  
        
 @app.route('/cats/analysis/detect_events',methods=['POST']) 
 def runMABED():
-    if not os.path.isfile('mabed_events.p'):
+    if not os.path.isfile('mabed.lock'):
         k = int(request.form['k-mabed'])
         t = threading.Thread(target=threadMABED, args=(k,))
         t.start()
@@ -225,6 +229,9 @@ def runMABED():
 def threadMABED(k):
     os.remove('mabed_events.p')
     os.remove('mabed_query.p')
+    file = open("static/mabed.lock", "w")
+    file.write(" ")
+    file.close()
     for the_file in os.listdir('mabed/input'):
         file_path = os.path.join('mabed/input', the_file)
         try:
@@ -236,6 +243,7 @@ def threadMABED(k):
     mf = MabedFiles(dbname='TwitterDB')
     mf.buildFiles(query, filepath='/home/adrien/CATS/GitHub/CATS/cats/mabed/input/', slice=60*60)
     result = subprocess.check_output(['java', '-jar', '/home/adrien/CATS/GitHub/CATS/cats/mabed/MABED-CATS.jar', '60', '40'])
+    os.remove('mabed.lock')
     pickle.dump(results,open("mabed_events.p","wb"))  
     pickle.dump(query_pretty,open("mabed_query.p","wb"))
     
@@ -249,6 +257,8 @@ def browseTopics():
         r = pickle.load(open("lda_topics.p","rb"))
         qp = pickle.load(open("lda_query.p","rb"))
         return render_template('topic_browser.html', topics=r, filter=qp)
+    elif os.path.isfile('lda.lock'):
+        return render_template('waiting.html',method_name='LDA')
     else:
         return render_template('unavailable.html',method_name='LDA')
     
@@ -262,6 +272,8 @@ def browseEvents():
         r = pickle.load(open("mabed_events.p","rb"))
         qp = pickle.load(open("mabed_query.p","rb"))
         return render_template('event_browser.html', events=r, filter=qp)
+    elif os.path.isfile('mabed.lock'):
+        return render_template('waiting.html',method_name='MABED')
     else:
         return render_template('unavailable.html',method_name='MABED')
         
