@@ -111,7 +111,7 @@ def analysis_dashboard_page2():
         vocab = VocabularyIndex(dbname)
         vocab.createIndex(query)
     tweetCount = getTweetCount()
-    return render_template('analysis.html', tweetCount=tweetCount, keywords=' '.join(wordList))  
+    return render_template('analysis.html', tweetCount=tweetCount, dates=date, keywords=' '.join(wordList))  
     
 @app.route('/cats/about')
 def about_page(name=None):
