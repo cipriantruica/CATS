@@ -204,9 +204,8 @@ def trainLDA():
 def runMABED():
     k = int(request.form['k-mabed'])
     t = threading.Thread(target=threadMABED, args=(k,))
-    threads.append(t)
     t.start()
-    return render_template('event_browser.html', events=result, filter=query_pretty)
+    return render_template('waiting.html',method_name='MABED')  
     
 def threadMABED(k):
     file = open("static/mabed.html", "w")
