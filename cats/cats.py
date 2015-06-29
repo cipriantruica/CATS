@@ -202,6 +202,7 @@ def threadLDA(k):
     file = open("static/lda.lock", "w")
     file.write(" ")
     file.close()
+    print "Training LDA..."
     lda = TrainLDA()
     results = lda.fitLDA(query=query, num_topics=k, num_words=10, iterations=500)
     scores = [0]*k
@@ -212,6 +213,7 @@ def threadLDA(k):
     for i in range(0,k):
         print(results[0][i])
         topics.append([i,scores[i],results[0][i]])
+    print "Done."
     os.remove('lda.lock')
     pickle.dump(topics,open("lda_topics.p","wb"))  
     pickle.dump(query_pretty,open("lda_query.p","wb"))  
@@ -232,6 +234,7 @@ def threadMABED(k):
     file = open("static/mabed.lock", "w")
     file.write(" ")
     file.close()
+    print "Running MABED..."
     for the_file in os.listdir('mabed/input'):
         file_path = os.path.join('mabed/input', the_file)
         try:
@@ -243,6 +246,7 @@ def threadMABED(k):
     mf = MabedFiles(dbname='TwitterDB')
     mf.buildFiles(query, filepath='/home/adrien/CATS/GitHub/CATS/cats/mabed/input/', slice=60*60)
     result = subprocess.check_output(['java', '-jar', '/home/adrien/CATS/GitHub/CATS/cats/mabed/MABED-CATS.jar', '60', '40'])
+    print "Done."
     os.remove('mabed.lock')
     pickle.dump(results,open("mabed_events.p","wb"))  
     pickle.dump(query_pretty,open("mabed_query.p","wb"))
