@@ -188,7 +188,7 @@ def getNamedEntityCloud():
     
 @app.route('/cats/analysis/train_lda',methods=['POST'])
 def trainLDA():
-    if !os.path.isfile('lda_topics.p'):
+    if not os.path.isfile('lda_topics.p'):
         k = int(request.form['k-lda'])
         t = threading.Thread(target=threadLDA, args=(k,))
         t.start()
@@ -214,7 +214,7 @@ def threadLDA(k):
        
 @app.route('/cats/analysis/detect_events',methods=['POST']) 
 def runMABED():
-    if !os.path.isfile('mabed_events.p'):
+    if not os.path.isfile('mabed_events.p'):
         k = int(request.form['k-mabed'])
         t = threading.Thread(target=threadMABED, args=(k,))
         t.start()
