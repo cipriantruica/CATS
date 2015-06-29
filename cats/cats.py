@@ -16,6 +16,7 @@ import jinja2
 from mllib.train_lda import TrainLDA
 from mabed.mabed_files import MabedFiles
 import subprocess
+import os, shutil
 
 # Connecting to the database
 client = pymongo.MongoClient()
@@ -179,6 +180,14 @@ def trainLDA():
    
 @app.route('/cats/analysis/detect_events',methods=['POST']) 
 def runMABED():
+    for the_file in os.listdir('mabed/input'):
+        file_path = os.path.join(folder, the_file)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path): shutil.rmtree(file_path)
+        except Exception, e:
+            print e
     mf = MabedFiles(dbname='TwitterDB')
     mf.buildFiles(query, filepath='/home/adrien/CATS/GitHub/CATS/cats/mabed/input/', slice=60*60)
     result = subprocess.check_output(['java', '-jar', '/home/adrien/CATS/GitHub/CATS/cats/mabed/MABED-CATS.jar', '60', '40'])
