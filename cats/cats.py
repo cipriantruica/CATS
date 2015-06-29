@@ -17,6 +17,7 @@ from mllib.train_lda import TrainLDA
 from mabed.mabed_files import MabedFiles
 import subprocess
 import os, shutil
+from functools import wraps
 
 # Connecting to the database
 client = pymongo.MongoClient()
@@ -29,6 +30,24 @@ query = {}
 
 query_pretty = ""
 
+def check_auth(username, password):
+    return username == 'demo' and password == 'ilikecats'
+
+def authenticate():
+    return Response(
+    'Could not verify your access level for that URL.\n'
+    'You have to login with proper credentials', 401,
+    {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
+def requires_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if not auth or not check_auth(auth.username, auth.password):
+            return authenticate()
+        return f(*args, **kwargs)
+    return decorated
+
 def getTweetCount():
     return db.documents.find(query).count()
 
@@ -37,15 +56,18 @@ def collection_dashboard_page(name=None):
     return render_template('collection.html', name=name) 
 
 @app.route('/cats/collection', methods=['POST'])
+@requires_auth
 def collection_dashboard_page2():
     return collection_dashboard_page()
 
 @app.route('/cats/analysis')
+@requires_auth
 def analysis_dashboard_page(name=None):
     tweetCount = getTweetCount()
     return render_template('analysis.html', name=name, tweetCount=tweetCount) 
 
 @app.route('/cats/analysis', methods=['POST'])
+@requires_auth
 def analysis_dashboard_page2():
     keywords = request.form['keyword']
     date = request.form['date']
