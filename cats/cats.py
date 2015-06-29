@@ -268,9 +268,9 @@ def getEvents():
     
 @app.route('/cats/analysis/mabed_event_browser')
 def browseEvents():
-    if os.path.isfile('lda.lock'):
+    if os.path.isfile('mabed.lock'):
         return render_template('waiting.html',method_name='MABED')
-    elif os.path.isfile('lda_topics.p'):
+    elif os.path.isfile('mabed_events.p'):
         r = pickle.load(open("mabed_events.p","rb"))
         qp = pickle.load(open("mabed_query.p","rb"))
         return render_template('event_browser.html', events=r, filter=qp)
