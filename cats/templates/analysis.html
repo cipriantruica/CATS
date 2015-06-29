@@ -67,7 +67,7 @@
 			<form action="{{ url_for('analysis_dashboard_page2') }}" method="POST">
 		    <input type="text" name="date" class="underlined" style="width:615px;"/><br/>
 		    <label id="filter-keyword">By keyword (a list of terms separated by a space, example: "cat dog"): </label><br/>
-		    <input type="text" name="keyword" class="underlined" style="width:615px;"/><br/>
+		    <input type="text" name="keyword" class="underlined" style="width:615px;" value="{{ keywords }}"/><br/>
 		    <label id="filter-gender">By gender: </label><br/>
 			<input type="checkbox" name="gender" value="femme" checked> Female authors <input type="checkbox" name="gender" value="homme" checked> Male authors <br/>
 		    <label id="filter-gender">By age: </label><br/>
