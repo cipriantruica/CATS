@@ -66,7 +66,13 @@ def collection_dashboard_page2():
 @requires_auth
 def analysis_dashboard_page(name=None):
     tweetCount = getTweetCount()
-    return render_template('analysis.html', name=name, tweetCount=tweetCount) 
+    dates = ""
+    keys = ""
+    if query["words.word"]:
+        keywords = ' '.join(query["words.word"].get("$in"))
+    if query["date"]: 
+        dates = query["date"].get("$gt")+' 'query["date"].get("$lte")
+    return render_template('analysis.html', tweetCount=tweetCount, dates=dates, keywords=keys)  
 
 @app.route('/cats/analysis', methods=['POST'])
 @requires_auth
