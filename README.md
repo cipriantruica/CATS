@@ -1,5 +1,10 @@
 # CATS Project
 
+## Run CATS
+
+In order to enable multi-threading for event detection, run CATS with the following command:
+export OPENBLAS_MAIN_FREE=1 ; python cats.py
+
 ## Packages
 * sudo apt-get update
 * sudo apt-get install libblas3gf libblas-doc libblas-dev liblapack3gf liblapack-doc liblapack-dev
