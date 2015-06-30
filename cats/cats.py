@@ -71,7 +71,7 @@ def analysis_dashboard_page(name=None):
     if query["words.word"]:
         keywords = ' '.join(query["words.word"].get("$in"))
     if query["date"]: 
-        dates = query["date"].get("$gt")+' 'query["date"].get("$lte")
+        dates = query["date"].get("$gt")+' '+query["date"].get("$lte")
     return render_template('analysis.html', tweetCount=tweetCount, dates=dates, keywords=keys)  
 
 @app.route('/cats/analysis', methods=['POST'])
