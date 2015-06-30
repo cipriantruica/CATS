@@ -1,10 +1,12 @@
 # export the database
-mongoexport --db TwitterDB --collection vocabulary --out vocabulary.json --journal
-mongoexport --db TwitterDB --collection documents --out documents.json --journal
+mongoexport --db TwitterDB --collection vocabulary --out vocabulary.json
+mongoexport --db TwitterDB --collection documents --out documents.json
+mongoexport --db TwitterDB --collection named_entities --out named_entities.json
 
 # import the database
-mongoimport --db TwitterDB --collection vocabulary --file vocabulary.json --journal
-mongoimport --db TwitterDB --collection documents --file documents.json --journal
+mongoimport --db TwitterDB --collection vocabulary --file vocabulary.json
+mongoimport --db TwitterDB --collection documents --file documents.json
+mongoimport --db TwitterDB --collection named_entities --file named_entities.json
 
 
 # manually added indexes

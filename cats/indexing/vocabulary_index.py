@@ -8,7 +8,7 @@ __email__ = "ciprian.truica@cs.pub.ro"
 __status__ = "Production"
 
 import pymongo
-
+from time import time
 
 mapFunction = """function() {
                     for (var idx=0; idx<this.words.length; idx++){
@@ -43,6 +43,7 @@ functionCreate = """function(){
                         db.vocabulary.ensureIndex({'idf':1});
                         db.temp_collection.drop();
                     }"""
+
 functionCreateQuery = """function(query){
                         var noDocs = db.documents.count(query);
                         var start = new Date();
@@ -60,7 +61,7 @@ functionCreateQuery = """function(query){
                         db.temp_collection.drop();
                     }"""
 
-functionUpdate ="""
+functionUpdate = """
                     function(){
                         var noDocs = db.documents.count();
                         var words = db.vocabulary.find({},{_id: 0, word: 1, docIDs: 1}).addOption(DBQuery.Option.noTimeout);
@@ -109,10 +110,28 @@ class VocabularyIndex:
         self.db = client[dbname]
     
     def createIndex(self, query = None):
+        print "Starting..."
+        print query
         if query:
             self.db.vocabulary_query.drop()
+
+            """
+                new code:
+                - aggregate the result in a new collection -> documents_query
+                - do map reduce on the new collections -> documents_query
+            """
+            # self.db.documents_query.drop()
+            # self.db.documents.aggregate([{"$match": query}, {"$project": {"_id": 1, "words": 1}}, {"$out": "documents_query"}])
+            # self.db.documents_query.ensure_index('words.word')
+            # self.db.documents_query.map_reduce(mapFunction, reduceFunction, "temp_collection", sort={'words.word': 1})
+
+            """
+                old code:
+                - do map reduce on the entire collection with query
+            """
             self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", query=query, sort={'words.word': 1})
             self.db.eval(functionCreateQuery, query)
+
         else:
             self.db.vocabulary.drop()
             self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", sort={'words.word': 1})
@@ -127,6 +146,16 @@ class VocabularyIndex:
 
     #docIDs - list of documents
     def deleteIndex(self, docIDs):
-        self.db.vocabulary.update({ }, { "$pull": { "docIDs" :{ "docID": {"$in": docIDs} } }}, multi=True )
-        self.db.vocabulary.remove({"docIDs" : {"$size": 0}}, multi=True )
+        self.db.vocabulary.update({}, {"$pull": {"docIDs": {"docID": {"$in": docIDs}}}}, multi=True)
+        self.db.vocabulary.remove({"docIDs": {"$size": 0}}, multi=True )
         self.db.eval(functionDelete)
+
+if __name__ == '__main__':
+    query = dict()
+    query['gender'] = 'homme'
+    # query["words.word"] = {"$in": ['shit', 'fuck'] }
+    vi = VocabularyIndex(dbname='TwitterDB')
+    start = time()
+    vi.createIndex(query=query)
+    end = time()
+    print "time:", (end-start)
