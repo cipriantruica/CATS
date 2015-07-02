@@ -80,7 +80,7 @@ class Streaming:
                 name = quote(name)
                 file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\t'+quote(tweet['lang'])+'\n')
                 if(nb_tweets_infile == tweets_per_file):
-                    current_date = datetime.datetime.today()
+                    current_date = datetime.date.today()
                     if current_date <= end_date:
                         t = threading.Thread(target=threadUpdate, args=(nb_files,))
                         t.start()
