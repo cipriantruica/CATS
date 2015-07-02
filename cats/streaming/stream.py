@@ -25,7 +25,7 @@ class Streaming:
         subprocess.call(['sh','update.sh',self.db_name,filepath])
         print('Done.')
 
-    def collect_tweets(self,duration=1,keywords=None,users=None,locations=None):
+    def collect_tweets(self,duration=1,keywords=None,users=None,location=None):
         nb_tweets = 0
         nb_tweets_infile = 0
         nb_files = 1
