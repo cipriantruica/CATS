@@ -62,9 +62,8 @@ class Streaming:
                 text = quote(text.replace('\n',' '))
                 geo = ''
                 if(tweet.get('geo')):
-                    geo = tweet['geo']
-                    print geo
-                geo = ''
+                    geo = str(tweet['geo']['coordinates'][0])+','+str(tweet['geo']['coordinates'][1])
+                geo = quote(geo)
                 timestamp = quote(datetime.datetime.fromtimestamp(float(tweet['timestamp_ms'])/1000).strftime('%Y-%m-%d %H:%M:%S'))
                 nb_tweets += 1
                 nb_tweets_infile += 1
