@@ -33,15 +33,11 @@ class Streaming:
         lock.write(" ")
         lock.close()
         file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
-        print(open('streaming/consumer_key','r').read())
-        print(open('streaming/consumer_secret','r').read())
-        print(open('streaming/token','r').read())
-        print(open('streaming/token_secret','r').read())
         auth = OAuth(
-            consumer_key=str(open('consumer_key','r').read()),
-            consumer_secret=str(open('consumer_secret','r').read()),
-            token=str(open('token','r').read()),
-            token_secret=str(open('token_secret','r').read())
+            consumer_key=str(open('streaming/consumer_key','r').read()),
+            consumer_secret=str(open('streaming/consumer_secret','r').read()),
+            token=str(open('streaming/token','r').read()),
+            token_secret=str(open('streaming/token_secret','r').read())
         )
         twitter_stream = TwitterStream(auth=auth)
         start_date = datetime.date.today()
