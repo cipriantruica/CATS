@@ -63,7 +63,8 @@ class Streaming:
                 geo = ''
                 if(tweet.get('geo')):
                     geo = tweet['geo']
-                geo = quote(str(geo['longitude'])+','+str(geo['latitude']))
+                    print geo
+                geo = ''
                 timestamp = quote(datetime.datetime.fromtimestamp(float(tweet['timestamp_ms'])/1000).strftime('%Y-%m-%d %H:%M:%S'))
                 nb_tweets += 1
                 nb_tweets_infile += 1
