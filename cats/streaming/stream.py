@@ -8,7 +8,6 @@ from twitter import *
 import datetime
 import threading
 import subprocess
-import os, shutil
 
 tweets_per_file = 1000
 
@@ -16,7 +15,8 @@ def quote(string):
     return '"'+string.encode('utf-8')+'"'
 
 class Streaming:
-    def __init__(self, dbname='TwitterTest'):
+    def __init__(self, dbname='TwitterDBTest'):
+        print '__init__ Streaming...'
         db_name = dbname
 
     def threadUpdate(self,filename):
@@ -94,4 +94,4 @@ if __name__ == '__main__':
     keywords = 'obama,hollande'
     users = '7302282,14857290,133663801'
     location = '-122.75,36.8,-121.75,37.8'
-    s.collect_tweets(users=users)
+    s.collect_tweets(keywords=keywords)
