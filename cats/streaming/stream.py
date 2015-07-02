@@ -29,9 +29,6 @@ class Streaming:
         nb_tweets = 0
         nb_tweets_infile = 0
         nb_files = 1
-        lock = open("collection.lock", "w")
-        lock.write(" ")
-        lock.close()
         file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
         auth = OAuth(
             consumer_key=str(open('streaming/consumer_key','r').read()),
@@ -42,14 +39,21 @@ class Streaming:
         twitter_stream = TwitterStream(auth=auth)
         start_date = datetime.date.today()
         end_date = start_date + datetime.timedelta(days=int(duration))
+        lock = open("collection.lock", "w")
         if keywords is not None:
             print("keywords")
+            lock.write(datetime.date.today()+';'+duration+';'+keywords+';None;None')
             iterator = twitter_stream.statuses.filter(track=keywords)
         elif users is not None:
             print("users")
+            lock.write(datetime.date.today()+';'+duration+';None;',users+';None')
             iterator = twitter_stream.statuses.filter(follow=users)
-        else:
+        elif location is not None:
+            lock.write(datetime.date.today()+';'+duration+';None;None;'+location)
             iterator = twitter_stream.statuses.filter(locations=location)
+        else:
+            iterator = twitter_stream.statuses.sample()
+        lock.close()
         for tweet in iterator:
             if tweet.get('text'):
                 text = tweet['text']

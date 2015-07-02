@@ -58,9 +58,16 @@
 		    </form>
 
 		    <h2>Corpora being collected</h2>
-	
-			<p>No corpus being currently collected.</p>
-			
+			{% if collecting_corpus %}
+				<p>No corpus being currently collected.</p>
+			{% else %}
+				<li>Collection started: {{ collecting_corpus[0] }}</li>
+				<li>Duration: {{ collecting_corpus[1] }}</li>
+				<li>Keyword filter: {{ collecting_corpus[2] }}</li>
+				<li>Location filter: {{ collecting_corpus[3] }}</li>
+				<li>User filter: {{ collecting_corpus[4] }}</li>
+			{% endif %}
+
 		    <h2>Available corpora</h2>
 			
 			<ul>

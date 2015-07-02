@@ -53,31 +53,43 @@ def getTweetCount():
 
 @app.route('/cats/collection')
 def collection_dashboard_page(name=None):
-    return render_template('collection.html', name=name) 
+    if os.path.isfile('collection.lock'):
+        lock = open('collection.lock','r').read()
+        corpus_info = lock.split(';')
+        return render_template('collection.html', collecting_corpus=corpus_info)
+    else:
+        return render_template('collection.html')
 
 @app.route('/cats/collection', methods=['POST'])
 @requires_auth
 def collection_dashboard_page2():
     print("Collecting tweets...")
     if not os.path.isfile('collection.lock'):
-        s = Streaming(dbname='TwitterDBTest')
-        print request.form['keyword_list']
-        s.collect_tweets(duration=1,keywords=request.form['keyword_list'])
-        """
         if 'duration' in request.form.values():
             duration = int(request.form['duration'])
-            if 'keyword_list' in request.form.values():
-                st.collect_tweets(duration=duration,keywords=request.form['keyword_list'])
-            elif 'user_list' in request.form.values():
-                st.collect_tweets(duration=duration,users=request.form['user_list'])
-            elif 'bounding_box' in request.form.values():
-                st.collect_tweets(duration=duration,location=request.form['bounding_box'])
         else:
-            print('')
-        """
+            duration=1
+        if 'keyword_list' in request.form.values():
+            keywords = request.form['keyword_list']
+        else:
+            keywords = None
+        if 'user_list' in request.form.values():
+            users = request.form['user_list']
+        else:
+            users = None
+        if 'bounding_box' in request.form.values():
+            location = location=request.form['bounding_box']
+        else:
+            location = None
+        t = threading.Thread(target=threadCollection, args=(duration,keywords,users,location,))
+        t.start()
     else:
-        print("Collection: error")
+        print("Already collecting a corpus")
     return collection_dashboard_page()
+
+def threadCollection(duration,keywords,users,location):
+    s = Streaming(dbname='TwitterDBTest')
+    s.collect_tweets(duration=duration,keywords=keywords,users=users,location=location)
 
 @app.route('/cats/analysis')
 @requires_auth
