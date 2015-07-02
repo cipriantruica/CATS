@@ -81,7 +81,7 @@ class Streaming:
                 if(nb_tweets_infile == tweets_per_file):
                     current_date = datetime.date.today()
                     if current_date <= end_date:
-                        t = threading.Thread(target=threadUpdate, args=(nb_files,))
+                        t = threading.Thread(target=self.threadUpdate, args=(nb_files,))
                         t.start()
                         nb_files += 1
                         nb_tweets_infile = 0
