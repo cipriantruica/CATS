@@ -70,23 +70,25 @@ functionUpdate = """
                             var exists = db.temp_collection.findOne({word: word.word}, {docIDs: 1, _id:0});
                             if (exists){
                                 var docIDs = exists.docIDs;
-                                docIDs = docIDs.concat(word.docIDs.length);
-                                var idf = Math.round(Math.log(noDocs/docIDs.length) * 100)/100;
+                                docIDs = docIDs.concat(word.docIDs);
+                                var idf = 1 + Math.round(Math.log(noDocs/docIDs.length) * 100)/100;
                                 db.vocabulary.update({word: word.word}, {$set: {'idf': idf, docIDs: docIDs}});
                                 db.temp_collection.remove({_id: word.word});
                             }else{
-                                var idf = Math.round(Math.log(noDocs/word.docIDs.length) * 100)/100;
+                                var idf = 1 + Math.round(Math.log(noDocs/word.docIDs.length) * 100)/100;
                                 db.vocabulary.update({word: word.word}, {$set: {'idf': idf}});
                             }
                         }
 
                         var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
+                        documents = Array();
                         while(items.hasNext()){
                             item = items.next();
                             var widf = Math.round(Math.log(noDocs/item.value.ids.length) * 100)/100;
                             doc = {word: item._id, idf: widf, createdAt: new Date(), docIDs: item.value.ids};
-                            db.vocabulary.insert(doc);
+                            documents.push(doc);
                         }
+                        db.vocabulary.insert(documents);
                         db.temp_collection.drop();
                     }
                 """
@@ -110,7 +112,6 @@ class VocabularyIndex:
         self.db = client[dbname]
     
     def createIndex(self, query = None):
-        print "Starting..."
         print query
         if query:
             self.db.vocabulary_query.drop()
@@ -151,9 +152,10 @@ class VocabularyIndex:
         self.db.eval(functionDelete)
 
 if __name__ == '__main__':
+    print "Starting..."
     query = dict()
     query['gender'] = 'homme'
-    # query["words.word"] = {"$in": ['shit', 'fuck'] }
+    # query["words.word"] = {"$in": ['cat', 'dog'] }
     vi = VocabularyIndex(dbname='TwitterDB')
     start = time()
     vi.createIndex(query=query)
