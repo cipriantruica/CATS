@@ -61,12 +61,15 @@ def collection_dashboard_page(name=None):
 def collection_dashboard_page2():
     print("Collecting tweets...")
     if not os.path.isfile('collection.lock'):
-        duration = int(request.form['duration'])
-        keywords = request.form['keyword_list']
-        users = request.form['user_list']
-        location = request.form['bounding_box']
-        # st = Streaming()
-        # st.collect_tweets(duration=duration,keywords=keywords,users=users,location=location)
+        st = Streaming(dbname=dbname)
+        if 'duration' in request.form.values():
+            duration = int(request.form['duration'])
+            if 'keyword_list' in request.form.values():
+                st.collect_tweets(duration=duration,keywords=request.form['keyword_list'])
+            elif 'user_list' in request.form.values():
+                st.collect_tweets(duration=duration,users=request.form['user_list'])
+            elif 'bounding_box' in request.form.values():
+                st.collect_tweets(duration=duration,location=request.form['bounding_box'])
     else:
         print("Collection: error")
     return collection_dashboard_page()
