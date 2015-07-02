@@ -58,7 +58,7 @@
 		    </form>
 
 		    <h2>Corpora being collected</h2>
-			{% if collecting_corpus %}
+			{% if not collecting_corpus %}
 				<p>No corpus being currently collected.</p>
 			{% else %}
 				<li>Collection started: {{ collecting_corpus[0] }}</li>
