@@ -21,7 +21,7 @@ class Streaming:
 
     def threadUpdate(self,filename):
         print('Importing',filename,'...')
-        filepath = 'data/'+str(filename)+'.csv'
+        filepath = 'streaming/data/'+str(filename)+'.csv'
         subprocess.call(['sh','update.sh',self.db_name,filepath])
         print('Done.')
 
@@ -32,7 +32,7 @@ class Streaming:
         lock = open("collection.lock", "w")
         lock.write(" ")
         lock.close()
-        file = open('data/'+str(nb_files)+'.csv', 'a')
+        file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
         print(open('consumer_key','r').read())
         print(open('consumer_secret','r').read())
         print(open('token','r').read())
@@ -84,7 +84,7 @@ class Streaming:
                         t.start()
                         nb_files += 1
                         nb_tweets_infile = 0
-                        file = open('data/'+str(nb_files)+'.csv', 'a')
+                        file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
                     else:
                         break
 
