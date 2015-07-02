@@ -17,7 +17,7 @@ def quote(string):
 class Streaming:
     def __init__(self, dbname='TwitterDBTest'):
         print '__init__ Streaming...'
-        db_name = dbname
+        self.db_name = dbname
 
     def threadUpdate(self,filename):
         print('Importing',filename,'...')
