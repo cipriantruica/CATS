@@ -12,12 +12,12 @@ import os, shutil
 
 tweets_per_file = 1000
 
+def quote(string):
+        return '"'+string.encode('utf-8')+'"'
+
 class Streaming:
     def __init__(self, dbname='TwitterDB'):
         print "__init__ Streaming"
-
-    def quote(string):
-        return '"'+string.encode('utf-8')+'"'
 
     def threadUpdate(filename):
         print('Importing',filename,'...')
@@ -47,8 +47,10 @@ class Streaming:
         start_date = datetime.date.today()
         end_date = start_date + datetime.timedelta(days=1)
         if keywords is not None:
+            print("keywords")
             iterator = twitter_stream.statuses.filter(track=keywords)
         elif users is not None:
+            print("users")
             iterator = twitter_stream.statuses.filter(follow=users)
         else:
             iterator = twitter_stream.statuses.filter(locations=location)
@@ -90,6 +92,6 @@ class Streaming:
 if __name__ == '__main__':
     s = Streaming(dbname='TwitterDB')
     keywords = 'obama,hollande'
-    users = '7302282'
+    users = '7302282,14857290,133663801'
     location = '-122.75,36.8,-121.75,37.8'
     s.collect_tweets(users=users)
