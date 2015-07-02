@@ -27,7 +27,7 @@ class Streaming:
 
     def collect_tweets(self,duration=1,keywords=None,users=None,locations=None):
         nb_tweets = 0
-        nb_tweets_infile = 100
+        nb_tweets_infile = 0
         nb_files = 1
         lock = open("collection.lock", "w")
         lock.write(" ")
