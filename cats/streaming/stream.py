@@ -4,57 +4,79 @@ __version__ = "0.1"
 __email__ = "adrien.guille@univ-lyon2.fr"
 __status__ = "Production"
 
-from cats import *
+from twitter import *
 import datetime
+from datetime import date, timedelta
 
-tweets_per_file = 5
+tweets_per_file = 1000
 
-def quote(string):
-    return '"'+string.encode('utf-8')+'"'
+class Streaming:
+    def __init__(self, dbname='TwitterDB'):
+        print "__init__ Streaming"
 
-def collect_tweets(keywords):
-    nb_tweets = 0
-    nb_tweets_infile = 0
-    nb_files = 1
-    file = open(str(nb_files)+'.csv', 'a')
-    print(open('consumer_key','r').read())
-    print(open('consumer_secret','r').read())
-    print(open('token','r').read())
-    print(open('token_secret','r').read())
-    auth = OAuth(
-        consumer_key=str(open('consumer_key','r').read()),
-        consumer_secret=str(open('consumer_secret','r').read()),
-        token=str(open('token','r').read()),
-        token_secret=str(open('token_secret','r').read())
-    )
-    twitter_stream = TwitterStream(auth=auth)
-    iterator = twitter_stream.statuses.filter(track=keywords)
-    for tweet in iterator:
-        if tweet.get('text'):
-            text = tweet['text']
-            text = text.replace('"',' ')
-            text = quote(text.replace('\n',' '))
-            geo = ''
-            if(tweet.get('geo')):
-                geo = tweet['geo']
-            geo = quote(geo)    
-            timestamp = quote(datetime.datetime.fromtimestamp(float(tweet['timestamp_ms'])/1000).strftime('%Y-%m-%d %H:%M:%S'))  
-            nb_tweets += 1
-            nb_tweets_infile += 1
-            description = ''
-            if(tweet['user'].get('description')):
-                description = tweet['user']['description']
-                description = description.replace('"',' ')
-                description = description.replace('\n',' ')
-            description = quote(description)
-            name = ''
-            if(tweet['user'].get('name')):
-                name = tweet['user']['name']
-            name = quote(name)
-            file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\t'+quote(tweet['lang'])+'\n')
-            if(nb_tweets_infile == tweets_per_file):
-                nb_files += 1
-                nb_tweets_infile = 0
-                file = open(str(nb_files)+'.csv', 'a')
-        
-collect_tweets('obama')
+    def quote(string):
+        return '"'+string.encode('utf-8')+'"'
+
+    def collect_tweets(duration=1,keywords=None,users=None,locations=None):
+        nb_tweets = 0
+        nb_tweets_infile = 0
+        nb_files = 1
+        file = open('data/'+str(nb_files)+'.csv', 'a')
+        print(open('consumer_key','r').read())
+        print(open('consumer_secret','r').read())
+        print(open('token','r').read())
+        print(open('token_secret','r').read())
+        auth = OAuth(
+            consumer_key=str(open('consumer_key','r').read()),
+            consumer_secret=str(open('consumer_secret','r').read()),
+            token=str(open('token','r').read()),
+            token_secret=str(open('token_secret','r').read())
+        )
+        twitter_stream = TwitterStream(auth=auth)
+        start_date = datetime.date.today()
+        end_date = start_date + datetime.timedelta(days=duration)
+        if keywords is not None:
+            iterator = twitter_stream.statuses.filter(track=keywords)
+        elif users is not None:
+            iterator = twitter_stream.statuses.filter(follow=users)
+        else:
+            iterator = twitter_stream.statuses.filter(locations=location)
+        for tweet in iterator:
+            if tweet.get('text'):
+                text = tweet['text']
+                text = text.replace('"',' ')
+                text = quote(text.replace('\n',' '))
+                geo = ''
+                if(tweet.get('geo')):
+                    geo = tweet['geo']
+                geo = quote(geo)    
+                timestamp = quote(datetime.datetime.fromtimestamp(float(tweet['timestamp_ms'])/1000).strftime('%Y-%m-%d %H:%M:%S'))
+                nb_tweets += 1
+                nb_tweets_infile += 1
+                description = ''
+                if(tweet['user'].get('description')):
+                    description = tweet['user']['description']
+                    description = description.replace('"',' ')
+                    description = description.replace('\n',' ')
+                description = quote(description)
+                name = ''
+                if(tweet['user'].get('name')):
+                    name = tweet['user']['name']
+                name = quote(name)
+                file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\t'+quote(tweet['lang'])+'\n')
+                if(nb_tweets_infile == tweets_per_file):
+                    current_date = datetime.datetime.today()
+                    if current_date <= end_date:
+                        nb_files += 1
+                        nb_tweets_infile = 0
+                        file = open('data/'+str(nb_files)+'.csv', 'a')
+                        # TODO: call the shell script in a thread to import the latest set of tweets
+                    else:
+                        break
+                    
+if __name__ == '__main__':
+    s = Streaming(dbname='TwitterDB')
+    keywords = 'obama,hollande'
+    users = ''
+    location = '-122.75,36.8,-121.75,37.8'
+    s.collect_tweets(keywords=keywords)
