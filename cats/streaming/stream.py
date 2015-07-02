@@ -33,10 +33,10 @@ class Streaming:
         lock.write(" ")
         lock.close()
         file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
-        print(open('consumer_key','r').read())
-        print(open('consumer_secret','r').read())
-        print(open('token','r').read())
-        print(open('token_secret','r').read())
+        print(open('streaming/consumer_key','r').read())
+        print(open('streaming/consumer_secret','r').read())
+        print(open('streaming/token','r').read())
+        print(open('streaming/token_secret','r').read())
         auth = OAuth(
             consumer_key=str(open('consumer_key','r').read()),
             consumer_secret=str(open('consumer_secret','r').read()),
