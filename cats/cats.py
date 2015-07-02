@@ -9,10 +9,7 @@ from indexing.vocabulary_index import VocabularyIndex
 from search_mongo import Search
 import pymongo
 from nlplib.lemmatize_text import LemmatizeText
-import re
 from indexing.ne_index import NEIndex
-import time
-import jinja2
 from mllib.train_lda import TrainLDA
 from mabed.mabed_files import MabedFiles
 import subprocess
@@ -20,6 +17,7 @@ import os, shutil
 from functools import wraps
 import threading
 import pickle
+from streaming.stream import Streaming
 
 # Connecting to the database
 client = pymongo.MongoClient()
@@ -60,6 +58,16 @@ def collection_dashboard_page(name=None):
 @app.route('/cats/collection', methods=['POST'])
 @requires_auth
 def collection_dashboard_page2():
+    print("Collecting tweets...")
+    if not os.path.isfile('collection.lock'):
+        duration = int(request.form['duration'])
+        keywords = request.form['keyword-list']
+        users = request.form['user-list']
+        location = request.form['bounding-box']
+        st = Streaming()
+        st.collect_tweets(duration=duration,keywords=keywords,users=users,location=location)
+    else:
+        print("Collection: error")
     return collection_dashboard_page()
 
 @app.route('/cats/analysis')
@@ -247,7 +255,7 @@ def threadMABED(k):
             print e
     mf = MabedFiles(dbname='TwitterDB')
     mf.buildFiles(query, filepath='/home/adrien/CATS/GitHub/CATS/cats/mabed/input/', slice=60*60)
-    result = subprocess.check_output(['java', '-jar', '/home/adrien/CATS/GitHub/CATS/cats/mabed/MABED-CATS.jar', '60', '40'])
+    result = subprocess.call(['java', '-jar', '/home/adrien/CATS/GitHub/CATS/cats/mabed/MABED-CATS.jar', '60', '40'])
     print "Done."
     os.remove('mabed.lock')
     pickle.dump(result,open("mabed_events.p","wb"))  

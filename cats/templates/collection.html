@@ -45,15 +45,16 @@
 		    
 		    <h2>New corpus</h2>
 		    <label id="duration">Duration (number of days during which tweets should be collected, example "30"): </label><br/>
-    		<input type="text" name="user" class="underlined" style="width:615px;"/><br/>
-		    <label id="filter-date" style="width: 20%;">Keyword filter (phrases of keywords are specified by a comma-separated list; example: "cat,dog"): </label><br/>		    <form action="{{ url_for('collection_dashboard_page2') }}" method="POST">
-		    <input type="text" name="keyword-list" class="underlined" style="width:615px;"/><br/>
-		    <label id="filter-keyword">Location filter (2 longitude,latitude pairs separated by specifying a bounding boxe to filter tweets by. Only geolocated Tweets falling within the requested bounding boxe will be included; example "45.740263,4.864114,45.767055,4.848559"): </label><br/>
-		    <input type="text" name="bouding-box" class="underlined" style="width:615px;"/><br/>
-		    <label id="filter-keyword">User filter (A comma separated list of user IDs, indicating the users to return statuses for in the stream; example: "43186109,113613920"): </label><br/>
-		    <input type="text" name="user-list" class="underlined" style="width:615px;"/><br/>
-		    <br/>
-		    <input type="submit" value="Collect tweets" class="button"/>
+			<form action="{{ url_for('collection_dashboard_page2') }}" method="POST">
+				<input type="text" name="collection-duration" class="underlined" style="width:615px;"/><br/>
+				<label id="filter-date" style="width: 20%;">Keyword filter (phrases of keywords are specified by a comma-separated list; example: "cat,dog"): </label><br/>
+				<input type="text" name="keyword-list" class="underlined" style="width:615px;"/><br/>
+				<label id="filter-keyword">Location filter (2 longitude,latitude pairs separated by specifying a bounding boxe to filter tweets by. Only geolocated Tweets falling within the requested bounding boxe will be included; example "45.740263,4.864114,45.767055,4.848559"): </label><br/>
+				<input type="text" name="bouding-box" class="underlined" style="width:615px;"/><br/>
+				<label id="filter-keyword">User filter (A comma separated list of user IDs, indicating the users to return statuses for in the stream; example: "43186109,113613920"): </label><br/>
+				<input type="text" name="user-list" class="underlined" style="width:615px;"/><br/>
+				<br/>
+				<input type="submit" value="Collect tweets" class="button"/>
 		    </form>
 
 		    <h2>Corpora being collected</h2>

@@ -6,7 +6,9 @@ __status__ = "Production"
 
 from twitter import *
 import datetime
-from datetime import date, timedelta
+import threading
+import subprocess
+import os, shutil
 
 tweets_per_file = 1000
 
@@ -17,10 +19,19 @@ class Streaming:
     def quote(string):
         return '"'+string.encode('utf-8')+'"'
 
+    def threadUpdate(filename):
+        print('Importing',filename,'...')
+        filepath = 'data/'+str(filename)+'.csv'
+        subprocess.call(['sh','update.sh','TwitterDBTest',filepath])
+        print('Done.')
+
     def collect_tweets(duration=1,keywords=None,users=None,locations=None):
         nb_tweets = 0
-        nb_tweets_infile = 0
+        nb_tweets_infile = 100
         nb_files = 1
+        lock = open("collection.lock", "w")
+        lock.write(" ")
+        lock.close()
         file = open('data/'+str(nb_files)+'.csv', 'a')
         print(open('consumer_key','r').read())
         print(open('consumer_secret','r').read())
@@ -34,7 +45,7 @@ class Streaming:
         )
         twitter_stream = TwitterStream(auth=auth)
         start_date = datetime.date.today()
-        end_date = start_date + datetime.timedelta(days=duration)
+        end_date = start_date + datetime.timedelta(days=1)
         if keywords is not None:
             iterator = twitter_stream.statuses.filter(track=keywords)
         elif users is not None:
@@ -67,16 +78,18 @@ class Streaming:
                 if(nb_tweets_infile == tweets_per_file):
                     current_date = datetime.datetime.today()
                     if current_date <= end_date:
+                        t = threading.Thread(target=threadUpdate, args=(nb_files,))
+                        t.start()
                         nb_files += 1
                         nb_tweets_infile = 0
                         file = open('data/'+str(nb_files)+'.csv', 'a')
-                        # TODO: call the shell script in a thread to import the latest set of tweets
                     else:
                         break
+
                     
 if __name__ == '__main__':
     s = Streaming(dbname='TwitterDB')
     keywords = 'obama,hollande'
-    users = ''
+    users = '7302282'
     location = '-122.75,36.8,-121.75,37.8'
-    s.collect_tweets(keywords=keywords)
+    s.collect_tweets(users=users)
