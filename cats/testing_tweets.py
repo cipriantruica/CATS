@@ -108,8 +108,9 @@ def main(filename, csv_delimiter = '\t', header = True, dbname = 'TwitterDB', la
     #initialize everything from the stat
     if initialize == 0:
         Documents.drop_collection()
-        populateDB(filename, csv_delimiter, header, language, dbname=dbname, mode=mode)
-        constructIndexes(dbname)
+    populateDB(filename, csv_delimiter, header, language, dbname=dbname, mode=mode)
+    constructIndexes(dbname)
+    """
     elif initialize == 1: #update the database with new documents, should work, not tested
         last_docDat = getDates()
         populateDB(filename, csv_delimiter, header, language, mode=mode)
@@ -119,6 +120,7 @@ def main(filename, csv_delimiter = '\t', header = True, dbname = 'TwitterDB', la
         if deleteDate:
             docIDs = deleteDocuments(deleteDate)
             deleteIndexes(dbname, docIDs)
+    """
 
 # this script receives 7 parameters
 # 1 - filename
