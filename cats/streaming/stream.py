@@ -13,19 +13,19 @@ import os, shutil
 tweets_per_file = 1000
 
 def quote(string):
-        return '"'+string.encode('utf-8')+'"'
+    return '"'+string.encode('utf-8')+'"'
 
 class Streaming:
-    def __init__(self, dbname='TwitterDB'):
-        print "__init__ Streaming"
+    def __init__(self, dbname='TwitterTest'):
+        db_name = dbname
 
-    def threadUpdate(filename):
+    def threadUpdate(self,filename):
         print('Importing',filename,'...')
         filepath = 'data/'+str(filename)+'.csv'
-        subprocess.call(['sh','update.sh','TwitterDBTest',filepath])
+        subprocess.call(['sh','update.sh',self.db_name,filepath])
         print('Done.')
 
-    def collect_tweets(duration=1,keywords=None,users=None,locations=None):
+    def collect_tweets(self,duration=1,keywords=None,users=None,locations=None):
         nb_tweets = 0
         nb_tweets_infile = 100
         nb_files = 1
@@ -45,7 +45,7 @@ class Streaming:
         )
         twitter_stream = TwitterStream(auth=auth)
         start_date = datetime.date.today()
-        end_date = start_date + datetime.timedelta(days=1)
+        end_date = start_date + datetime.timedelta(days=int(duration))
         if keywords is not None:
             print("keywords")
             iterator = twitter_stream.statuses.filter(track=keywords)
@@ -90,7 +90,7 @@ class Streaming:
 
                     
 if __name__ == '__main__':
-    s = Streaming(dbname='TwitterDB')
+    s = Streaming(dbname='TwitterDBTest')
     keywords = 'obama,hollande'
     users = '7302282,14857290,133663801'
     location = '-122.75,36.8,-121.75,37.8'
