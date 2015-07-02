@@ -62,9 +62,9 @@ def collection_dashboard_page2():
     print("Collecting tweets...")
     if not os.path.isfile('collection.lock'):
         duration = int(request.form['duration'])
-        keywords = request.form['keyword-list']
-        users = request.form['user-list']
-        location = request.form['bounding-box']
+        keywords = request.form['keyword_list']
+        users = request.form['user_list']
+        location = request.form['bounding_box']
         # st = Streaming()
         # st.collect_tweets(duration=duration,keywords=keywords,users=users,location=location)
     else:
