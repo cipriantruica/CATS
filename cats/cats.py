@@ -254,8 +254,8 @@ def threadMABED(k):
         except Exception, e:
             print e
     mf = MabedFiles(dbname='TwitterDB')
-    mf.buildFiles(query, filepath='/home/adrien/CATS/GitHub/CATS/cats/mabed/input/', slice=60*60)
-    result = subprocess.check_output(['java', '-jar', '/home/adrien/CATS/GitHub/CATS/cats/mabed/MABED-CATS.jar', '60', '40'])
+    mf.buildFiles(query, filepath='mabed/input/', slice=60*60)
+    result = subprocess.check_output(['java', '-jar', './mabed/MABED-CATS.jar', '60', '40'])
     print "Done."
     os.remove('mabed.lock')
     pickle.dump(result,open("mabed_events.p","wb"))  
