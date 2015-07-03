@@ -130,7 +130,7 @@ def processElement(elem, language, mode=0):
             document['geoLocation'] = elem[4].split(' ')
             # author age
             # this are the change required for the moment when we will keep age as a number
-            # age = elem[5].spit('-')
+            # age = elem[5].split('-')
             # document['age'] = int(age[1]) - int(age[0])
             document['age'] = elem[5]
 
