@@ -120,8 +120,8 @@ def processElement(elem, language, mode=0):
 
             # construct the document
             document['_id'] = elem[0]
-            document['rawText'] = elem[1]
-            document['cleanText'] = cleanText
+            document['rawText'] = elem[1].encode('utf8').encode('string_escape').replace('\r', '').replace('\n', '')
+            document['cleanText'] = cleanText.encode('utf8').encode('string_escape').replace('\r', '').replace('\n', '')
             document['lemmaText'] = lemmaText
             document['date'] = elem[2]
             document['author'] = elem[3]
