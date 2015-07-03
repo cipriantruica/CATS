@@ -84,6 +84,7 @@ def populateDatabase(elems, language='EN', dbname='TwitterDB', mode=0):
         if documents:
             db.documents.insert(documents)
 
+gender = {'male': 1, 'female': 2, 'homme': 1, 'femme': 2}
 #process one element
 def processElement(elem, language, mode=0):
     document = dict()
@@ -128,8 +129,14 @@ def processElement(elem, language, mode=0):
             # geo location [x, y]
             document['geoLocation'] = elem[4].split(' ')
             # author age
+            # this are the change required for the moment when we will keep age as a number
+            # age = elem[5].spit('-')
+            # document['age'] = int(age[1]) - int(age[0])
             document['age'] = elem[5]
-            # author gender
+
+            # this are the changes required for the moment when we will keep gender as a number
+            # author gender - 1 male, 2 female, 0 unknown
+            # document['gender'] = gender.get(elem[6], 0)
             document['gender'] = elem[6]
 
             if attags:
