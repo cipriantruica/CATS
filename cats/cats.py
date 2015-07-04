@@ -55,7 +55,7 @@ def getTweetCount():
 
 @app.route('/cats/collection')
 def collection_dashboard_page(name=None):
-    print dbname
+    print dbname, can_collect_tweets
     if can_collect_tweets and os.path.isfile('collection.lock'):
         lock = open('collection.lock','r').read()
         corpus_info = lock.split(';')
@@ -66,7 +66,6 @@ def collection_dashboard_page(name=None):
 @app.route('/cats/collection', methods=['POST'])
 @requires_auth
 def collection_dashboard_page2():
-    print("Collecting tweets...")
     if not os.path.isfile('collection.lock'):
         if 'duration' in request.form.values():
             duration = int(request.form['duration'])
@@ -86,8 +85,6 @@ def collection_dashboard_page2():
             location = None
         t = threading.Thread(target=threadCollection, args=(duration,keywords,users,location,))
         t.start()
-    else:
-        print("Already collecting a corpus")
     return collection_dashboard_page()
 
 def threadCollection(duration,keywords,users,location):

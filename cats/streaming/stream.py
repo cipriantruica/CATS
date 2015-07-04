@@ -53,7 +53,7 @@ class Streaming:
             lock.write(str(datetime.date.today())+';'+duration+';None;None;'+location)
             iterator = twitter_stream.statuses.filter(locations=location)
         else:
-            lock.write(str(datetime.date.today())+';None;None;None;None')
+            lock.write(str(datetime.date.today())+';'+duration+';None;None;None')
             iterator = twitter_stream.statuses.sample()
         lock.close()
         for tweet in iterator:
