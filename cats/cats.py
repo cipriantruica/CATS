@@ -67,23 +67,22 @@ def collection_dashboard_page(name=None):
 @requires_auth
 def collection_dashboard_page2():
     if can_collect_tweets and not os.path.isfile('collection.lock'):
-        if 'duration' in request.form.values():
-            duration = int(request.form['duration'])
+        if request.form.get('duration'):
+            duration = int(request.form.get('duration'))
         else:
-            duration=1
-        if 'keyword_list' in request.form.values():
-            keywords = request.form['keyword_list']
+            duration = 1
+        if request.form.get('keyword_list'):
+            keywords = request.form.get('keyword_list')
         else:
-            keywords = None
-        if 'user_list' in request.form.values():
-            users = request.form['user_list']
+            keywords = ""
+        if request.form.get('user_list'):
+            users = request.form.get('user_list')
         else:
-            users = None
-        if 'bounding_box' in request.form.values():
-            location = request.form['bounding_box']
+            users = ""
+        if request.form.get('bounding_box'):
+            location = request.form.get('bounding_box')
         else:
-            location = None
-        print keywords,users,location
+            location = ""
         t = threading.Thread(target=threadCollection, args=(duration,keywords,users,location,))
         t.start()
     return collection_dashboard_page()

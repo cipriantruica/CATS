@@ -40,15 +40,15 @@ class Streaming:
         start_date = datetime.date.today()
         end_date = start_date + datetime.timedelta(days=int(duration))
         lock = open("collection.lock", "w")
-        if keywords is not None:
+        if keywords != "":
             print("keywords")
             lock.write(str(datetime.date.today())+';'+str(duration)+';'+keywords+';None;None')
             iterator = twitter_stream.statuses.filter(track=keywords)
-        elif users is not None:
+        elif users != "":
             print("users")
             lock.write(str(datetime.date.today())+';'+str(duration)+';None;',users+';None')
             iterator = twitter_stream.statuses.filter(follow=users)
-        elif location is not None:
+        elif location != "":
             print("location")
             lock.write(str(datetime.date.today())+';'+str(duration)+';None;None;'+location)
             iterator = twitter_stream.statuses.filter(locations=location)
