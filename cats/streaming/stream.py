@@ -16,7 +16,6 @@ def quote(string):
 
 class Streaming:
     def __init__(self, dbname='TwitterDBTest'):
-        print '__init__ Streaming...'
         self.db_name = dbname
 
     def threadUpdate(self,filename):
@@ -50,9 +49,11 @@ class Streaming:
             lock.write(str(datetime.date.today())+';'+str(duration)+';None;',users+';None')
             iterator = twitter_stream.statuses.filter(follow=users)
         elif location is not None:
+            print("location")
             lock.write(str(datetime.date.today())+';'+str(duration)+';None;None;'+location)
             iterator = twitter_stream.statuses.filter(locations=location)
         else:
+            print("sample")
             lock.write(str(datetime.date.today())+';'+str(duration)+';None;None;None')
             iterator = twitter_stream.statuses.sample()
         lock.close()
