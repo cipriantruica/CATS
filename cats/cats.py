@@ -22,6 +22,9 @@ import sys
 
 # Connecting to the database
 client = pymongo.MongoClient()
+dbname = 'TwitterDB'
+db = client[dbname]
+can_collect_tweets = False
 
 app = Flask(__name__)
 
@@ -312,18 +315,13 @@ def browseEvents():
         
 if __name__ == '__main__':
     arg = sys.argv
-    global dbname
-    global can_collect_tweets
-    global db
     if(arg[1] == 'demo'):
         app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5000)
         dbname = 'TwitterDB'
-        db = client[dbname]
         can_collect_tweets = False
     if(arg[1] == 'geriico'):
         app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5001)
         dbname = 'TwitterGERiiCO'
-        db = client[dbname]
         can_collect_tweets = True
     # run local
     # app.run(debug=True,host='127.0.0.1')
