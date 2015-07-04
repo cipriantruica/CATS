@@ -111,8 +111,7 @@ class VocabularyIndex:
         client = pymongo.MongoClient()
         self.db = client[dbname]
     
-    def createIndex(self, query = None):
-        print query
+    def createIndex(self, query=None):
         if query:
             self.db.vocabulary_query.drop()
 
@@ -138,14 +137,13 @@ class VocabularyIndex:
             self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", sort={'words.word': 1})
             self.db.eval(functionCreate)
 
-    #update index after docunemts are added
+    # update index after docunemts are added
     def updateIndex(self, startDate):
         query = {"createdAt": {"$gt": startDate } }
         self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", query = query)
         self.db.eval(functionUpdate)
 
-
-    #docIDs - list of documents
+    # docIDs - list of documents
     def deleteIndex(self, docIDs):
         self.db.vocabulary.update({}, {"$pull": {"docIDs": {"docID": {"$in": docIDs}}}}, multi=True)
         self.db.vocabulary.remove({"docIDs": {"$size": 0}}, multi=True )
