@@ -18,6 +18,7 @@ from functools import wraps
 import threading
 import pickle
 from streaming.stream import Streaming
+import sys
 
 # Connecting to the database
 client = pymongo.MongoClient()
@@ -88,7 +89,7 @@ def collection_dashboard_page2():
     return collection_dashboard_page()
 
 def threadCollection(duration,keywords,users,location):
-    s = Streaming(dbname='TwitterDBTest')
+    s = Streaming(dbname=dbname)
     s.collect_tweets(duration=duration,keywords=keywords,users=users,location=location)
 
 @app.route('/cats/analysis')
@@ -313,6 +314,11 @@ def browseEvents():
         return render_template('unavailable.html',method_name='MABED')
         
 if __name__ == '__main__':
-    app.run(debug=True,host='mediamining.univ-lyon2.fr')
+    arg = sys.argv
+    if(arg[0] == 'demo'):
+        app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5000)
+    if(arg[0] == 'geriico'):
+        app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5001)
+        dbname = 'TwitterGERiiCO'
     # run local
     # app.run(debug=True,host='127.0.0.1')

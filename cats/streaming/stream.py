@@ -29,6 +29,7 @@ class Streaming:
         nb_tweets = 0
         nb_tweets_infile = 0
         nb_files = 1
+        last_import_day = datetime.now().day
         file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
         auth = OAuth(
             consumer_key=str(open('streaming/consumer_key','r').read()),
@@ -79,18 +80,19 @@ class Streaming:
                 name = quote(name)
                 file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\n')
                 # language: +'\t'+quote(tweet['lang'].upper())+'\n')
-                if(nb_tweets_infile == tweets_per_file):
-                    current_date = datetime.date.today()
-                    if current_date <= end_date:
-                        t = threading.Thread(target=self.threadUpdate, args=(nb_files,))
-                        t.start()
-                        nb_files += 1
-                        nb_tweets_infile = 0
-                        file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
-                    else:
-                        break
+                if(datetime.now().hour == 0):
+                    if(not datetime.now().day == last_import_day):
+                        last_import_day = not datetime.now().day
+                        current_date = datetime.date.today()
+                        if current_date <= end_date:
+                            t = threading.Thread(target=self.threadUpdate, args=(nb_files,))
+                            t.start()
+                            nb_files += 1
+                            nb_tweets_infile = 0
+                            file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
+                        else:
+                            break
 
-                    
 if __name__ == '__main__':
     s = Streaming(dbname='TwitterDBTest')
     keywords = 'obama,hollande'
