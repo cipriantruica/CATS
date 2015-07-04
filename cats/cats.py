@@ -24,6 +24,7 @@ import sys
 client = pymongo.MongoClient()
 dbname = 'TwitterDB'
 db = client[dbname]
+can_collect_tweets = False
 
 app = Flask(__name__)
 
@@ -54,7 +55,8 @@ def getTweetCount():
 
 @app.route('/cats/collection')
 def collection_dashboard_page(name=None):
-    if os.path.isfile('collection.lock'):
+    print dbname
+    if can_collect_tweets and os.path.isfile('collection.lock'):
         lock = open('collection.lock','r').read()
         corpus_info = lock.split(';')
         return render_template('collection.html', collecting_corpus=corpus_info)
@@ -95,6 +97,7 @@ def threadCollection(duration,keywords,users,location):
 @app.route('/cats/analysis')
 @requires_auth
 def analysis_dashboard_page(name=None):
+    print dbname
     tweetCount = getTweetCount()
     dates = ""
     keys = ""
@@ -315,11 +318,11 @@ def browseEvents():
         
 if __name__ == '__main__':
     arg = sys.argv
-    print(str(arg))
     if(arg[1] == 'demo'):
         app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5000)
     if(arg[1] == 'geriico'):
         app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5001)
         dbname = 'TwitterGERiiCO'
+        can_collect_tweets = True
     # run local
     # app.run(debug=True,host='127.0.0.1')
