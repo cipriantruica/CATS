@@ -314,14 +314,8 @@ def browseEvents():
         return render_template('unavailable.html',method_name='MABED')
         
 if __name__ == '__main__':
-    arg = sys.argv
-    if(arg[1] == 'demo'):
-        app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5000)
-        dbname = 'TwitterDB'
-        can_collect_tweets = False
-    if(arg[1] == 'geriico'):
-        app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5001)
-        dbname = 'TwitterGERiiCO'
-        can_collect_tweets = True
-    # run local
-    # app.run(debug=True,host='127.0.0.1')
+    # Demo
+     app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5000)
+    # GERiiCO
+    # Change dbname to TwitterGERiiCO and can_collect_tweets to True
+    # app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5001)
