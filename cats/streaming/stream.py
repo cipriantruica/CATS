@@ -43,17 +43,17 @@ class Streaming:
         lock = open("collection.lock", "w")
         if keywords is not None:
             print("keywords")
-            lock.write(str(datetime.date.today())+';'+duration+';'+keywords+';None;None')
+            lock.write(str(datetime.date.today())+';'+str(duration)+';'+keywords+';None;None')
             iterator = twitter_stream.statuses.filter(track=keywords)
         elif users is not None:
             print("users")
-            lock.write(str(datetime.date.today())+';'+duration+';None;',users+';None')
+            lock.write(str(datetime.date.today())+';'+str(duration)+';None;',users+';None')
             iterator = twitter_stream.statuses.filter(follow=users)
         elif location is not None:
-            lock.write(str(datetime.date.today())+';'+duration+';None;None;'+location)
+            lock.write(str(datetime.date.today())+';'+str(duration)+';None;None;'+location)
             iterator = twitter_stream.statuses.filter(locations=location)
         else:
-            lock.write(str(datetime.date.today())+';'+duration+';None;None;None')
+            lock.write(str(datetime.date.today())+';'+str(duration)+';None;None;None')
             iterator = twitter_stream.statuses.sample()
         lock.close()
         for tweet in iterator:
