@@ -80,7 +80,7 @@ class Streaming:
                 name = quote(name)
                 file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\n')
                 # language: +'\t'+quote(tweet['lang'].upper())+'\n')
-                if(datetime.now().hour == 0):
+                if(datetime.datetime.now().hour == 0):
                     if(not datetime.now().day == last_import_day):
                         last_import_day = datetime.datetime.now().day
                         current_date = datetime.date.today()
