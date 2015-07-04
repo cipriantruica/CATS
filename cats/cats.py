@@ -66,7 +66,7 @@ def collection_dashboard_page(name=None):
 @app.route('/cats/collection', methods=['POST'])
 @requires_auth
 def collection_dashboard_page2():
-    if not os.path.isfile('collection.lock'):
+    if can_collect_tweets and not os.path.isfile('collection.lock'):
         if 'duration' in request.form.values():
             duration = int(request.form['duration'])
         else:
