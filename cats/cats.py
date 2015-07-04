@@ -319,7 +319,9 @@ if __name__ == '__main__':
         app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5000)
     if(arg[1] == 'geriico'):
         app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5001)
+        global dbname
         dbname = 'TwitterGERiiCO'
+        global can_collect_tweets
         can_collect_tweets = True
     # run local
     # app.run(debug=True,host='127.0.0.1')
