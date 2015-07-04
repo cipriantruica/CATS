@@ -29,7 +29,7 @@ class Streaming:
         nb_tweets = 0
         nb_tweets_infile = 0
         nb_files = 1
-        last_import_day = datetime.now().day
+        last_import_day = datetime.datetime.now().day
         file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
         auth = OAuth(
             consumer_key=str(open('streaming/consumer_key','r').read()),
@@ -82,7 +82,7 @@ class Streaming:
                 # language: +'\t'+quote(tweet['lang'].upper())+'\n')
                 if(datetime.now().hour == 0):
                     if(not datetime.now().day == last_import_day):
-                        last_import_day = datetime.now().day
+                        last_import_day = datetime.datetime.now().day
                         current_date = datetime.date.today()
                         t = threading.Thread(target=self.threadUpdate, args=(nb_files,))
                         t.start()
