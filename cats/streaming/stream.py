@@ -16,7 +16,6 @@ def quote(string):
 
 class Streaming:
     def __init__(self, dbname='TwitterDBTest'):
-        print '__init__ Streaming...'
         self.db_name = dbname
 
     def threadUpdate(self,filename):
@@ -29,6 +28,7 @@ class Streaming:
         nb_tweets = 0
         nb_tweets_infile = 0
         nb_files = 1
+        last_import_day = datetime.datetime.now().day
         file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
         auth = OAuth(
             consumer_key=str(open('streaming/consumer_key','r').read()),
@@ -40,19 +40,21 @@ class Streaming:
         start_date = datetime.date.today()
         end_date = start_date + datetime.timedelta(days=int(duration))
         lock = open("collection.lock", "w")
-        if keywords is not None:
+        if keywords != "":
             print("keywords")
-            lock.write(str(datetime.date.today())+';'+duration+';'+keywords+';None;None')
+            lock.write(str(datetime.date.today())+';'+str(duration)+';'+keywords+';None;None')
             iterator = twitter_stream.statuses.filter(track=keywords)
-        elif users is not None:
+        elif users != "":
             print("users")
-            lock.write(str(datetime.date.today())+';'+duration+';None;',users+';None')
+            lock.write(str(datetime.date.today())+';'+str(duration)+';None;',users+';None')
             iterator = twitter_stream.statuses.filter(follow=users)
-        elif location is not None:
-            lock.write(str(datetime.date.today())+';'+duration+';None;None;'+location)
+        elif location != "":
+            print("location")
+            lock.write(str(datetime.date.today())+';'+str(duration)+';None;None;'+location)
             iterator = twitter_stream.statuses.filter(locations=location)
         else:
-            lock.write(str(datetime.date.today())+';None;None;None;None')
+            print("sample")
+            lock.write(str(datetime.date.today())+';'+str(duration)+';None;None;None')
             iterator = twitter_stream.statuses.sample()
         lock.close()
         for tweet in iterator:
@@ -77,19 +79,21 @@ class Streaming:
                 if(tweet['user'].get('name')):
                     name = tweet['user']['name']
                 name = quote(name)
-                file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\t'+quote(tweet['lang'])+'\n')
-                if(nb_tweets_infile == tweets_per_file):
-                    current_date = datetime.date.today()
-                    if current_date <= end_date:
+                file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\n')
+                # language: +'\t'+quote(tweet['lang'].upper())+'\n')
+                if(datetime.datetime.now().hour == 0):
+                    if(not datetime.now().day == last_import_day):
+                        last_import_day = datetime.datetime.now().day
+                        current_date = datetime.date.today()
                         t = threading.Thread(target=self.threadUpdate, args=(nb_files,))
                         t.start()
-                        nb_files += 1
-                        nb_tweets_infile = 0
-                        file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
-                    else:
-                        break
+                        if current_date <= end_date:
+                            nb_files += 1
+                            nb_tweets_infile = 0
+                            file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
+                        else:
+                            break
 
-                    
 if __name__ == '__main__':
     s = Streaming(dbname='TwitterDBTest')
     keywords = 'obama,hollande'

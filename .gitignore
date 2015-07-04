@@ -10,3 +10,5 @@ cats/streaming/collection.lock
 *.xml
 
 .idea/workspace.xml
+
+*.iml

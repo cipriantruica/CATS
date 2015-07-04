@@ -18,11 +18,13 @@ from functools import wraps
 import threading
 import pickle
 from streaming.stream import Streaming
+import sys
 
 # Connecting to the database
 client = pymongo.MongoClient()
 dbname = 'TwitterDB'
 db = client[dbname]
+can_collect_tweets = False
 
 app = Flask(__name__)
 
@@ -53,7 +55,8 @@ def getTweetCount():
 
 @app.route('/cats/collection')
 def collection_dashboard_page(name=None):
-    if os.path.isfile('collection.lock'):
+    print dbname, can_collect_tweets
+    if can_collect_tweets and os.path.isfile('collection.lock'):
         lock = open('collection.lock','r').read()
         corpus_info = lock.split(';')
         return render_template('collection.html', collecting_corpus=corpus_info)
@@ -63,37 +66,35 @@ def collection_dashboard_page(name=None):
 @app.route('/cats/collection', methods=['POST'])
 @requires_auth
 def collection_dashboard_page2():
-    print("Collecting tweets...")
-    if not os.path.isfile('collection.lock'):
-        if 'duration' in request.form.values():
-            duration = int(request.form['duration'])
+    if can_collect_tweets and not os.path.isfile('collection.lock'):
+        if request.form.get('duration'):
+            duration = int(request.form.get('duration'))
         else:
-            duration=1
-        if 'keyword_list' in request.form.values():
-            keywords = request.form['keyword_list']
+            duration = 1
+        if request.form.get('keyword_list'):
+            keywords = request.form.get('keyword_list')
         else:
-            keywords = None
-        if 'user_list' in request.form.values():
-            users = request.form['user_list']
+            keywords = ""
+        if request.form.get('user_list'):
+            users = request.form.get('user_list')
         else:
-            users = None
-        if 'bounding_box' in request.form.values():
-            location = location=request.form['bounding_box']
+            users = ""
+        if request.form.get('bounding_box'):
+            location = request.form.get('bounding_box')
         else:
-            location = None
+            location = ""
         t = threading.Thread(target=threadCollection, args=(duration,keywords,users,location,))
         t.start()
-    else:
-        print("Already collecting a corpus")
     return collection_dashboard_page()
 
 def threadCollection(duration,keywords,users,location):
-    s = Streaming(dbname='TwitterDBTest')
+    s = Streaming(dbname=dbname)
     s.collect_tweets(duration=duration,keywords=keywords,users=users,location=location)
 
 @app.route('/cats/analysis')
 @requires_auth
 def analysis_dashboard_page(name=None):
+    print dbname
     tweetCount = getTweetCount()
     dates = ""
     keys = ""
@@ -313,6 +314,8 @@ def browseEvents():
         return render_template('unavailable.html',method_name='MABED')
         
 if __name__ == '__main__':
-    app.run(debug=True,host='mediamining.univ-lyon2.fr')
-    # run local
-    # app.run(debug=True,host='127.0.0.1')
+    # Demo
+     app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5000)
+    # GERiiCO
+    # Change dbname to TwitterGERiiCO and can_collect_tweets to True
+    # app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5001)
