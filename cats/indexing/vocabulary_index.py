@@ -41,7 +41,7 @@ functionCreate = """function(){
                         }
                         db.vocabulary.insert(documents);
                         db.vocabulary.ensureIndex({'idf':1});
-                        db.temp_collection.drop();
+                        //db.temp_collection.drop();
                     }"""
 
 functionCreateQuery = """function(query){
@@ -58,7 +58,7 @@ functionCreateQuery = """function(query){
                         }
                         db.vocabulary_query.insert(documents);
                         db.vocabulary_query.ensureIndex({'idf':1});
-                        db.temp_collection.drop();
+                        //db.temp_collection.drop();
                     }"""
 
 functionUpdate = """
@@ -112,6 +112,7 @@ class VocabularyIndex:
         self.db = client[dbname]
     
     def createIndex(self, query=None):
+        self.db.documents.ensure_index([('words.word', pymongo.ASCENDING)])
         if query:
             self.db.vocabulary_query.drop()
 
@@ -131,11 +132,11 @@ class VocabularyIndex:
             """
             self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", query=query, sort={'words.word': 1})
             self.db.eval(functionCreateQuery, query)
-
         else:
             self.db.vocabulary.drop()
             self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", sort={'words.word': 1})
-            self.db.eval(functionCreate)
+            # self.db.eval(functionCreate)
+            self.db.eval(functionCreateQuery, {})
 
     # update index after docunemts are added
     def updateIndex(self, startDate):

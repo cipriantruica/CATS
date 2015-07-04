@@ -106,9 +106,9 @@ def main(filename, csv_delimiter = '\t', header = True, dbname = 'TwitterDB', la
     connectDB(dbname)
     print mode
     #initialize everything from the stat
-    if initialize == 0:
-        Documents.drop_collection()
-    populateDB(filename, csv_delimiter, header, language, dbname=dbname, mode=mode)
+    # if initialize == 0:
+    #     Documents.drop_collection()
+    # populateDB(filename, csv_delimiter, header, language, dbname=dbname, mode=mode)
     constructIndexes(dbname)
     """
     elif initialize == 1: #update the database with new documents, should work, not tested
