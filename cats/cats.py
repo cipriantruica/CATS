@@ -80,9 +80,10 @@ def collection_dashboard_page2():
         else:
             users = None
         if 'bounding_box' in request.form.values():
-            location = location=request.form['bounding_box']
+            location = request.form['bounding_box']
         else:
             location = None
+        print keywords,users,location
         t = threading.Thread(target=threadCollection, args=(duration,keywords,users,location,))
         t.start()
     return collection_dashboard_page()
