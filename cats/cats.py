@@ -315,6 +315,7 @@ def browseEvents():
         
 if __name__ == '__main__':
     arg = sys.argv
+    print(str(arg))
     if(arg[0] == 'demo'):
         app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5000)
     if(arg[0] == 'geriico'):
