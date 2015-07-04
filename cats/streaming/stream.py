@@ -77,7 +77,8 @@ class Streaming:
                 if(tweet['user'].get('name')):
                     name = tweet['user']['name']
                 name = quote(name)
-                file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\t'+quote(tweet['lang'])+'\n')
+                file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\n')
+                # language: +'\t'+quote(tweet['lang'].upper())+'\n')
                 if(nb_tweets_infile == tweets_per_file):
                     current_date = datetime.date.today()
                     if current_date <= end_date:
