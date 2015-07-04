@@ -82,11 +82,11 @@ class Streaming:
                 # language: +'\t'+quote(tweet['lang'].upper())+'\n')
                 if(datetime.now().hour == 0):
                     if(not datetime.now().day == last_import_day):
-                        last_import_day = not datetime.now().day
+                        last_import_day = datetime.now().day
                         current_date = datetime.date.today()
+                        t = threading.Thread(target=self.threadUpdate, args=(nb_files,))
+                        t.start()
                         if current_date <= end_date:
-                            t = threading.Thread(target=self.threadUpdate, args=(nb_files,))
-                            t.start()
                             nb_files += 1
                             nb_tweets_infile = 0
                             file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
