@@ -156,13 +156,14 @@ if __name__ == '__main__':
     query = dict()
     # query['gender'] = 'homme'
     query["words.word"] = {"$in": ['cat', 'dog'] }
-    vi = VocabularyIndex(dbname='OLAPDB')
+    #vi = VocabularyIndex(dbname='OLAPDB')
+    vi = VocabularyIndex(dbname='TwitterDB_test')
     print "Starting Create Index without query..."
     start = time()
     vi.createIndex(query={})
     end = time()
-    # print "Starting Create Index with query...", query
-    # start = time()
-    # vi.createIndex(query=query)
-    # end = time()
-    # print "time:", (end-start)
+    print "Starting Create Index with query...", query
+    start = time()
+    vi.createIndex(query=query)
+    end = time()
+    print "time:", (end-start)
