@@ -21,7 +21,10 @@ class Streaming:
     def threadUpdate(self,filename):
         print('Importing',filename,'...')
         filepath = 'streaming/data/'+str(filename)+'.csv'
-        subprocess.call(['sh','update.sh',self.db_name,filepath])
+        if filename == 1:
+            subprocess.call(['sh','stream_update.sh',self.db_name,filepath])
+        else:
+            subprocess.call(['sh','stream_run.sh',self.db_name,filepath])
         print('Done.')
 
     def collect_tweets(self,duration=1,keywords=None,users=None,location=None):
@@ -79,10 +82,10 @@ class Streaming:
                 if(tweet['user'].get('name')):
                     name = tweet['user']['name']
                 name = quote(name)
-                file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\n')
-                # language: +'\t'+quote(tweet['lang'].upper())+'\n')
+                file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\t'+quote(tweet['lang'].upper())+'\n')
                 if(datetime.datetime.now().hour == 0):
-                    if(not datetime.now().day == last_import_day):
+                    # if(not datetime.now().day == last_import_day):
+                    if nb_tweets_infile == tweets_per_file:
                         last_import_day = datetime.datetime.now().day
                         current_date = datetime.date.today()
                         t = threading.Thread(target=self.threadUpdate, args=(nb_files,))
