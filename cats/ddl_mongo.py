@@ -94,53 +94,56 @@ def processElement(elem, language, mode=0):
     else:
         lang = language
     # get clean text
-    cleanText, hashtags, attags = ct.cleanText(elem[1], lang)
-    # if clean text exists
-    if len(ct.removePunctuation(cleanText)) > 0:
-        # extract lemmas and part of speech
-        lemmas = LemmatizeText(rawText=ct.removePunctuation(cleanText), language=lang, mode=mode)
-        lemmas.createLemmaText()
-        lemmaText = lemmas.cleanText
-        if lemmaText and lemmaText != " ":
-            lemmas.createLemmas()
-            words = []
-            for w in lemmas.wordList:
-                word = dict()
-                word['word'] = w.word
-                word['tf'] = w.tf
-                word['count'] = w.count
-                word['pos'] = w.wtype
-                words.append(word)
+    try:
+        cleanText, hashtags, attags = ct.cleanText(elem[1], lang)
+        # if clean text exists
+        if len(ct.removePunctuation(cleanText)) > 0:
+            # extract lemmas and part of speech
+            lemmas = LemmatizeText(rawText=ct.removePunctuation(cleanText), language=lang, mode=mode)
+            lemmas.createLemmaText()
+            lemmaText = lemmas.cleanText
+            if lemmaText and lemmaText != " ":
+                lemmas.createLemmas()
+                words = []
+                for w in lemmas.wordList:
+                    word = dict()
+                    word['word'] = w.word
+                    word['tf'] = w.tf
+                    word['count'] = w.count
+                    word['pos'] = w.wtype
+                    words.append(word)
 
-            # named entities:
-            ner = NamedEntitiesRegonizer(text=cleanText, language=lang)
-            ner.createNamedEntities()
-            if ner.ner:
-                document['namedEntities'] = ner.ner
+                # named entities:
+                ner = NamedEntitiesRegonizer(text=cleanText, language=lang)
+                ner.createNamedEntities()
+                if ner.ner:
+                    document['namedEntities'] = ner.ner
 
-            # construct the document
-            document['_id'] = elem[0]
-            document['rawText'] = elem[1].encode('utf8').encode('string_escape').replace('\r', '').replace('\n', '')
-            document['cleanText'] = cleanText.encode('utf8').encode('string_escape').replace('\r', '').replace('\n', '')
-            document['lemmaText'] = lemmaText
-            document['date'] = elem[2]
-            document['author'] = elem[3]
-            document['words'] = words
-            # geo location [x, y]
-            document['geoLocation'] = elem[4].split(' ')
-            # author age
-            # this are the change required for the moment when we will keep age as a number
-            # age = elem[5].split('-')
-            # document['age'] = int(age[1]) - int(age[0])
-            document['age'] = elem[5]
+                # construct the document
+                document['_id'] = elem[0]
+                document['rawText'] = elem[1].encode('utf8').encode('string_escape').replace('\r', '').replace('\n', '')
+                document['cleanText'] = cleanText.encode('utf8').encode('string_escape').replace('\r', '').replace('\n', '')
+                document['lemmaText'] = lemmaText
+                document['date'] = elem[2]
+                document['author'] = elem[3]
+                document['words'] = words
+                # geo location [x, y]
+                document['geoLocation'] = elem[4].split(' ')
+                # author age
+                # this are the change required for the moment when we will keep age as a number
+                # age = elem[5].split('-')
+                # document['age'] = int(age[1]) - int(age[0])
+                document['age'] = elem[5]
 
-            # this are the changes required for the moment when we will keep gender as a number
-            # author gender - 1 male, 2 female, 0 unknown
-            # document['gender'] = gender.get(elem[6], 0)
-            document['gender'] = elem[6]
+                # this are the changes required for the moment when we will keep gender as a number
+                # author gender - 1 male, 2 female, 0 unknown
+                # document['gender'] = gender.get(elem[6], 0)
+                document['gender'] = elem[6]
 
-            if attags:
-                document['attags'] = attags
-            if hashtags:
-                document['hashtags'] = hashtags
+                if attags:
+                    document['attags'] = attags
+                if hashtags:
+                    document['hashtags'] = hashtags
+    except Exception as e:
+        print e
     return document
