@@ -152,7 +152,7 @@ if __name__ == '__main__':
     # print "time:", (end-start)
 
     # testing for OLAPDB
-    query['authors.genderid'] = '1'
+    query['authors.genderid'] = 1
     # query["words.word"] = {"$in": ['cat', 'dog'] }
     print "Starting initializing class..."
     start = time()
