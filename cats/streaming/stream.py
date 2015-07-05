@@ -9,7 +9,7 @@ import datetime
 import threading
 import subprocess
 
-tweets_per_file = 1000
+tweets_per_file = 500
 
 def quote(string):
     return '"'+string.encode('utf-8')+'"'
@@ -22,12 +22,12 @@ class Streaming:
         print('Importing',filename,'...')
         filepath = 'streaming/data/'+str(filename)+'.csv'
         if filename == 1:
-            subprocess.call(['sh','stream_update.sh',self.db_name,filepath])
-        else:
             subprocess.call(['sh','stream_run.sh',self.db_name,filepath])
+        else:
+            subprocess.call(['sh','stream_update.sh',self.db_name,filepath])
         print('Done.')
 
-    def collect_tweets(self,duration=1,keywords=None,users=None,location=None):
+    def collect_tweets(self, duration=1, keys=None, follow=None, loc=None):
         nb_tweets = 0
         nb_tweets_infile = 0
         nb_files = 1
@@ -43,18 +43,18 @@ class Streaming:
         start_date = datetime.date.today()
         end_date = start_date + datetime.timedelta(days=int(duration))
         lock = open("collection.lock", "w")
-        if keywords != "":
+        if keys != "":
             print("keywords")
-            lock.write(str(datetime.date.today())+';'+str(duration)+';'+keywords+';None;None')
-            iterator = twitter_stream.statuses.filter(track=keywords)
-        elif users != "":
+            lock.write(str(datetime.date.today())+';'+str(duration)+';'+keys+';None;None')
+            iterator = twitter_stream.statuses.filter(track=keys)
+        elif follow != "":
             print("users")
-            lock.write(str(datetime.date.today())+';'+str(duration)+';None;',users+';None')
-            iterator = twitter_stream.statuses.filter(follow=users)
-        elif location != "":
+            lock.write(str(datetime.date.today())+';'+str(duration)+';None;',follow+';None')
+            iterator = twitter_stream.statuses.filter(follow=follow)
+        elif loc != "":
             print("location")
-            lock.write(str(datetime.date.today())+';'+str(duration)+';None;None;'+location)
-            iterator = twitter_stream.statuses.filter(locations=location)
+            lock.write(str(datetime.date.today())+';'+str(duration)+';None;None;'+loc)
+            iterator = twitter_stream.statuses.filter(locations=loc)
         else:
             print("sample")
             lock.write(str(datetime.date.today())+';'+str(duration)+';None;None;None')
@@ -102,4 +102,4 @@ if __name__ == '__main__':
     keywords = 'obama,hollande'
     users = '7302282,14857290,133663801'
     location = '-122.75,36.8,-121.75,37.8'
-    s.collect_tweets(keywords=keywords)
+    s.collect_tweets(keys=keywords)

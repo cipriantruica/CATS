@@ -67,8 +67,8 @@ def collection_dashboard_page(name=None):
 @requires_auth
 def collection_dashboard_page2():
     if can_collect_tweets and not os.path.isfile('collection.lock'):
-        if request.form.get('duration'):
-            duration = int(request.form.get('duration'))
+        if request.form.get('collection_duration'):
+            duration = int(request.form.get('collection_duration'))
         else:
             duration = 1
         if request.form.get('keyword_list'):
@@ -89,7 +89,7 @@ def collection_dashboard_page2():
 
 def threadCollection(duration,keywords,users,location):
     s = Streaming(dbname=dbname)
-    s.collect_tweets(duration=duration,keywords=keywords,users=users,location=location)
+    s.collect_tweets(duration=duration, keys=keywords, follow=users, loc=location)
 
 @app.route('/cats/analysis')
 @requires_auth
