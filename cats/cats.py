@@ -18,7 +18,7 @@ from functools import wraps
 import threading
 import pickle
 from streaming.stream import Streaming
-import sys
+import datetime
 
 # Connecting to the database
 client = pymongo.MongoClient()
@@ -67,25 +67,33 @@ def collection_dashboard_page(name=None):
 @requires_auth
 def collection_dashboard_page2():
     if can_collect_tweets and not os.path.isfile('collection.lock'):
+        lock = open("collection.lock", "w")
         if request.form.get('collection_duration'):
             duration = int(request.form.get('collection_duration'))
         else:
             duration = 1
         if request.form.get('keyword_list'):
             keywords = request.form.get('keyword_list')
+            lock.write(str(datetime.date.today())+';'+str(duration)+';'+keywords+';None;None')
         else:
             keywords = ""
         if request.form.get('user_list'):
             users = request.form.get('user_list')
+            lock.write(str(datetime.date.today())+';'+str(duration)+';None;'+users+';None')
         else:
             users = ""
         if request.form.get('bounding_box'):
             location = request.form.get('bounding_box')
+            lock.write(str(datetime.date.today())+';'+str(duration)+';None;None;'+location)
         else:
             location = ""
+        lock.close()
         t = threading.Thread(target=threadCollection, args=(duration,keywords,users,location,))
         t.start()
-    return collection_dashboard_page()
+        lock = open('collection.lock','r').read()
+        corpus_info = lock.split(';')
+        return render_template('collecting.html', collecting_corpus=corpus_info)
+    return render_template('collecting.html')
 
 def threadCollection(duration,keywords,users,location):
     s = Streaming(dbname=dbname)
