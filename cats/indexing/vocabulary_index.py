@@ -112,9 +112,9 @@ class VocabularyIndex:
     def __init__(self, dbname):
         client = pymongo.MongoClient()
         self.db = client[dbname]
+        self.db.documents.ensure_index([('words.word', pymongo.ASCENDING)])
     
     def createIndex(self, query=None):
-        # self.db.documents.ensure_index([('words.word', pymongo.ASCENDING)])
         if query:
             self.db.vocabulary_query.drop()
 
@@ -132,11 +132,11 @@ class VocabularyIndex:
                 old code:
                 - do map reduce on the entire collection with query
             """
-            self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", query=query)#, sort={'words.word': 1})
+            self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", query=query, sort={'words.word': 1})
             self.db.eval(functionCreateQuery, query)
         else:
             self.db.vocabulary.drop()
-            self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection")#, sort={'words.word': 1})
+            self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", sort={'words.word': 1})
             self.db.eval(functionCreate)
 
     # update index after docunemts are added
@@ -157,11 +157,16 @@ if __name__ == '__main__':
     # query['gender'] = 'homme'
     query["words.word"] = {"$in": ['cat', 'dog'] }
     #vi = VocabularyIndex(dbname='OLAPDB')
+    print "Starting initializing class..."
+    start = time()
     vi = VocabularyIndex(dbname='TwitterDB_test')
+    end = time()
+    print "time:", (end-start)
     print "Starting Create Index without query..."
     start = time()
     vi.createIndex(query={})
     end = time()
+    print "time:", (end-start)
     print "Starting Create Index with query...", query
     start = time()
     vi.createIndex(query=query)
