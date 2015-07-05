@@ -30,7 +30,7 @@
 						<li><a href="#query-user">User filter</a></li>
 					</ul>	
 				</li>
-				<li>Corpora being collected
+				<li>Corpus being collected
 				</li>
 				<li>Available corpora
 				</li>
@@ -46,7 +46,7 @@
 		    <h2>New corpus</h2>
 		    <label id="duration">Duration (number of days during which tweets should be collected, example "30"): </label><br/>
 			<form action="{{ url_for('collection_dashboard_page2') }}" method="POST">
-				<input type="text" name="collection-duration" class="underlined" style="width:615px;"/><br/>
+				<input type="text" name="collection_duration" class="underlined" style="width:615px;"/><br/>
 				<label id="filter-date" style="width: 20%;">Keyword filter (phrases of keywords are specified by a comma-separated list; example: "cat,dog"): </label><br/>
 				<input type="text" name="keyword_list" class="underlined" style="width:615px;"/><br/>
 				<label id="filter-keyword">Location filter (2 longitude,latitude pairs separated by specifying a bounding boxe to filter tweets by. Only geolocated Tweets falling within the requested bounding boxe will be included; example "45.740263,4.864114,45.767055,4.848559"): </label><br/>
@@ -57,7 +57,7 @@
 				<input type="submit" value="Collect tweets" class="button"/>
 		    </form>
 
-		    <h2>Corpora being collected</h2>
+		    <h2>Corpus being collected</h2>
 			{% if not collecting_corpus %}
 				<p>No corpus being currently collected.</p>
 			{% else %}
