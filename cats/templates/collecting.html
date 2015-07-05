@@ -32,15 +32,18 @@
 		<div id="content">
 			<div id="sidebar"></div>
 			<div id="main-content">
+				<p><a href="/cats/analysis">Go back to the collection dashboard</a></p>
 				{% if not collecting_corpus %}
 					<p>You're not allowed to collect a new corpus for now.</p>
 				{% else %}
 					<p>Collecting a new corpus: </p>
-					<li>Collection started: {{ collecting_corpus[0] }}</li>
-					<li>Duration: {{ collecting_corpus[1] }}</li>
-					<li>Keyword filter: {{ collecting_corpus[2] }}</li>
-					<li>Location filter: {{ collecting_corpus[3] }}</li>
-					<li>User filter: {{ collecting_corpus[4] }}</li>
+					<ul>
+						<li>Collection started: {{ collecting_corpus[0] }}</li>
+						<li>Duration: {{ collecting_corpus[1] }}</li>
+						<li>Keyword filter: {{ collecting_corpus[2] }}</li>
+						<li>Location filter: {{ collecting_corpus[3] }}</li>
+						<li>User filter: {{ collecting_corpus[4] }}</li>
+					</ul>
 					<p>The analysis dashboard will be updated with new tweets everyday at midnight until the collection is over.</p>
 			{% endif %}
 			<div class="clear"></div>
