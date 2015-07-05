@@ -83,19 +83,18 @@ class Streaming:
                     name = tweet['user']['name']
                 name = quote(name)
                 file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\t'+quote(tweet['lang'].upper())+'\n')
-                #if(datetime.datetime.now().hour == 0):
-                    #if(not datetime.now().day == last_import_day):
-                if nb_tweets_infile == tweets_per_file:
-                    last_import_day = datetime.datetime.now().day
-                    current_date = datetime.date.today()
-                    t = threading.Thread(target=self.threadUpdate, args=(nb_files,))
-                    t.start()
-                    if current_date <= end_date:
-                        nb_files += 1
-                        nb_tweets_infile = 0
-                        file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
-                    else:
-                        break
+                if(datetime.datetime.now().hour == 0):
+                    if(not datetime.now().day == last_import_day):
+                        last_import_day = datetime.datetime.now().day
+                        current_date = datetime.date.today()
+                        t = threading.Thread(target=self.threadUpdate, args=(nb_files,))
+                        t.start()
+                        if current_date <= end_date:
+                            nb_files += 1
+                            nb_tweets_infile = 0
+                            file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
+                        else:
+                            break
 
 if __name__ == '__main__':
     s = Streaming(dbname='TwitterDBTest')
