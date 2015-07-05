@@ -133,30 +133,11 @@ class VocabularyIndex:
 if __name__ == '__main__':
     print "Starting..."
     query = dict()
-    # query['gender'] = 'homme'
-    # query["words.word"] = {"$in": ['cat', 'dog'] }
-    # print "Starting initializing class..."
-    # start = time()
-    # vi = VocabularyIndex(dbname='TwitterDB_test')
-    # end = time()
-    # print "time:", (end-start)
-    # print "Starting Create Index without query..."
-    # start = time()
-    # vi.createIndex(query={})
-    # end = time()
-    # print "time:", (end-start)
-    # print "Starting Create Index with query...", query
-    # start = time()
-    # vi.createIndex(query=query)
-    # end = time()
-    # print "time:", (end-start)
-
-    # testing for OLAPDB
-    query['authors.genderid'] = 1
-    # query["words.word"] = {"$in": ['cat', 'dog'] }
+    query['gender'] = 'homme'
+    query["words.word"] = {"$in": ['cat', 'dog'] }
     print "Starting initializing class..."
     start = time()
-    vi = VocabularyIndex(dbname='OLAPDB')
+    vi = VocabularyIndex(dbname='TwitterDB_test')
     end = time()
     print "time:", (end-start)
     print "Starting Create Index without query..."
@@ -169,3 +150,22 @@ if __name__ == '__main__':
     vi.createIndex(query=query)
     end = time()
     print "time:", (end-start)
+
+    # testing for OLAPDB
+    # query['authors.genderid'] = 1
+    # query["words.word"] = {"$in": ['cat', 'dog'] }
+    # print "Starting initializing class..."
+    # start = time()
+    # vi = VocabularyIndex(dbname='OLAPDB')
+    # end = time()
+    # print "time:", (end-start)
+    # print "Starting Create Index without query..."
+    # start = time()
+    # vi.createIndex(query={})
+    # end = time()
+    # print "time:", (end-start)
+    # print "Starting Create Index with query...", query
+    # start = time()
+    # vi.createIndex(query=query)
+    # end = time()
+    # print "time:", (end-start)
