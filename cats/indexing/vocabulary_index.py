@@ -31,36 +31,30 @@ functionCreate = """function(){
                         var noDocs = db.documents.count();
                         var start = new Date();
                         var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
-                        //documents = Array();
                         while(items.hasNext()){
                             var item = items.next();
                             var n = item.value.ids.length;
                             var widf = 1 + Math.round(Math.log(noDocs/n) * 100)/100;
                             doc = {word: item._id, idf: widf, createdAt: new Date(), docIDs: item.value.ids};
-                            //documents.push(doc);
                             db.vocabulary.insert(doc);
                         }
-                        //db.vocabulary.insert(documents);
                         db.vocabulary.ensureIndex({'idf':1});
-                        //db.temp_collection.drop();
+                        db.temp_collection.drop();
                     }"""
 
 functionCreateQuery = """function(query){
                         var noDocs = db.documents.count(query);
                         var start = new Date();
                         var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
-                        //documents = Array();
                         while(items.hasNext()){
                             var item = items.next();
                             var n = item.value.ids.length;
                             var widf = 1 + Math.round(Math.log(noDocs/n) * 100)/100;
                             doc = {word: item._id, idf: widf, createdAt: new Date(), docIDs: item.value.ids};
-                            //documents.push(doc);
                             db.vocabulary_query.insert(doc);
                         }
-                        //db.vocabulary_query.insert(documents);
                         db.vocabulary_query.ensureIndex({'idf':1});
-                        //db.temp_collection.drop();
+                        db.temp_collection.drop();
                     }"""
 
 functionUpdate = """
@@ -117,21 +111,6 @@ class VocabularyIndex:
     def createIndex(self, query=None):
         if query:
             self.db.vocabulary_query.drop()
-
-            """
-                new code:
-                - aggregate the result in a new collection -> documents_query
-                - do map reduce on the new collections -> documents_query
-            """
-            # self.db.documents_query.drop()
-            # self.db.documents.aggregate([{"$match": query}, {"$project": {"_id": 1, "words": 1}}, {"$out": "documents_query"}])
-            # self.db.documents_query.ensure_index('words.word')
-            # self.db.documents_query.map_reduce(mapFunction, reduceFunction, "temp_collection", sort={'words.word': 1})
-
-            """
-                old code:
-                - do map reduce on the entire collection with query
-            """
             self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", query=query, sort={'words.word': 1})
             self.db.eval(functionCreateQuery, query)
         else:
@@ -155,11 +134,29 @@ if __name__ == '__main__':
     print "Starting..."
     query = dict()
     # query['gender'] = 'homme'
-    query["words.word"] = {"$in": ['cat', 'dog'] }
-    #vi = VocabularyIndex(dbname='OLAPDB')
+    # query["words.word"] = {"$in": ['cat', 'dog'] }
+    # print "Starting initializing class..."
+    # start = time()
+    # vi = VocabularyIndex(dbname='TwitterDB_test')
+    # end = time()
+    # print "time:", (end-start)
+    # print "Starting Create Index without query..."
+    # start = time()
+    # vi.createIndex(query={})
+    # end = time()
+    # print "time:", (end-start)
+    # print "Starting Create Index with query...", query
+    # start = time()
+    # vi.createIndex(query=query)
+    # end = time()
+    # print "time:", (end-start)
+
+    # testing for OLAPDB
+    query['authors.genderid'] = '1'
+    # query["words.word"] = {"$in": ['cat', 'dog'] }
     print "Starting initializing class..."
     start = time()
-    vi = VocabularyIndex(dbname='TwitterDB_test')
+    vi = VocabularyIndex(dbname='OLAPDB')
     end = time()
     print "time:", (end-start)
     print "Starting Create Index without query..."
