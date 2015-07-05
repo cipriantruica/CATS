@@ -31,15 +31,16 @@ functionCreate = """function(){
                         var noDocs = db.documents.count();
                         var start = new Date();
                         var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
-                        documents = Array();
+                        //documents = Array();
                         while(items.hasNext()){
                             var item = items.next();
                             var n = item.value.ids.length;
                             var widf = 1 + Math.round(Math.log(noDocs/n) * 100)/100;
                             doc = {word: item._id, idf: widf, createdAt: new Date(), docIDs: item.value.ids};
-                            documents.push(doc);
+                            //documents.push(doc);
+                            db.vocabulary.insert(doc);
                         }
-                        db.vocabulary.insert(documents);
+                        //db.vocabulary.insert(documents);
                         db.vocabulary.ensureIndex({'idf':1});
                         //db.temp_collection.drop();
                     }"""
@@ -48,15 +49,16 @@ functionCreateQuery = """function(query){
                         var noDocs = db.documents.count(query);
                         var start = new Date();
                         var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
-                        documents = Array();
+                        //documents = Array();
                         while(items.hasNext()){
                             var item = items.next();
                             var n = item.value.ids.length;
                             var widf = 1 + Math.round(Math.log(noDocs/n) * 100)/100;
                             doc = {word: item._id, idf: widf, createdAt: new Date(), docIDs: item.value.ids};
-                            documents.push(doc);
+                            //documents.push(doc);
+                            db.vocabulary_query.insert(doc);
                         }
-                        db.vocabulary_query.insert(documents);
+                        //db.vocabulary_query.insert(documents);
                         db.vocabulary_query.ensureIndex({'idf':1});
                         //db.temp_collection.drop();
                     }"""
@@ -135,8 +137,7 @@ class VocabularyIndex:
         else:
             self.db.vocabulary.drop()
             self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection")#, sort={'words.word': 1})
-            # self.db.eval(functionCreate)
-            self.db.eval(functionCreateQuery, {})
+            self.db.eval(functionCreate)
 
     # update index after docunemts are added
     def updateIndex(self, startDate):
@@ -153,15 +154,15 @@ class VocabularyIndex:
 if __name__ == '__main__':
     print "Starting..."
     query = dict()
-    query['gender'] = 'homme'
-    # query["words.word"] = {"$in": ['cat', 'dog'] }
-    vi = VocabularyIndex(dbname='TwitterDB_test')
+    # query['gender'] = 'homme'
+    query["words.word"] = {"$in": ['cat', 'dog'] }
+    vi = VocabularyIndex(dbname='OLAPDB')
     print "Starting Create Index without query..."
     start = time()
     vi.createIndex(query={})
     end = time()
-    print "Starting Create Index with query...", query
-    start = time()
-    vi.createIndex(query=query)
-    end = time()
-    print "time:", (end-start)
+    # print "Starting Create Index with query...", query
+    # start = time()
+    # vi.createIndex(query=query)
+    # end = time()
+    # print "time:", (end-start)
