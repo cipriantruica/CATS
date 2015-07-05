@@ -82,7 +82,8 @@ class Streaming:
                 if(tweet['user'].get('name')):
                     name = tweet['user']['name']
                 name = quote(name)
-                file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\t'+quote(tweet['lang'].upper())+'\n')
+                file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\n')
+                           #+quote(tweet['lang'].upper())+'\n')
                 #if(datetime.datetime.now().hour == 0):
                     # if(not datetime.now().day == last_import_day):
                 if nb_tweets_infile == tweets_per_file:
