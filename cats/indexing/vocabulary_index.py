@@ -142,7 +142,7 @@ if __name__ == '__main__':
     print "time:", (end-start)
     print "Starting Create Index without query..."
     start = time()
-    vi.createIndex(query={})
+    vi.createIndex()
     end = time()
     print "time:", (end-start)
     print "Starting Create Index with query...", query
