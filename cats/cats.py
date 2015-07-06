@@ -83,12 +83,12 @@ def collection_dashboard_page2():
             keywords = ""
         if request.form.get('user_list'):
             users = request.form.get('user_list')
-            lock.write(str(datetime.date.today())+';'+str(duration)+';None;'+users+';None')
+            lock.write(str(datetime.date.today())+';'+str(duration)+';None;None;'+users)
         else:
             users = ""
         if request.form.get('bounding_box'):
             location = request.form.get('bounding_box')
-            lock.write(str(datetime.date.today())+';'+str(duration)+';None;None;'+location)
+            lock.write(str(datetime.date.today())+';'+str(duration)+';None;'+location+';None')
         else:
             location = ""
         lock.close()
