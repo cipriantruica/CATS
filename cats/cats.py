@@ -96,7 +96,9 @@ def collection_dashboard_page2():
         t.start()
         lock = open('collecting.lock','r').read()
         corpus_info = lock.split(';')
-    return collection_dashboard_page()
+        return collection_dashboard_page()
+    else:
+        return render_template('collecting.html')
 
 def threadCollection(duration,keywords,users,location):
     s = Streaming(dbname=dbname)
