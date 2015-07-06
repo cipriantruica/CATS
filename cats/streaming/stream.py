@@ -31,7 +31,7 @@ class Streaming:
         nb_tweets = 0
         nb_tweets_infile = 0
         nb_files = 1
-        last_import_day = datetime.datetime.now().day-1
+        last_import_day = datetime.datetime.now().day
         file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
         auth = OAuth(
             consumer_key=str(open('streaming/consumer_key','r').read()),
@@ -83,7 +83,7 @@ class Streaming:
                     name = tweet['user']['name']
                 name = quote(name)
                 file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\t'+quote(tweet['lang'].upper())+'\n')
-                if(datetime.datetime.now().hour == 10):
+                if(datetime.datetime.now().hour == 0):
                     if(not datetime.datetime.now().day == last_import_day):
                         last_import_day = datetime.datetime.now().day
                         current_date = datetime.date.today()
