@@ -61,6 +61,7 @@
 			{% if not collecting_corpus %}
 				<p>No corpus being currently collected.</p>
 			{% else %}
+				<p>There is a corpus being collected right now. The analysis dashboard will be updated daily at midnight with the latest tweets, until the collection is over.</p>
 				<p><a href="analysis">Analyze this corpus</a></p>
 				<li>Collection started: {{ collecting_corpus[0] }}</li>
 				<li>Duration: {{ collecting_corpus[1] }}</li>
