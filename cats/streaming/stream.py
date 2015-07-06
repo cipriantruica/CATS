@@ -31,7 +31,7 @@ class Streaming:
         nb_tweets = 0
         nb_tweets_infile = 0
         nb_files = 1
-        last_import_day = datetime.datetime.now().day
+        last_import_day = datetime.datetime.now().day-1
         file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
         auth = OAuth(
             consumer_key=str(open('streaming/consumer_key','r').read()),
