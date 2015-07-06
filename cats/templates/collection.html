@@ -61,6 +61,7 @@
 			{% if not collecting_corpus %}
 				<p>No corpus being currently collected.</p>
 			{% else %}
+				<p><a href="analysis">Analyze this corpus</a></p>
 				<li>Collection started: {{ collecting_corpus[0] }}</li>
 				<li>Duration: {{ collecting_corpus[1] }}</li>
 				<li>Keyword filter: {{ collecting_corpus[2] }}</li>
@@ -68,17 +69,20 @@
 				<li>User filter: {{ collecting_corpus[4] }}</li>
 			{% endif %}
 
-		    <h2>Already collected corpora</h2>
+		    <h2>Already collected corpus</h2>
 			
 			<ul>
-				<li><a href="analysis">Demonstration corpus</a>
-				<ul>
-					<li>Tweet count: 878810</li>
-					<li>Collection period: [2015-04-06 00:00:08 ; 2015-06-11 11:48:32]</li>
-					<li>Keyword filter: none</li>
-					<li>Location filter: 49.186288,0.043709 53.186288,-8.043709</li>
-					<li>User filter: none</li>
-				</ul>
+				<li><a href="analysis">Analyze this corpus</a>
+				{% if not collected_corpus %}
+					<p>No corpus available.</p>
+				{% else %}
+					<p><a href="analysis">Analyze this corpus</a></p>
+					<li>Collection started: {{ collected_corpus[0] }}</li>
+					<li>Duration: {{ collected_corpus[1] }}</li>
+					<li>Keyword filter: {{ collected_corpus[2] }}</li>
+					<li>Location filter: {{ collected_corpus[3] }}</li>
+					<li>User filter: {{ collected_corpus[4] }}</li>
+				{% endif %}
 				</li>
 			</ul>
         

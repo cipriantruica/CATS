@@ -56,18 +56,20 @@ def getTweetCount():
 @app.route('/cats/collection')
 def collection_dashboard_page(name=None):
     print dbname, can_collect_tweets
-    if can_collect_tweets and os.path.isfile('collection.lock'):
-        lock = open('collection.lock','r').read()
+    if can_collect_tweets and os.path.isfile('collecting.lock'):
+        lock = open('collecting.lock','r').read()
         corpus_info = lock.split(';')
         return render_template('collection.html', collecting_corpus=corpus_info)
     else:
-        return render_template('collection.html')
+        lock = open('demonstration.info','r').read()
+        corpus_info = lock.split(';')
+        return render_template('collection.html', collected_corpus=corpus_info)
 
 @app.route('/cats/collection', methods=['POST'])
 @requires_auth
 def collection_dashboard_page2():
-    if can_collect_tweets and not os.path.isfile('collection.lock'):
-        lock = open("collection.lock", "w")
+    if can_collect_tweets and not os.path.isfile('collecting.lock'):
+        lock = open("collecting.lock", "w")
         if request.form.get('collection_duration'):
             duration = int(request.form.get('collection_duration'))
         else:
@@ -90,10 +92,9 @@ def collection_dashboard_page2():
         lock.close()
         t = threading.Thread(target=threadCollection, args=(duration,keywords,users,location,))
         t.start()
-        lock = open('collection.lock','r').read()
+        lock = open('collecting.lock','r').read()
         corpus_info = lock.split(';')
-        return render_template('collecting.html', collecting_corpus=corpus_info)
-    return render_template('collecting.html')
+    return collection_dashboard_page()
 
 def threadCollection(duration,keywords,users,location):
     s = Streaming(dbname=dbname)
