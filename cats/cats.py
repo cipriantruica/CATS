@@ -60,10 +60,12 @@ def collection_dashboard_page(name=None):
         lock = open('collecting.lock','r').read()
         corpus_info = lock.split(';')
         return render_template('collection.html', collecting_corpus=corpus_info)
-    else:
+    elif not can_collect_tweets:
         lock = open('demonstration.info','r').read()
         corpus_info = lock.split(';')
         return render_template('collection.html', collected_corpus=corpus_info)
+    else:
+        return render_template('collection.html')
 
 @app.route('/cats/collection', methods=['POST'])
 @requires_auth
