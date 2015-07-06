@@ -42,24 +42,18 @@ class Streaming:
         twitter_stream = TwitterStream(auth=auth)
         start_date = datetime.date.today()
         end_date = start_date + datetime.timedelta(days=int(duration))
-        lock = open("collection.lock", "w")
         if keys != "":
             print("keywords")
-            lock.write(str(datetime.date.today())+';'+str(duration)+';'+keys+';None;None')
             iterator = twitter_stream.statuses.filter(track=keys)
         elif follow != "":
             print("users")
-            lock.write(str(datetime.date.today())+';'+str(duration)+';None;',follow+';None')
             iterator = twitter_stream.statuses.filter(follow=follow)
         elif loc != "":
             print("location")
-            lock.write(str(datetime.date.today())+';'+str(duration)+';None;None;'+loc)
             iterator = twitter_stream.statuses.filter(locations=loc)
         else:
             print("sample")
-            lock.write(str(datetime.date.today())+';'+str(duration)+';None;None;None')
             iterator = twitter_stream.statuses.sample()
-        lock.close()
         for tweet in iterator:
             if tweet.get('text'):
                 text = tweet['text']
