@@ -82,7 +82,11 @@ def populateDatabase(elems, language='EN', dbname='TwitterDB', mode=0):
                     except Exception, e:
                         print e
         if documents:
-            db.documents.insert(documents)
+            try:
+                db.documents.insert(documents, continue_on_error=True)
+            except pymongo.errors.DuplicateKeyError:
+                pass
+
 
 gender = {'male': 1, 'female': 2, 'homme': 1, 'femme': 2}
 #process one element
