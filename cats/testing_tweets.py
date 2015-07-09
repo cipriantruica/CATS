@@ -44,27 +44,12 @@ def getDates():
 
 
 #try to parallelize this
-def populateDB(filename, csv_delimiter, header, language='EN', dbname='TwitterDB', mode=0, k = 100):
+def populateDB(filename, csv_delimiter, header, language='EN', dbname='TwitterDB', mode=0, serialized=False):
     start = time.time() 
     h, lines = utils.readCSV(filename, csv_delimiter, header)
-    populateDatabase(lines, language, dbname, mode)
-
+    populateDatabase(lines, language, dbname, mode, serialized)
     end = time.time() 
     print "time_populate.append(", (end - start), ")"
-
-def updateIndexes(dbname, startDate):
-    start = time.time()
-    vocab = VI(dbname)
-    vocab.updateIndex(startDate)
-    end = time.time()
-    print "vocabulary_update.append(", (end - start) , ")"
-
-def deleteIndexes(dbname, docIDs):
-    start = time.time()
-    vocab = VI(dbname)
-    vocab.deleteIndex(docIDs)
-    end = time.time()
-    print "vocabulary_delete.append(", (end - start) , ")"
 
 def constructIndexes(dbname):
     #build Vocabulary
@@ -79,20 +64,8 @@ def constructIndexes(dbname):
     ner = NE(dbname)
     ner.createIndex()
     end = time.time()
-    print "vocabulary_build.append(", (end - start) , ")"
-    """
-    start = time.time()
-    iv = IV(dbname)
-    iv.createIndex()
-    end = time.time()
-    print "inverted_build.append(", (end - start) , ")"
-    
-    start = time.time()
-    pi = PI(dbname)
-    pi.createIndex()
-    end = time.time()
-    print "pos_build.append(", (end - start) , ")"
-    """
+    print "ne_build.append(", (end - start) , ")"
+
 
 def deleteDocuments(startDate):
     docIDs = []
@@ -102,25 +75,15 @@ def deleteDocuments(startDate):
         document.delete()
     return docIDs
     
-def main(filename, csv_delimiter = '\t', header = True, dbname = 'TwitterDB', language='EN', initialize = 0, mode=0, deleteDate=None):
+def main(filename, csv_delimiter='\t', header=True, dbname='TwitterDB', language='EN', initialize=0, mode=0, serialized=False):
     connectDB(dbname)
     print mode
     #initialize everything from the stat
     if initialize == 0:
         Documents.drop_collection()
-    populateDB(filename, csv_delimiter, header, language, dbname=dbname, mode=mode)
+    populateDB(filename, csv_delimiter, header, language, dbname=dbname, mode=mode, serialized=serialized)
     constructIndexes(dbname)
-    """
-    elif initialize == 1: #update the database with new documents, should work, not tested
-        last_docDat = getDates()
-        populateDB(filename, csv_delimiter, header, language, mode=mode)
-        Documents.objects(intText__exists = False).delete()
-        updateIndexes(dbname, last_docDat)
-    elif initialize == 2: #update the database after documents are deleted, should work, not tested
-        if deleteDate:
-            docIDs = deleteDocuments(deleteDate)
-            deleteIndexes(dbname, docIDs)
-    """
+
 
 # this script receives 7 parameters
 # 1 - filename
@@ -130,6 +93,7 @@ def main(filename, csv_delimiter = '\t', header = True, dbname = 'TwitterDB', la
 # 5 - language: EN or FR
 # 6 - integer: 0 - create the database, 1 - update the database
 # 7 - integer: 0 - use fast lemmatizer (not accurate), 1 - use slow lemmatizer (accurate)
+# 8 - integer: 0 - use parallelized version, 1 - use serialized version
 if __name__ == "__main__":
     filename = sys.argv[1] 
     csv_delimiter = utils.determineDelimiter(sys.argv[2])
@@ -138,4 +102,5 @@ if __name__ == "__main__":
     language = sys.argv[5] #currently EN & FR, FR does not work so well
     initialize = int(sys.argv[6])
     mode = int(sys.argv[7])
-    main(filename=filename, csv_delimiter=csv_delimiter, header=header, dbname=dbname, language=language, initialize=initialize, mode=mode)
+    serialized = bool(sys.argv[8])
+    main(filename=filename, csv_delimiter=csv_delimiter, header=header, dbname=dbname, language=language, initialize=initialize, mode=mode, serialized=serialized)
