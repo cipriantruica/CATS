@@ -43,7 +43,7 @@ def getDates():
 
 
 
-#try to parallelize this
+# try to parallelize this
 def populateDB(filename, csv_delimiter, header, language='EN', dbname='TwitterDB', mode=0, serialized=False):
     start = time.time() 
     h, lines = utils.readCSV(filename, csv_delimiter, header)
@@ -74,11 +74,11 @@ def deleteDocuments(startDate):
         docIDs.append(document.id)
         document.delete()
     return docIDs
-    
+
 def main(filename, csv_delimiter='\t', header=True, dbname='TwitterDB', language='EN', initialize=0, mode=0, serialized=False):
     connectDB(dbname)
-    print mode, serialized
-    #initialize everything from the stat
+    # print mode, serialized, header
+    # initialize everything from the stat
     if initialize == 0:
         Documents.drop_collection()
     populateDB(filename, csv_delimiter, header, language, dbname=dbname, mode=mode, serialized=serialized)
@@ -97,10 +97,10 @@ def main(filename, csv_delimiter='\t', header=True, dbname='TwitterDB', language
 if __name__ == "__main__":
     filename = sys.argv[1] 
     csv_delimiter = utils.determineDelimiter(sys.argv[2])
-    header = bool(sys.argv[3])
+    header = bool(int(sys.argv[3]))
     dbname = sys.argv[4]
     language = sys.argv[5] #currently EN & FR, FR does not work so well
     initialize = int(sys.argv[6])
     mode = int(sys.argv[7])
-    serialized = bool(sys.argv[8])
+    serialized = bool(int(sys.argv[8]))
     main(filename=filename, csv_delimiter=csv_delimiter, header=header, dbname=dbname, language=language, initialize=initialize, mode=mode, serialized=serialized)
