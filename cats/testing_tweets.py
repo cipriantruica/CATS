@@ -77,7 +77,7 @@ def deleteDocuments(startDate):
     
 def main(filename, csv_delimiter='\t', header=True, dbname='TwitterDB', language='EN', initialize=0, mode=0, serialized=False):
     connectDB(dbname)
-    print mode
+    print mode, serialized
     #initialize everything from the stat
     if initialize == 0:
         Documents.drop_collection()
