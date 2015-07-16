@@ -10,24 +10,62 @@ __status__ = "Production"
 import pymongo
 from time import time
 
+# mapFunction = """function() {
+#                     for (var idx=0; idx<this.words.length; idx++){
+#                         var key = this.words[idx].word;
+#                         var values = {
+#                             tf: this.words[idx].tf,
+#                             count: 1
+#                         };
+#                         emit(key, values);
+#                     }
+#                 }"""
+#
+# reduceFunction = """function(key, values) {
+#                         var result = {tf: 0, count: 0};
+#                         for(var idx = 0; idx < values.length; idx++){
+#                             result.count += values[idx].count;
+#                             result.tf += values[idx].tf;
+#                         };
+#                         return result;
+#                     }"""
+#
+# functionCreate = """function(){
+#                         var noDocs = db.documents.count();
+#                         var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
+#                         while(items.hasNext()){
+#                             var item = items.next();
+#                             var idf = 1 + Math.round(Math.log(noDocs/item.value.count) * 100)/100;
+#                             var tfidf = Math.round(idf * item.value.tf * 100)/100;
+#                             doc = {word: item._id, IDF: idf, TFIDF: tfidf};
+#                             db.vocabulary.insert(doc);
+#                         }
+#                         db.vocabulary.ensureIndex({IDF:1});
+#                         db.temp_collection.drop();
+#                     }"""
+#
+# functionCreateQuery = """function(query){
+#                         var noDocs = db.documents.count(query);
+#                         var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
+#                         while(items.hasNext()){
+#                             var item = items.next();
+#                             var idf = 1 + Math.round(Math.log(noDocs/item.value.count) * 100)/100;
+#                             var tfidf = Math.round(idf * item.value.tf * 100)/100;
+#                             doc = {word: item._id, IDF: idf, TFIDF: tfidf};
+#                             db.vocabulary.insert(doc);
+#                         }
+#                         db.vocabulary_query.ensureIndex({'idf':1});
+#                         db.temp_collection.drop();
+#                     }"""
+
 mapFunction = """function() {
                     for (var idx=0; idx<this.words.length; idx++){
-                        var key = this.words[idx].word;
-                        var values = {
-                            tf: this.words[idx].tf,
-                            count: 1
-                        };
-                        emit(key, values);
+                        emit(this.words[idx].word, 1);
                     }
                 }"""
 
 reduceFunction = """function(key, values) {
-                        var result = {tf: 0, count: 0};
-                        for(var idx = 0; idx < values.length; idx++){
-                            result.count += values[idx].count;
-                            result.tf += values[idx].tf;
-                        };
-                        return result;
+                        return Array.sum(values);
                     }"""
 
 functionCreate = """function(){
@@ -35,9 +73,8 @@ functionCreate = """function(){
                         var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
                         while(items.hasNext()){
                             var item = items.next();
-                            var idf = 1 + Math.round(Math.log(noDocs/item.value.count) * 100)/100;
-                            var tfidf = Math.round(idf * item.value.tf * 100)/100;
-                            doc = {word: item._id, IDF: idf, TFIDF: tfidf};
+                            var idf = 1 + Math.round(Math.log(noDocs/item.value) * 100)/100;
+                            doc = {word: item._id, IDF: idf};
                             db.vocabulary.insert(doc);
                         }
                         db.vocabulary.ensureIndex({IDF:1});
@@ -57,8 +94,6 @@ functionCreateQuery = """function(query){
                         db.vocabulary_query.ensureIndex({'idf':1});
                         db.temp_collection.drop();
                     }"""
-
-
 
 class VocabularyIndex:
     def __init__(self, dbname):
