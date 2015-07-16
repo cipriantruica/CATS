@@ -25,7 +25,7 @@ LANGUAGE=EN
 INIT_0=0
 INIT_1=1
 MODE=1
-
+SERIAL=0
 FILE="../DATA_SETS/tweets/corpus"
 DB="TwitterDB_at"
 echo $FILE
@@ -40,10 +40,10 @@ do
 		if [ $j = 0 ]
 		then
 			# need init == 0 to drop the database
-			python testing_tweets.py $FILE$j".csv" $DELIMITER $HEADER $DB $LANGUAGE $INIT_0 $MODE
+			python testing_tweets.py $FILE$j".csv" $DELIMITER $HEADER $DB $LANGUAGE $INIT_0 $MODE $SERIAL
 		else
 			# need init == 1 to do incremental insert
-			python testing_tweets.py $FILE$j".csv" $DELIMITER $HEADER $DB $LANGUAGE $INIT_1 $MODE
+			python testing_tweets.py $FILE$j".csv" $DELIMITER $HEADER $DB $LANGUAGE $INIT_1 $MODE $SERIAL
 		fi
 	done;
 done;
