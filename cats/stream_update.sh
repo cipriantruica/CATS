@@ -24,6 +24,6 @@ INIT=1
 MODE=1
 FILE=$2
 DB=$1
-python testing_tweets.py $FILE $DELIMITER $HEADER $DB $LANGUAGE $INIT $MODE
+python testing_tweets_new.py $FILE $DELIMITER $HEADER $DB $LANGUAGE $INIT $MODE 0
 
 
