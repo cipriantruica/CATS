@@ -31,8 +31,8 @@ class MabedFiles:
                 startDate = datetime.strptime(self.query["date"]["$gt"] + " 00:00:00", '%Y-%m-%d %H:%M:%S')
                 endDate = datetime.strptime(self.query["date"]["$lte"] + " 00:00:00", '%Y-%m-%d %H:%M:%S')
             else:
-                startDate = datetime.strptime(self.db.documents.find(spec=self.query, fields={'date': 1, '_id': 0}, limit=1, sort=[('date',pymongo.ASCENDING)])[0]['date'], '%Y-%m-%d %H:%M:%S') - timedelta(0, 1)
-                endDate = datetime.strptime(self.db.documents.find(spec=self.query, fields={'date': 1, '_id': 0}, limit=1, sort=[('date',pymongo.DESCENDING)])[0]['date'], '%Y-%m-%d %H:%M:%S')
+                startDate = datetime.strptime(self.db.documents.find(self.query, {'date': 1, '_id': 0}, limit=1, sort=[('date',pymongo.ASCENDING)])[0]['date'], '%Y-%m-%d %H:%M:%S') - timedelta(0, 1)
+                endDate = datetime.strptime(self.db.documents.find(self.query, {'date': 1, '_id': 0}, limit=1, sort=[('date',pymongo.DESCENDING)])[0]['date'], '%Y-%m-%d %H:%M:%S')
             # print slice, startDate, endDate
             idx = 0
             filelen = 8
@@ -42,7 +42,7 @@ class MabedFiles:
                     intDate = endDate
                 self.query["date"] = { "$gt": str(startDate), "$lte": str(intDate) }
                 # print idx, startDate, intDate, query
-                documents = self.db.documents.find(spec=self.query, fields={'rawText': 1, 'date': 1, '_id': 0})
+                documents = self.db.documents.find(self.query, {'rawText': 1, 'date': 1, '_id': 0})
                 if documents.count() > 0:
                     filename = filepath + '/' + '0'*(filelen-len(str(idx))) + str(idx)
                     idx += 1
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     query4 = {'date': {'$lte': u'2015-04-10', '$gt': u'2015-04-08'}, 'gender': u'femme', 'age': {'$in': [u'5-11', u'12-18', u'45-60', u'61-99']}, 'words.word': {'$in': [u'fuck']}}
     query5 = {}
     start = time()
-    mf.buildFiles(query1, slice=3600)
+    mf.buildFiles(query1, filepath='test/1', slice=3600)
     end = time()
     print 'Time',(end-start), query1
     start = time()

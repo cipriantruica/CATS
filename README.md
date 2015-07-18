@@ -16,20 +16,18 @@ export OPENBLAS_MAIN_FREE=1 ; python cats.py
 * sudo apt-get install git
 * sudo apt-get install libenchant1c2a
 * sudo pip install -U numpy
-* sudo pip install pymongo==2.8
-* sudo pip install mongoengine
+* sudo pip install -U pymongo
 * sudo pip install -U nltk
 * python -m nltk.downloader all
 * sudo pip install -U scipy
-* sudo pip install --upgrade gensim
-* sudo easy_install -U gensim
-* sudo easy_install gensim[distributed]
-* sudo easy_install Pyro4
-* sudo pip install Pattern
-* sudo pip install pyenchant
-* sudo pip install Unidecode
-* sudo pip install futures
-* sudo pip install python-dateutil
+* sudo pip install -U Pyro4
+* sudo pip install -U gensim
+* sudo pip install -U gensim[distributed]
+* sudo pip install -U Pattern
+* sudo pip install -U pyenchant
+* sudo pip install -U Unidecode
+* sudo pip install -U futures
+* sudo pip install -U python-dateutil
 
 ##IDE
 * PyCharm

@@ -20,17 +20,20 @@ class Queries:
     def countDocuments(self, query=None):
         return self.db.documents.find(query).count()
 
+    def dropDocuments(self):
+        self.db.documents.drop()
+
     def getOneWord(self, query=None, fields=None, existing=False):
         if existing:
-            return self.db.vocabulary_query.find_one(spec_or_id=query, fields=fields)
+            return self.db.vocabulary_query.find_one(query, fields)
         else:
-            return self.db.vocabulary.find_one(spec_or_id=query, fields=fields)
+            return self.db.vocabulary.find_one(query, fields)
 
     def getWords(self, query=None, fields=None, limit=0, existing=False):
         if existing:
-            return self.db.vocabulary_query.find(spec=query, fields=fields, limit=limit, sort=[('idf',pymongo.ASCENDING)])
+            return self.db.vocabulary_query.find(query, fields, limit=limit, sort=[('idf',pymongo.ASCENDING)])
         else:
-            return self.db.vocabulary.find(spec=query, fields=fields, limit=limit, sort=[('idf',pymongo.ASCENDING)])
+            return self.db.vocabulary.find(query, fields, limit=limit, sort=[('idf',pymongo.ASCENDING)])
 
     def getNamedEntities(self, query=None, limit=0):
         if query:
@@ -52,10 +55,10 @@ class Queries:
         ner.createIndex(query)
 
     def getDocuments(self, query=None, fields=None):
-        return self.db.documents.find(spec=query, fields=fields)
+        return self.db.documents.find(query, fields)
 
     def getOneDocument(self, query=None, fields=None):
-        return self.db.documents.find_one(spec_or_id=query, fields=fields)
+        return self.db.documents.find_one(query, fields)
 
 
     def bulkInsert(self, documents):

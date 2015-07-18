@@ -7,6 +7,9 @@ __version__ = "0.1"
 __email__ = "ciprian.truica@cs.pub.ro"
 __status__ = "Production"
 
+# This class is not used anymore
+# the model has been moved to indexing
+
 from mongoengine import *
 from datetime import datetime
 from bson.objectid import ObjectId

@@ -10,7 +10,6 @@ __status__ = "Production"
 import time
 import utils
 from ddl_mongo_new import *
-from models.mongo_models import *
 from indexing.queries import Queries
 
 
@@ -38,11 +37,11 @@ def constructIndexes(dbname):
     print "ne_build.append(", (end - start) , ")"
 
 def main(filename, csv_delimiter='\t', header=True, dbname='TwitterDB', language='EN', initialize=0, mode=0, serialized=False):
-    connectDB(dbname)
     # print mode, serialized, header
     # initialize everything from the stat
     if initialize == 0:
-        Documents.drop_collection()
+        queries = Queries(dbname=dbname)
+        queries.dropDocuments()
     populateDB(filename, csv_delimiter, header, language, dbname=dbname, mode=mode, serialized=serialized)
     constructIndexes(dbname)
 
