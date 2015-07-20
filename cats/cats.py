@@ -250,7 +250,7 @@ def threadLDA(k):
     file.write(" ")
     file.close()
     print "Training LDA..."
-    lda = TrainLDA(dbname)
+    lda = TrainLDA(dbname=dbname)
     results = lda.fitLDA(query=query, num_topics=k, num_words=10, iterations=500)
     scores = [0]*k
     for doc in results[1]:
