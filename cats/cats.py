@@ -22,7 +22,7 @@ import datetime
 
 # Connecting to the database
 client = pymongo.MongoClient()
-dbname = 'TwitterDB'
+dbname = 'TwitterDB_demo'
 db = client[dbname]
 can_collect_tweets = False
 
@@ -250,7 +250,7 @@ def threadLDA(k):
     file.write(" ")
     file.close()
     print "Training LDA..."
-    lda = TrainLDA()
+    lda = TrainLDA(dbname)
     results = lda.fitLDA(query=query, num_topics=k, num_words=10, iterations=500)
     scores = [0]*k
     for doc in results[1]:
@@ -288,7 +288,7 @@ def threadMABED(k):
             elif os.path.isdir(file_path): shutil.rmtree(file_path)
         except Exception, e:
             print e
-    mf = MabedFiles(dbname='TwitterDB')
+    mf = MabedFiles(dbname=dbname)
     mf.buildFiles(query, filepath='mabed/input/', slice=60*60)
     result = subprocess.check_output(['java', '-jar', './mabed/MABED-CATS.jar', '60', '40'])
     print "Done."

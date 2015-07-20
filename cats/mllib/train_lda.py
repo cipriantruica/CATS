@@ -27,6 +27,8 @@ class TrainLDA:
         try:
             documents = []
             documentsDB = self.db.documents.find(query, {'lemmaText': 1, '_id': 0})
+            if documentsDB:
+                print 'ok documentDB'
             for document in documentsDB:
                 documents.append([lemma for lemma in document['lemmaText'].split() if lemma not in self.sw])
             dictionary = corpora.Dictionary(documents)
