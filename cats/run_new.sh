@@ -29,7 +29,7 @@ SERIAL=0
 #FILE="/home/cats/data/CATS_demo_May-12-2015_3.csv"
 #on Ciprian computer
 FILE="../DATA_SETS/tweets/CATS_demo_200.csv"
-DB="TwitterDB_new"
+DB="TwitterDB_at"
 echo $FILE
 python testing_tweets_new.py $FILE $DELIMITER $HEADER $DB $LANGUAGE $INIT $MODE $SERIAL
 

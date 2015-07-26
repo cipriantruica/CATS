@@ -53,8 +53,9 @@ functionCreateQuery = """function(){
                         }"""
 
 class NEIndex:
-    def __init__(self, dbname):
-        client = pymongo.MongoClient()
+    def __init__(self, dbname, host='localhost', port=27017):
+        #client = pymongo.MongoClient()
+        client = pymongo.MongoClient(host=host, port=port)
         self.db = client[dbname]
 
     def createIndex(self, query = None):

@@ -12,8 +12,11 @@ from ne_index import NEIndex
 from vocabulary_index_new import VocabularyIndex
 
 class Queries:
-    def __init__(self, dbname):
-        client = pymongo.MongoClient()
+    def __init__(self, dbname, host='localhost', port=27017):
+        #client = pymongo.MongoClient()
+        self.host = host
+        self.port = port
+        client = pymongo.MongoClient(host=self.host, port=self.port)
         self.dbname = dbname
         self.db = client[self.dbname]
 
@@ -31,9 +34,9 @@ class Queries:
 
     def getWords(self, query=None, fields=None, limit=0, existing=False):
         if existing:
-            return self.db.vocabulary_query.find(query, fields, limit=limit, sort=[('idf',pymongo.ASCENDING)])
+            return self.db.vocabulary_query.find(query, fields, limit=limit, sort=[('IDF',pymongo.ASCENDING)])
         else:
-            return self.db.vocabulary.find(query, fields, limit=limit, sort=[('idf',pymongo.ASCENDING)])
+            return self.db.vocabulary.find(query, fields, limit=limit, sort=[('IDF',pymongo.ASCENDING)])
 
     def getNamedEntities(self, query=None, limit=0):
         if query:
@@ -47,11 +50,11 @@ class Queries:
             return self.db.named_entities.find(sort=[('count',pymongo.DESCENDING)], limit=limit)
 
     def constructVocabulary(self, query=None):
-        vocab = VocabularyIndex(self.dbname)
+        vocab = VocabularyIndex(dbname=self.dbname, host=self.host, port=self.port)
         vocab.createIndex(query)
 
     def constructNamedEntities(self, query=None):
-        ner = NEIndex(self.dbname)
+        ner = NEIndex(dbname=self.dbname, host=self.host, port=self.port)
         ner.createIndex(query)
 
     def getDocuments(self, query=None, fields=None):
@@ -68,6 +71,6 @@ class Queries:
             pass
 
 if __name__ == "__main__":
-    queries = Queries('TwitterDB')
+    queries = Queries('TwitterDB', 'localhost', 27017)
     x = queries.getOneWord(query={'word': 'fuck'}, fields={'IDF': 1}, existing=False)['IDF']
     print x

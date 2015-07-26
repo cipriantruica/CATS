@@ -42,7 +42,7 @@ ct = CleanText()
 global mode_global
 global language_global
 
-def populateDatabase(elems, language='EN', dbname='TwitterDB', mode=0, serialized=True):
+def populateDatabase(elems, language='EN', dbname='TwitterDB', host='localhost', port=27017, mode=0, serialized=True):
     if elems:
         documents = []
         if serialized:
@@ -69,7 +69,7 @@ def populateDatabase(elems, language='EN', dbname='TwitterDB', mode=0, serialize
                     if result:
                         documents.append(result)
         if documents:
-            queries = Queries(dbname=dbname)
+            queries = Queries(dbname=dbname, host=host, port=port)
             queries.bulkInsert(documents=documents)
 
 gender = {'male': 1, 'female': 2, 'homme': 1, 'femme': 2}

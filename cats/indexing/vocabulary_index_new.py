@@ -68,36 +68,38 @@ reduceFunction = """function(key, values) {
                         return Array.sum(values);
                     }"""
 
-functionCreate = """function(){
-                        var noDocs = db.documents.count();
+functionCreate = """function(noDocs){
+                        //var noDocs = db.documents.count();
                         var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
+                        var docs = Array();
                         while(items.hasNext()){
                             var item = items.next();
                             var idf = 1 + Math.round(Math.log(noDocs/item.value) * 100)/100;
                             doc = {word: item._id, IDF: idf};
-                            db.vocabulary.insert(doc);
+                            docs.push(doc);
                         }
+                        db.vocabulary.insert(docs);
                         db.vocabulary.ensureIndex({IDF:1});
                         db.temp_collection.drop();
                     }"""
 
-functionCreateQuery = """function(query){
-                        var noDocs = db.documents.count(query);
+functionCreateQuery = """function(query, noDocs){
+                        //var noDocs = db.documents.count(query);
                         var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
                         while(items.hasNext()){
                             var item = items.next();
                             var idf = 1 + Math.round(Math.log(noDocs/item.value.count) * 100)/100;
-                            var tfidf = Math.round(idf * item.value.tf * 100)/100;
-                            doc = {word: item._id, IDF: idf, TFIDF: tfidf};
+                            doc = {word: item._id, IDF: idf};
                             db.vocabulary.insert(doc);
                         }
-                        db.vocabulary_query.ensureIndex({'idf':1});
+                        db.vocabulary_query.ensureIndex({'IDF':1});
                         db.temp_collection.drop();
                     }"""
 
 class VocabularyIndex:
-    def __init__(self, dbname):
-        client = pymongo.MongoClient()
+    def __init__(self, dbname, host='localhost', port=27017):
+        #client = pymongo.MongoClient()
+        client = pymongo.MongoClient(host=host, port=port)
         self.db = client[dbname]
         self.db.documents.ensure_index([('words.word', pymongo.ASCENDING)])
     
@@ -105,11 +107,13 @@ class VocabularyIndex:
         if query:
             self.db.vocabulary_query.drop()
             self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", query=query, sort={'words.word': 1})
-            self.db.eval(functionCreateQuery, query)
+            noDocs = self.db.documents.count(query)
+            self.db.eval(functionCreateQuery, query, noDocs)
         else:
             self.db.vocabulary.drop()
             self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", sort={'words.word': 1})
-            self.db.eval(functionCreate)
+            noDocs = self.db.documents.count()
+            self.db.eval(functionCreate, noDocs)
 
 
 if __name__ == '__main__':
