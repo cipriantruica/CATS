@@ -21,7 +21,9 @@ from indexing.queries import Queries
 # Connecting to the database
 
 dbname = 'TwitterDB_demo'
-queries = Queries(dbname=dbname)
+host='localhost'
+port=27017
+queries = Queries(dbname=dbname, host=host, port=port)
 can_collect_tweets = False
 
 app = Flask(__name__)
@@ -174,20 +176,20 @@ def construct_vocabulary():
 @app.route('/cats/analysis/vocabulary_cloud')
 def getTermCloud():
     if query:
-        voc = queries.getWords(fields={'word': 1,'idf': 1}, limit=150, existing=True)
+        voc = queries.getWords(fields={'word': 1,'IDF': 1}, limit=150, existing=True)
     else:
-        voc = queries.getWords(fields={'word': 1,'idf': 1}, limit=150, existing=False)
+        voc = queries.getWords(fields={'word': 1,'IDF': 1}, limit=150, existing=False)
     return render_template('word_cloud.html', voc=voc, filter=query_pretty)     
     
 @app.route('/cats/analysis/vocabulary.csv')
 def getTerms():
     if query:
-        voc = queries.getWords(fields={'word': 1,'idf': 1}, limit=1000, existing=True)
+        voc = queries.getWords(fields={'word': 1,'IDF': 1}, limit=1000, existing=True)
     else:
-        voc = queries.getWords(fields={'word': 1,'idf': 1},limit=1000, existing=False)
-    csv = 'word,idf\n'
+        voc = queries.getWords(fields={'word': 1,'IDF': 1},limit=1000, existing=False)
+    csv = 'word,IDF\n'
     for doc in voc :
-        csv += doc['word']+','+str(doc['idf'])+'\n'
+        csv += doc['word']+','+str(doc['IDF'])+'\n'
     return Response(csv,mimetype="text/csv")   
 
 @app.route('/cats/analysis/tweets',methods=['POST'])
@@ -196,7 +198,7 @@ def getTweets():
     query_exists = False
     if query:
         query_exists = True
-    search = Search(searchPhrase=searchPhrase, dbname=dbname, query=query_exists)
+    search = Search(searchPhrase=searchPhrase, dbname=dbname, host=host, port=port, query=query_exists)
     results = search.results()
     return render_template('tweet_browser.html', results=results, filter=query_pretty) 
 
@@ -230,7 +232,7 @@ def threadLDA(k):
     file.write(" ")
     file.close()
     print "Training LDA..."
-    lda = TrainLDA(dbname=dbname)
+    lda = TrainLDA(dbname=dbname, host=host, port=port)
     results = lda.fitLDA(query=query, num_topics=k, num_words=10, iterations=500)
     scores = [0]*k
     for doc in results[1]:
@@ -268,7 +270,7 @@ def threadMABED(k):
             elif os.path.isdir(file_path): shutil.rmtree(file_path)
         except Exception, e:
             print e
-    mf = MabedFiles(dbname=dbname)
+    mf = MabedFiles(dbname=dbname, host=host, port=port)
     mf.buildFiles(query, filepath='mabed/input/', slice=60*60)
     result = subprocess.check_output(['java', '-jar', './mabed/MABED-CATS.jar', '60', '40'])
     print "Done."

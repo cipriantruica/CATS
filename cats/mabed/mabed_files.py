@@ -13,8 +13,8 @@ from datetime import datetime, timedelta
 from time import time
 
 class MabedFiles:
-    def __init__(self, dbname='TwitterDB'):
-        client = pymongo.MongoClient()
+    def __init__(self, dbname='TwitterDB', host='localhost', port=27017):
+        client = pymongo.MongoClient(host=host, port=port)
         self.db = client[dbname]
         self.query = {}
 

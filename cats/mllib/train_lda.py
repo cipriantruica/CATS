@@ -15,8 +15,8 @@ cachedStopWords_en = stopwords.words("english")
 cachedStopWords_fr = stopwords.words("french") + ["ce", "cet", "cette", "le", "les"]
 
 class TrainLDA:
-    def __init__(self, dbname='TwitterDB', language='EN' ):
-        client = pymongo.MongoClient()
+    def __init__(self, dbname='TwitterDB', host='localhost', port=27017, language='EN' ):
+        client = pymongo.MongoClient(host=host, port=port)
         self.db = client[dbname]
         if language == 'EN':
             self.sw = cachedStopWords_en

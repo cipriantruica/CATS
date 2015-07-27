@@ -15,16 +15,18 @@ def quote(string):
     return '"'+string.encode('utf-8')+'"'
 
 class Streaming:
-    def __init__(self, dbname='TwitterDBTest'):
+    def __init__(self, dbname='TwitterDBTest', host='localhost', port=27017):
         self.db_name = dbname
+        self.host = host
+        self.port = port
 
     def threadUpdate(self,filename):
         print('Importing',filename,'...')
         filepath = 'streaming/data/'+str(filename)+'.csv'
         if filename == 1:
-            subprocess.call(['sh','stream_run.sh',self.db_name,filepath])
+            subprocess.call(['sh','stream_run.sh', filepath, self.db_name, self.host, self.port])
         else:
-            subprocess.call(['sh','stream_update.sh',self.db_name,filepath])
+            subprocess.call(['sh','stream_update.sh', filepath, self.db_name, self.host, self.port])
         print('Done.')
 
     def collect_tweets(self, duration=1, keys=None, follow=None, loc=None):

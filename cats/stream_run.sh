@@ -22,8 +22,10 @@ OP=1
 LANGUAGE=EN
 INIT=0
 MODE=1
-FILE=$2
-DB=$1
-python testing_tweets_new.py $FILE $DELIMITER $HEADER $DB $LANGUAGE $INIT $MODE 0
+FILE=$1
+DB=$2
+HOST=$3
+PORT=$4
+python testing_tweets_new.py $FILE $DELIMITER $HEADER $DB $HOST $PORT $LANGUAGE $INIT $MODE 0
 
 
