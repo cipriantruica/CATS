@@ -43,9 +43,9 @@
 						{% for doc in voc %}
 						  {% if firstLine == 0 %}
 						    {% set firstLine = 1 %}
-						    {% set max = 1/doc['idf'] %}
+						    {% set max = 1/doc['IDF'] %}
 						  {% endif %}
-							<span data-weight="{{ 50+(50/doc['idf']/max) }}">{{ doc['word'] }}</span>
+							<span data-weight="{{ 50+(50/doc['IDF']/max) }}">{{ doc['word'] }}</span>
 					  	{% endfor %}
 					</div>
 					<script>

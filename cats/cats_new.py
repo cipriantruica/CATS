@@ -5,7 +5,7 @@ __email__ = "adrien.guille@univ-lyon2.fr"
 __status__ = "Production"
 
 from flask import Flask, Response, render_template, request
-from search_mongo import Search
+from search_mongo_new import Search
 from nlplib.lemmatize_text import LemmatizeText
 from mllib.train_lda import TrainLDA
 from mabed.mabed_files import MabedFiles
@@ -25,6 +25,8 @@ host='localhost'
 port=27017
 queries = Queries(dbname=dbname, host=host, port=port)
 can_collect_tweets = False
+lda_running = False
+mabed_running = False
 
 app = Flask(__name__)
 
@@ -219,7 +221,7 @@ def getNamedEntityCloud():
     
 @app.route('/cats/analysis/train_lda',methods=['POST'])
 def trainLDA():
-    if not os.path.isfile('lda.lock'):
+    if not lda_running:
         k = int(request.form['k-lda'])
         t = threading.Thread(target=threadLDA, args=(k,))
         t.start()
@@ -228,9 +230,8 @@ def trainLDA():
         return render_template('already_running.html',method_name='LDA')
    
 def threadLDA(k):
-    file = open("lda.lock", "w")
-    file.write(" ")
-    file.close()
+    global lda_running
+    lda_running = True
     print "Training LDA..."
     lda = TrainLDA(dbname=dbname, host=host, port=port)
     results = lda.fitLDA(query=query, num_topics=k, num_words=10, iterations=500)
@@ -243,13 +244,13 @@ def threadLDA(k):
         print(results[0][i])
         topics.append([i,scores[i],results[0][i]])
     print "Done."
-    os.remove('lda.lock')
+    lda_running = False
     pickle.dump(topics,open("lda_topics.p","wb"))  
     pickle.dump(query_pretty,open("lda_query.p","wb"))  
        
 @app.route('/cats/analysis/detect_events',methods=['POST']) 
 def runMABED():
-    if not os.path.isfile('mabed.lock'):
+    if not mabed_running:
         k = int(request.form['k-mabed'])
         t = threading.Thread(target=threadMABED, args=(k,))
         t.start()
@@ -258,9 +259,8 @@ def runMABED():
         return render_template('already_running.html',method_name='MABED')
     
 def threadMABED(k):
-    file = open("mabed.lock", "w")
-    file.write(" ")
-    file.close()
+    global mabed_running
+    mabed_running = True
     print "Running MABED..."
     for the_file in os.listdir('mabed/input'):
         file_path = os.path.join('mabed/input', the_file)
@@ -272,9 +272,9 @@ def threadMABED(k):
             print e
     mf = MabedFiles(dbname=dbname, host=host, port=port)
     mf.buildFiles(query, filepath='mabed/input/', slice=60*60)
-    result = subprocess.check_output(['java', '-jar', './mabed/MABED-CATS.jar', '60', '40'])
+    result = subprocess.check_output(['java', '-jar', './mabed/MABED-CATS.jar', '60', str(k)])
     print "Done."
-    os.remove('mabed.lock')
+    mabed_running = False
     pickle.dump(result,open("mabed_events.p","wb"))  
     pickle.dump(query_pretty,open("mabed_query.p","wb"))
     
@@ -284,7 +284,7 @@ def getTopics():
     
 @app.route('/cats/analysis/lda_topic_browser')
 def browseTopics():
-    if os.path.isfile('lda.lock'):
+    if lda_running:
         return render_template('waiting.html',method_name='LDA')
     elif os.path.isfile('lda_topics.p'):
         r = pickle.load(open("lda_topics.p","rb"))
@@ -299,7 +299,7 @@ def getEvents():
     
 @app.route('/cats/analysis/mabed_event_browser')
 def browseEvents():
-    if os.path.isfile('mabed.lock'):
+    if mabed_running:
         return render_template('waiting.html',method_name='MABED')
     elif os.path.isfile('mabed_events.p'):
         r = pickle.load(open("mabed_events.p","rb"))
