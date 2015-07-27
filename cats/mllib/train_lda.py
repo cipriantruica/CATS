@@ -10,6 +10,7 @@ __status__ = "Production"
 import pymongo
 from gensim import corpora, models
 from nltk.corpus import stopwords
+from collections import defaultdict
 
 cachedStopWords_en = stopwords.words("english")
 cachedStopWords_fr = stopwords.words("french") + ["ce", "cet", "cette", "le", "les"]
@@ -27,10 +28,13 @@ class TrainLDA:
         try:
             documents = []
             documentsDB = self.db.documents.find(query, {'lemmaText': 1, '_id': 0})
-            if documentsDB:
-                print 'ok documentDB'
             for document in documentsDB:
                 documents.append([lemma for lemma in document['lemmaText'].split() if lemma not in self.sw])
+            frequency = defaultdict(int)
+            for document in documents:
+                for word in document:
+                    frequency[word] += 1
+            documents = [[word for word in document if frequency[word] > 1] for document in documents]
             dictionary = corpora.Dictionary(documents)
             corpus = [dictionary.doc2bow(document) for document in documents]
             tfidf = models.TfidfModel(corpus)
