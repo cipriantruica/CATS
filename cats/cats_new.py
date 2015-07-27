@@ -5,7 +5,7 @@ __email__ = "adrien.guille@univ-lyon2.fr"
 __status__ = "Production"
 
 from flask import Flask, Response, render_template, request
-from search_mongo import Search
+from search_mongo_new import Search
 from nlplib.lemmatize_text import LemmatizeText
 from mllib.train_lda import TrainLDA
 from mabed.mabed_files import MabedFiles
