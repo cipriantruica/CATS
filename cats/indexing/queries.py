@@ -67,6 +67,10 @@ class Queries:
     def bulkInsert(self, documents):
         try:
             self.db.documents.insert(documents, continue_on_error=True)
+            self.db.documents.ensure_index([('date', pymongo.ASCENDING)])
+            self.db.documents.ensure_index([('gender', pymongo.ASCENDING)])
+            self.db.documents.ensure_index([('age', pymongo.ASCENDING)])
+            self.db.documents.ensure_index([('words.word', pymongo.ASCENDING)])
         except pymongo.errors.DuplicateKeyError:
             pass
 
