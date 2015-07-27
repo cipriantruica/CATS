@@ -20,7 +20,7 @@ from indexing.queries import Queries
 
 # Connecting to the database
 
-dbname = 'TwitterDB'
+dbname = 'TwitterDB_demo'
 host='localhost'
 port=27017
 queries = Queries(dbname=dbname, host=host, port=port)
