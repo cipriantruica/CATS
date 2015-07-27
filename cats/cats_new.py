@@ -20,13 +20,13 @@ from indexing.queries import Queries
 
 # Connecting to the database
 
-dbname = 'TwitterDB_demo'
+dbname = 'TwitterDB'
 host='localhost'
 port=27017
 queries = Queries(dbname=dbname, host=host, port=port)
 can_collect_tweets = False
 lda_running = False
-mabed_running = True
+mabed_running = False
 
 app = Flask(__name__)
 
