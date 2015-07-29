@@ -29,7 +29,7 @@ class Streaming:
             subprocess.call(['sh','stream_update.sh', filepath, self.db_name, self.host, self.port])
         print('Done.')
 
-    def collect_tweets(self, duration=1, keys=None, follow=None, loc=None):
+    def collect_tweets(self, duration=1, keys=None, follow=None, loc=None, lang='en'):
         nb_tweets = 0
         nb_tweets_infile = 0
         nb_files = 1
@@ -46,16 +46,16 @@ class Streaming:
         end_date = start_date + datetime.timedelta(days=int(duration))
         if keys != "":
             print("keywords")
-            iterator = twitter_stream.statuses.filter(track=keys)
+            iterator = twitter_stream.statuses.filter(track=keys, language=lang)
         elif follow != "":
             print("users")
-            iterator = twitter_stream.statuses.filter(follow=follow)
+            iterator = twitter_stream.statuses.filter(follow=follow, language=lang)
         elif loc != "":
             print("location")
-            iterator = twitter_stream.statuses.filter(locations=loc)
+            iterator = twitter_stream.statuses.filter(locations=loc, language=lang)
         else:
             print("sample")
-            iterator = twitter_stream.statuses.sample()
+            iterator = twitter_stream.statuses.sample(language=lang)
         for tweet in iterator:
             try:
                 if tweet.get('text'):

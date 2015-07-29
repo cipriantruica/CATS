@@ -74,6 +74,8 @@ def collection_dashboard_page(name=None):
 def collection_dashboard_page2():
     if can_collect_tweets and not os.path.isfile('collecting.lock'):
         lock = open("collecting.lock", "w")
+        checked_lang = request.form.getlist('lang')
+        lang = checked_lang[0]
         if request.form.get('collection_duration'):
             duration = int(request.form.get('collection_duration'))
         else:
@@ -94,7 +96,7 @@ def collection_dashboard_page2():
         else:
             location = ""
         lock.close()
-        t = threading.Thread(target=threadCollection, args=(duration,keywords,users,location,))
+        t = threading.Thread(target=threadCollection, args=(duration,keywords,users,location,lang,))
         t.start()
         lock = open('collecting.lock','r').read()
         corpus_info = lock.split(';')
@@ -102,9 +104,9 @@ def collection_dashboard_page2():
     else:
         return render_template('collecting.html')
 
-def threadCollection(duration,keywords,users,location):
+def threadCollection(duration,keywords,users,location,language):
     s = Streaming(dbname=dbname)
-    s.collect_tweets(duration=duration, keys=keywords, follow=users, loc=location)
+    s.collect_tweets(duration=duration, keys=keywords, follow=users, loc=location, lang=language)
 
 @app.route('/cats/analysis')
 @requires_auth
