@@ -30,11 +30,6 @@ class TrainLDA:
             documentsDB = self.db.documents.find(query, {'lemmaText': 1, '_id': 0})
             for document in documentsDB:
                 documents.append([lemma for lemma in document['lemmaText'].split() if lemma not in self.sw])
-            frequency = defaultdict(int)
-            for document in documents:
-                for word in document:
-                    frequency[word] += 1
-            documents = [[word for word in document if frequency[word] > 1] for document in documents]
             dictionary = corpora.Dictionary(documents)
             corpus = [dictionary.doc2bow(document) for document in documents]
             tfidf = models.TfidfModel(corpus)

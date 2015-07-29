@@ -57,40 +57,43 @@ class Streaming:
             print("sample")
             iterator = twitter_stream.statuses.sample()
         for tweet in iterator:
-            if tweet.get('text'):
-                text = tweet['text']
-                text = text.replace('"',' ')
-                text = quote(text.replace('\n',' '))
-                geo = ''
-                if(tweet.get('geo')):
-                    geo = str(tweet['geo']['coordinates'][0])+','+str(tweet['geo']['coordinates'][1])
-                geo = quote(geo)
-                timestamp = quote(datetime.datetime.fromtimestamp(float(tweet['timestamp_ms'])/1000).strftime('%Y-%m-%d %H:%M:%S'))
-                nb_tweets += 1
-                nb_tweets_infile += 1
-                description = ''
-                if(tweet['user'].get('description')):
-                    description = tweet['user']['description']
-                    description = description.replace('"',' ')
-                    description = description.replace('\n',' ')
-                description = quote(description)
-                name = ''
-                if(tweet['user'].get('name')):
-                    name = tweet['user']['name']
-                name = quote(name)
-                file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\t'+quote(tweet['lang'].upper())+'\n')
-                if(datetime.datetime.now().hour == 0):
-                    if(not datetime.datetime.now().day == last_import_day):
-                        last_import_day = datetime.datetime.now().day
-                        current_date = datetime.date.today()
-                        t = threading.Thread(target=self.threadUpdate, args=(nb_files,))
-                        t.start()
-                        if current_date <= end_date:
-                            nb_files += 1
-                            nb_tweets_infile = 0
-                            file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
-                        else:
-                            break
+            try:
+                if tweet.get('text'):
+                    text = tweet['text']
+                    text = text.replace('"',' ')
+                    text = quote(text.replace('\n',' '))
+                    geo = ''
+                    if(tweet.get('geo')):
+                        geo = str(tweet['geo']['coordinates'][0])+','+str(tweet['geo']['coordinates'][1])
+                    geo = quote(geo)
+                    timestamp = quote(datetime.datetime.fromtimestamp(float(tweet['timestamp_ms'])/1000).strftime('%Y-%m-%d %H:%M:%S'))
+                    nb_tweets += 1
+                    nb_tweets_infile += 1
+                    description = ''
+                    if(tweet['user'].get('description')):
+                        description = tweet['user']['description']
+                        description = description.replace('"',' ')
+                        description = description.replace('\n',' ')
+                    description = quote(description)
+                    name = ''
+                    if(tweet['user'].get('name')):
+                        name = tweet['user']['name']
+                    name = quote(name)
+                    file.write(quote(str(tweet['id']))+'\t'+text+'\t'+timestamp+'\t'+quote(str(tweet['user']['id']))+'\t'+geo+'\t'+description+'\t'+name+'\t'+quote(tweet['lang'].upper())+'\n')
+                    if datetime.datetime.now().hour == 0:
+                        if not datetime.datetime.now().day == last_import_day:
+                            last_import_day = datetime.datetime.now().day
+                            current_date = datetime.date.today()
+                            t = threading.Thread(target=self.threadUpdate, args=(nb_files,))
+                            t.start()
+                            if current_date <= end_date:
+                                nb_files += 1
+                                nb_tweets_infile = 0
+                                file = open('streaming/data/'+str(nb_files)+'.csv', 'a')
+                            else:
+                                break
+            except:
+                print 'exception: ', tweet
 
 if __name__ == '__main__':
     s = Streaming(dbname='TwitterDBTest')
