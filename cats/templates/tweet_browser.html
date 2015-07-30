@@ -33,7 +33,7 @@
 		            </thead>
 		            <tbody>
 						{% for doc in results %}
-						<tr><td><p>{{ doc['author'] }}</p></td><td><p>{{ doc['date'] }}</p></td><td><p>{{ doc['rawText'] }}</p></td><td><p>{{ doc['score'] }}</p></td></tr>
+						<tr><td><p>{{ doc['author'] }}</p></td><td><p>{{ doc['date'] }}</p></td><td><p>{{ doc['rawText'].replace('\','') }}</p></td><td><p>{{ doc['score'] }}</p></td></tr>
 					  	{% endfor %}
 					</tbody>
 				</table>
