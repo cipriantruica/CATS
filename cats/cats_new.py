@@ -202,8 +202,9 @@ def getTweets():
     search = Search(searchPhrase=searchPhrase, dbname=dbname, host=host, port=port, query=query)
     results = search.results()
     for i in range(len(results)):
-        results = results[i]
-        results['rawText'] = results['rawText'].replace('\\', '')
+        result = results[i]
+        result['rawText'] = result['rawText'].replace('\\', '')
+        results[i] = result
     return render_template('tweet_browser.html', results=results, filter=query_pretty)
 
 def namedEntities(limit=None):
