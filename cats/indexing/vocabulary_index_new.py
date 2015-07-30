@@ -10,54 +10,6 @@ __status__ = "Production"
 import pymongo
 from time import time
 
-# mapFunction = """function() {
-#                     for (var idx=0; idx<this.words.length; idx++){
-#                         var key = this.words[idx].word;
-#                         var values = {
-#                             tf: this.words[idx].tf,
-#                             count: 1
-#                         };
-#                         emit(key, values);
-#                     }
-#                 }"""
-#
-# reduceFunction = """function(key, values) {
-#                         var result = {tf: 0, count: 0};
-#                         for(var idx = 0; idx < values.length; idx++){
-#                             result.count += values[idx].count;
-#                             result.tf += values[idx].tf;
-#                         };
-#                         return result;
-#                     }"""
-#
-# functionCreate = """function(){
-#                         var noDocs = db.documents.count();
-#                         var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
-#                         while(items.hasNext()){
-#                             var item = items.next();
-#                             var idf = 1 + Math.round(Math.log(noDocs/item.value.count) * 100)/100;
-#                             var tfidf = Math.round(idf * item.value.tf * 100)/100;
-#                             doc = {word: item._id, IDF: idf, TFIDF: tfidf};
-#                             db.vocabulary.insert(doc);
-#                         }
-#                         db.vocabulary.ensureIndex({IDF:1});
-#                         db.temp_collection.drop();
-#                     }"""
-#
-# functionCreateQuery = """function(query){
-#                         var noDocs = db.documents.count(query);
-#                         var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
-#                         while(items.hasNext()){
-#                             var item = items.next();
-#                             var idf = 1 + Math.round(Math.log(noDocs/item.value.count) * 100)/100;
-#                             var tfidf = Math.round(idf * item.value.tf * 100)/100;
-#                             doc = {word: item._id, IDF: idf, TFIDF: tfidf};
-#                             db.vocabulary.insert(doc);
-#                         }
-#                         db.vocabulary_query.ensureIndex({'idf':1});
-#                         db.temp_collection.drop();
-#                     }"""
-
 mapFunction = """function() {
                     for (var idx=0; idx<this.words.length; idx++){
                         emit(this.words[idx].word, 1);
@@ -68,8 +20,7 @@ reduceFunction = """function(key, values) {
                         return Array.sum(values);
                     }"""
 
-functionCreate = """function(noDocs){
-                        //var noDocs = db.documents.count();
+functionCreate = """function(noDocs, all){
                         var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
                         var docs = Array();
                         while(items.hasNext()){
@@ -78,27 +29,20 @@ functionCreate = """function(noDocs){
                             doc = {word: item._id, IDF: idf};
                             docs.push(doc);
                         }
-                        db.vocabulary.insert(docs);
-                        db.vocabulary.ensureIndex({IDF:1});
+                        if (all == 1){
+                            db.vocabulary.insert(docs);
+                            db.vocabulary.ensureIndex({IDF:1});
+                        }
+                        else if (all == 0){
+                            db.vocabulary_query.insert(docs);
+                            db.vocabulary_query.ensureIndex({'IDF':1});
+                        }
                         db.temp_collection.drop();
                     }"""
 
-functionCreateQuery = """function(query, noDocs){
-                        //var noDocs = db.documents.count(query);
-                        var items = db.temp_collection.find().addOption(DBQuery.Option.noTimeout);
-                        while(items.hasNext()){
-                            var item = items.next();
-                            var idf = 1 + Math.round(Math.log(noDocs/item.value.count) * 100)/100;
-                            doc = {word: item._id, IDF: idf};
-                            db.vocabulary.insert(doc);
-                        }
-                        db.vocabulary_query.ensureIndex({'IDF':1});
-                        db.temp_collection.drop();
-                    }"""
 
 class VocabularyIndex:
     def __init__(self, dbname, host='localhost', port=27017):
-        #client = pymongo.MongoClient()
         client = pymongo.MongoClient(host=host, port=port)
         self.db = client[dbname]
         self.db.documents.ensure_index([('words.word', pymongo.ASCENDING)])
@@ -108,12 +52,12 @@ class VocabularyIndex:
             self.db.vocabulary_query.drop()
             self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", query=query, sort={'words.word': 1})
             noDocs = self.db.documents.count(query)
-            self.db.eval(functionCreateQuery, query, noDocs)
+            self.db.eval(functionCreate, noDocs, 0)
         else:
             self.db.vocabulary.drop()
             self.db.documents.map_reduce(mapFunction, reduceFunction, "temp_collection", sort={'words.word': 1})
             noDocs = self.db.documents.count()
-            self.db.eval(functionCreate, noDocs)
+            self.db.eval(functionCreate, noDocs, 1)
 
 
 if __name__ == '__main__':
