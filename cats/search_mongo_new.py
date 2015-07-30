@@ -52,22 +52,21 @@ class Search:
 
         # serial version
         for doc in documents:
-            document = dict()
-            document['id'] = doc['_id']
-            document['rawText'] = doc['rawText']
-            document['author'] = doc['author']
-            document['date'] = doc['date']
-            score = 0
-            for word in self.idfs:
-                tf = 1
-                for tfs in doc['words']:
-                    if tfs.get(word, 1) == 1:
-                        tf = tfs['tf']
-                score += tf*self.idfs[word];
-            document['score'] = math.log(1+score, 2)
-            list_documents.append(document)
+            # document = dict()
+            # document['id'] = doc['_id']
+            # document['rawText'] = doc['rawText']
+            # document['author'] = doc['author']
+            # document['date'] = doc['date']
+            # score = 0
+            # for word in self.idfs:
+            #     tf = 1
+            #     for tfs in doc['words']:
+            #         if tfs.get(word, 1) == 1:
+            #             tf = tfs['tf']
+            #     score += tf*self.idfs[word];
+            # document['score'] = math.log(1+score, 2)
+            # list_documents.append(document)
             list_documents.append(self.process(doc))
-
         return list_documents
 
     def process(self, elem):
