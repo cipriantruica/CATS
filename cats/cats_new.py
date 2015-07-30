@@ -190,7 +190,7 @@ def getTerms():
     if query:
         voc = queries.getWords(fields={'word': 1,'IDF': 1}, limit=1000, existing=True)
     else:
-        voc = queries.getWords(fields={'word': 1,'IDF': 1},limit=1000, existing=False)
+        voc = queries.getWords(fields={'word': 1,'IDF': 1}, limit=1000, existing=False)
     csv = 'word,IDF\n'
     for doc in voc :
         csv += doc['word']+','+str(doc['IDF'])+'\n'
@@ -199,10 +199,7 @@ def getTerms():
 @app.route('/cats/analysis/tweets',methods=['POST'])
 def getTweets():
     searchPhrase = request.form['cooccurringwords']
-    query_exists = False
-    if query:
-        query_exists = True
-    search = Search(searchPhrase=searchPhrase, dbname=dbname, host=host, port=port, query=query_exists)
+    search = Search(searchPhrase=searchPhrase, dbname=dbname, host=host, port=port, query=query)
     results = search.results()
     return render_template('tweet_browser.html', results=results, filter=query_pretty) 
 
