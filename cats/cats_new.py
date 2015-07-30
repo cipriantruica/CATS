@@ -193,6 +193,7 @@ def getTerms():
         voc = queries.getWords(fields={'word': 1,'IDF': 1}, limit=1000, existing=False)
     csv = 'word,IDF\n'
     for doc in voc :
+        print doc['word'], doc['IDF']
         csv += doc['word']+','+str(doc['IDF'])+'\n'
     return Response(csv,mimetype="text/csv")   
 
@@ -313,7 +314,7 @@ def browseEvents():
         
 if __name__ == '__main__':
     # Demo
-     app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5000)
+    app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5000)
     # GERiiCO
     # Change dbname to TwitterGERiiCO and can_collect_tweets to True
     # app.run(debug=True,host='mediamining.univ-lyon2.fr',port=5001)
