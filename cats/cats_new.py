@@ -201,7 +201,10 @@ def getTweets():
     searchPhrase = request.form['cooccurringwords']
     search = Search(searchPhrase=searchPhrase, dbname=dbname, host=host, port=port, query=query)
     results = search.results()
-    return render_template('tweet_browser.html', results=results, filter=query_pretty) 
+    for i in range(len(results)):
+        results = results[i]
+        results['rawText'] = results['rawText'].replace('\\', '')
+    return render_template('tweet_browser.html', results=results, filter=query_pretty)
 
 def namedEntities(limit=None):
     return queries.getNamedEntities(query=query, limit=limit)
